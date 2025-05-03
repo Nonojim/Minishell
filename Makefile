@@ -1,14 +1,18 @@
 ###############################
 ##ARGUMENTS/MACRO
+MAKEFLAGS += --silent
 
 CC = cc
-CFLAGS = -g -lreadline -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
+READFLAG = -lreadline
 NAME = minishell
+LIBFT = libft/libft.a
 
 ###############################
 ##SOURCES
 
-FILES = minishell.c
+FILES = minishell.c \
+				main.c
 
 OBJS = $(FILES:.c=.o)
 
@@ -19,7 +23,8 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "Compilation of $(NAME)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@make -C libft/
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
@@ -27,9 +32,12 @@ $(NAME): $(OBJS)
 clean:
 	@echo "Cleaning .o"
 	@rm -f $(OBJS)
+	@make -C libft/ clean
+
 fclean: clean
 	@echo "Cleaning program"
 	@rm -f $(NAME)
+	@make -C libft/ fclean
 
 re: fclean all
 

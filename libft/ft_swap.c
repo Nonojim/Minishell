@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_swap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/03 17:46:05 by lduflot          ###   ########.fr       */
+/*   Created: 2025/03/28 01:13:15 by npederen          #+#    #+#             */
+/*   Updated: 2025/03/28 01:13:15 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_swap(int *a, int *b)
 {
-    char *rl;
-    rl = readline("Minishell$ ");
-    printf("%s\n", rl);
-    return (0);
+	int	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }

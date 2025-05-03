@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_sort_int_tab.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/03 17:46:05 by lduflot          ###   ########.fr       */
+/*   Created: 2025/03/28 01:10:50 by npederen          #+#    #+#             */
+/*   Updated: 2025/03/28 01:10:50 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(void)
+void	ft_sort_int_tab(int *tab, int size)
 {
-    char *rl;
-    rl = readline("Minishell$ ");
-    printf("%s\n", rl);
-    return (0);
+	int	i;
+
+	i = 0;
+	while (i < size - 1)
+	{
+		if (tab[i] > tab[i + 1])
+		{
+			ft_swap(&tab[i], &tab[i + 1]);
+			if (i == 0)
+				i -= 1;
+			else
+				i -= 2;
+		}
+		i++;
+	}
 }
