@@ -94,7 +94,7 @@
 |-----------|------------------|-------|
 | `;`       | Séquence         | Exécute les commandes l’une après l’autre, peu importe si la précédente réussit ou échoue. |
 | `&&`      | ET logique       | Exécute la commande suivante seulement si la commande précédente réussit. |
-| `||`      | OU logique       | Exécute la commande suivante seulement si la commande précédente échoue  |
+| `\|\|`      | OU logique       | Exécute la commande suivante seulement si la commande précédente échoue  |
 | `&`       | Tâche en arrière-plan | Lance une commande en arrière-plan, il est alos possible de continuer a utiliser le terminal, permet de faire plusieurs taches en même temps sans qu'elle se bloquent |
 
 ### **Pipes**
