@@ -1,6 +1,6 @@
-            - Bibliographie
+-- BIBLIOGRAPHIE --
 
-        - Concepts et théorie des shells
+ - Concepts et théorie des shells
 
     - Chapitre 5 – Writing Your Own Shell (Purdue)
     https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
@@ -15,7 +15,7 @@
     https://en.wikipedia.org/wiki/Abstract_syntax_tree
 
  
-        - Lexers et analyseurs
+- Lexers et analyseurs
 
     - GeeksForGeeks – C Lexical Analyzer
     https://www.geeksforgeeks.org/c-lexical-analyser-lexer/
@@ -26,7 +26,7 @@
     - Shell Grammar Parser
     https://shell.multun.net/parser.html#lire-une-grammaire
 
-        - Projets GitHub utiles
+ - Projets GitHub utiles
 
     - Swoorup/mysh
     https://github.com/Swoorup/mysh
@@ -37,7 +37,7 @@
     - vietdu91/42_minishell
     https://github.com/vietdu91/42_minishell
 
-        - Vidéos qui expliquent 
+- Vidéos
 
     - How to Build a Shell – YouTube (style 42)
     https://www.youtube.com/watch?v=ubt-UjcQUYg
@@ -45,7 +45,7 @@
     - Shell parsing & tokenization – YouTube
     https://www.youtube.com/watch?v=ZjzMdsTWF0U
 
-        - Gros manuels, livres et docu
+- Gros manuels, livres et docu
 
     - Manuel officiel de Bash (GNU)
     https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
@@ -62,7 +62,7 @@
     - Learning the Bash Shell (O'Reilly)
     https://github.com/Ricky-Wilson/Programming-books/blob/master/PDF/Learning%20the%20bash%20Shell%2C%203rd%20Edition.pdf
 
-        - Outils et
+- Outils pratiques, schemas
 
     - Apprendre le Git Branching (visual tool)
     https://learngitbranching.js.org/
@@ -72,28 +72,6 @@
 
     - Schema AST
     https://github.com/user-attachments/assets/ff4c3a10-950b-4805-85f9-0088f4edfb43
-
-
-
-![ast](https://github.com/user-attachments/assets/ff4c3a10-950b-4805-85f9-0088f4edfb43)
-https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
-https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
-https://github.com/Swoorup/mysh
-https://en.wikipedia.org/wiki/Backus–Naur_form
-https://en.wikipedia.org/wiki/Abstract_syntax_tree
-https://github.com/pmouhali/minishell_ast
-https://www.youtube.com/watch?v=ubt-UjcQUYg
-https://www.youtube.com/watch?v=ZjzMdsTWF0U
-https://shell.multun.net/parser.html#lire-une-grammaire
-https://learngitbranching.js.org/
-https://docs.google.com/spreadsheets/d/1BPW7k81LJPhGv2fbi35NIIoOC_mGZXQQJDnV0SjulFs/edit?pli=1&gid=0#gid=0
-https://github.com/vietdu91/42_minishell
-https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html (miam le manuel).  http://manpagesfr.free.fr/man/man1/bash.1.html
-https://abs.traduc.org/abs-5.3-fr/ch20.html#:~:text=D%C3%A9finition%20%3A%20un%20sous-shell%20est,ou%20dans%20une%20fen%C3%AAtre%20xterm
-https://www.geeksforgeeks.org/c-lexical-analyser-lexer/
-https://theory.stanford.edu/~aiken/software/cooldist/src/PA3/tokens-lex.cc
-https://craftinginterpreters.com/
-https://github.com/Ricky-Wilson/Programming-books/blob/master/PDF/Learning%20the%20bash%20Shell%2C%203rd%20Edition.pdf
 
 
 | Nom de la commande | Prototype / Utilisation | Description |
