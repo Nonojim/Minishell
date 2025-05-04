@@ -1,6 +1,6 @@
--- BIBLIOGRAPHIE --
-
- - Concepts et théorie des shells
+### **BIBLIOGRAPHIE** 
+---
+ - **Concepts et théorie des shells**
 
     - Chapitre 5 – Writing Your Own Shell (Purdue)
     https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
@@ -15,7 +15,7 @@
     https://en.wikipedia.org/wiki/Abstract_syntax_tree
 
  
-- Lexers et analyseurs
+- **Lexers et analyseurs**
 
     - GeeksForGeeks – C Lexical Analyzer
     https://www.geeksforgeeks.org/c-lexical-analyser-lexer/
@@ -26,7 +26,7 @@
     - Shell Grammar Parser
     https://shell.multun.net/parser.html#lire-une-grammaire
 
- - Projets GitHub utiles
+ - **Projets GitHub utiles**
 
     - Swoorup/mysh
     https://github.com/Swoorup/mysh
@@ -37,7 +37,7 @@
     - vietdu91/42_minishell
     https://github.com/vietdu91/42_minishell
 
-- Vidéos
+- **Vidéos**
 
     - How to Build a Shell – YouTube (style 42)
     https://www.youtube.com/watch?v=ubt-UjcQUYg
@@ -45,7 +45,7 @@
     - Shell parsing & tokenization – YouTube
     https://www.youtube.com/watch?v=ZjzMdsTWF0U
 
-- Gros manuels, livres et docu
+- **Gros manuels, livres et docu**
 
     - Manuel officiel de Bash (GNU)
     https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
@@ -62,7 +62,7 @@
     - Learning the Bash Shell (O'Reilly)
     https://github.com/Ricky-Wilson/Programming-books/blob/master/PDF/Learning%20the%20bash%20Shell%2C%203rd%20Edition.pdf
 
-- Outils pratiques, schemas
+- **Outils pratiques, schemas**
 
     - Apprendre le Git Branching (visual tool)
     https://learngitbranching.js.org/
@@ -73,7 +73,8 @@
     - Schema AST
     https://github.com/user-attachments/assets/ff4c3a10-950b-4805-85f9-0088f4edfb43
 
-
+## Commmandes qui doivent être exe dans Minishell
+---
 | Nom de la commande | Prototype / Utilisation | Description |
 |:-------------------|:------------------------|:------------|
 | echo | `echo [OPTIONS] [texte]` | Affiche le txt passé en arg avec ou sans \n [-n] |
@@ -84,7 +85,45 @@
 | env | `env` | Affiche l'environnement actuel |
 | exit | `exit` | Termine le script |
 
-    - Fonctions externes autorisées: 
+
+## Opérateurs du shell Bash
+---
+### **Opérateurs logiques**
+
+| Opérateur | Nom              | Effet |
+|-----------|------------------|-------|
+| `;`       | Séquence         | Exécute les commandes l’une après l’autre, peu importe si la précédente réussit ou échoue. |
+| `&&`      | ET logique       | Exécute la commande suivante seulement si la commande précédente réussit. |
+| `||`      | OU logique       | Exécute la commande suivante seulement si la commande précédente échoue  |
+| `&`       | Tâche en arrière-plan | Lance une commande en arrière-plan, il est alos possible de continuer a utiliser le terminal, permet de faire plusieurs taches en même temps sans qu'elle se bloquent |
+
+### **Pipes**
+| Opérateur | Nom              | Effet |
+|-----------|------------------|-------|
+| `\|`       | Pipe        |  Envoie la sortie standard d’une commande comme entrée de la suivante |
+
+### **Opérateurs de redirection**
+
+| Opérateur | Nom              | Fonction |
+|-----------|------------------|----------|
+| `<`       | Redirection d’entrée       | Prend l’entrée standard depuis un fichier. |
+| `>`       | Redirection de sortie      | Écrit la sortie standard dans un fichier. |
+| `>>`      | Redirection de sortie (append) | Ajoute la sortie d une commande à la fin du fichier. |
+| `<<`      | **Heredoc** (Here-document) | Lis une entrée multi-lignes jusqu’à un délimiteur (souvent utilisé pour des scripts inline). |
+
+### **Autres opérateurs**
+
+| Opérateur | Nom               | Fonction |
+|-----------|-------------------|----------|
+| `'`       | simple quote | entoure une chaîne de caractères, les variables ne sont pas interprétées à l'intérieur. ex : `'Hello $USER'` |
+| `"`       | double quote | entoure une chaîne où les variables seront interprétées. Ex : USER = toi "`Hello $USER`" devient `Hello toi`|
+| `()`      | Subshell          | exe une commande dans un **sous_shell**, permet de ne pas modifier le shell principal |
+
+---
+
+  ### **Fonctions externes autorisées:**
+
+---
 
 - Ok Libft
 - printf, malloc, free, write, open, read, close, exit, strerror, perror,
