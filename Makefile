@@ -1,6 +1,6 @@
 ###############################
 ##ARGUMENTS/MACRO
-##MAKEFLAGS += --silent
+MAKEFLAGS += --silent
 
 CC = cc
 CFLAGS = -g -Wall -Wextra -Werror
@@ -22,22 +22,22 @@ OBJS = $(FILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	echo "Compilation of $(NAME)"
-	make -C libft/
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
+	@echo "Compilation of $(NAME)"
+	@make -C libft/
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
 
 %.o: %.c
-	$(CC)  $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	echo "Cleaning .o"
-	rm -f $(OBJS)
-	make -C libft/ clean
+	@echo "Cleaning .o"
+	@rm -f $(OBJS)
+	@make -C libft/ clean
 
 fclean: clean
-	echo "Cleaning program"
-	rm -f $(NAME)
-	make -C libft/ fclean
+	@echo "Cleaning program"
+	@rm -f $(NAME)
+	@make -C libft/ fclean
 
 re: fclean all
 
