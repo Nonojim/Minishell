@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/03 18:52:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/04 11:01:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ int	main(void)
 	while (1)
 	{
 		rl = readline("Minishell$ ");
+		if (rl == NULL)
+			break;
+		if(rl)
+			add_history(rl);
 		printf("%s\n", rl);
 		free(rl);
-		if (rl == NULL)
-			break ;
 	}
 	return (0);
 }
