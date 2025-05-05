@@ -6,13 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/05 16:09:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:28:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//Fonction lié à la création de token déplacé dans create_token_utils.c
 
 int	ft_istokenword(int c)
 {
@@ -24,7 +22,6 @@ int	ft_istokenword(int c)
 	return (0);
 }
 
-//AJOUT0
 int	is_operator_logical(char c)
 {
 	if (c == '|' || c == '&' || c == ';' || c == '<' || c == '>'
@@ -35,7 +32,14 @@ int	is_operator_logical(char c)
 	else
 		return (0);
 }
-//AJOUT
+
+int	is_ok_double(char c)
+{
+	if (c == '|' || c == '&' || c == '<' || c == '<')
+		return (1);
+	else
+		return (0);
+}
 
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
 int	main(void)
@@ -52,7 +56,6 @@ int	main(void)
 		token = NULL;
 		i = 0;
 		start = 0;
-	//	type = -1;
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
@@ -64,14 +67,12 @@ int	main(void)
 		printf("carac: %c\n", line[1]);
 		while (line[i] != '\0')
 		{
-			//AJOUT - Tokenise bien les operateurs logique.
-			//MAIS, si double op tokénise et aprés repasse et retokénise le i+1;
 			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
 				i++;
 			start = i;
 			if (is_operator_logical(line[i]) == line[i])
 			{
-				if (is_operator_logical(line[i + 1]) == line[i])
+				if (is_operator_logical(line[i + 1]) == line[i] && is_ok_double(line[i])  == 1)
 				{
 					str = ft_substr(line, start, 2);
 					add_token_end(&token, create_token(OPERATOR, str));
@@ -84,7 +85,6 @@ int	main(void)
 					i++;
 				}
 			}
-			//FIN_AJOUT
 			else if (line[i] != '\0' && ft_istokenword(line[i]) == 1)
 			{
 				while (line[i] != '\0' && ft_istokenword(line[i]) == 1)
@@ -100,5 +100,6 @@ int	main(void)
 		free_token(token);
 		free(line);
 	}
+	//rl_clear_history();
 	return (0);
 }

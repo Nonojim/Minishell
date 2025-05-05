@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/05 13:01:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:38:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include <limits.h>
 # include "libft/libft.h"
 
-//debute automatiquement l enum a 0;
 enum e_TOKEN_TYPE
 {
 	WORD,
@@ -46,12 +45,6 @@ enum e_TOKEN_TYPE
 	DOUBLE_QUOTE, //"
 	BRACKETS_R, //(
 	BRACKETS_L, //)
-};
-
-//Peut_on imbriquer des enum dans un autre enum ?!
-enum e_TOKEN_SOUS_TYPE_OPERATOR
-{
-	affzfz,
 };
 
 typedef struct s_token
