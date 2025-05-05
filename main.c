@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/05 18:28:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/05 21:57:54 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,19 @@ int	main(void)
 			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
 				i++;
 			start = i;
-			if (is_operator_logical(line[i]) == line[i])
+			if (line[i] == '\'' && line[i])
+			{
+				while (line[i] == '\'')
+					i++;
+				start = i;
+				while (line[i] && line[i] != '\'')
+					i++;
+				str = ft_substr(line, start, i - start);
+				add_token_end(&token, create_token(WORD, str));
+				while (line[i] == '\'')
+					i++;	
+			}
+			else if (is_operator_logical(line[i]) == line[i] && line[i])
 			{
 				if (is_operator_logical(line[i + 1]) == line[i] && is_ok_double(line[i])  == 1)
 				{
@@ -95,8 +107,8 @@ int	main(void)
 				else
 					i++;
 			}
-			print_token_list(token);
 		}
+		print_token_list(token);
 		free_token(token);
 		free(line);
 	}
