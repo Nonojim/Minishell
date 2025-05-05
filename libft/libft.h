@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:21:01 by npederen          #+#    #+#             */
-/*   Updated: 2024/11/26 18:31:22 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:06:27 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
-# include "ft_printf/ft_printf.h"
 # include "get_next_line/get_next_line.h"
 
 int		ft_isalnum(int c);

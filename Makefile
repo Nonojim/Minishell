@@ -12,6 +12,7 @@ LIBFT = libft/libft.a
 ##SOURCES
 
 FILES = minishell.c \
+				create_token_utils.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
