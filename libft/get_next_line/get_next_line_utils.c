@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 16:48:16 by npederen          #+#    #+#             */
-/*   Updated: 2025/01/27 18:26:27 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:50:09 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr_gnl(const char *s, int c)
 {
 	size_t	i;
 
@@ -36,26 +36,6 @@ char	*ft_strchr(const char *s, int c)
 	if ((unsigned char)c == '\0')
 		return ((char *)&s[i]);
 	return (NULL);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*dest;
-	size_t	size;
-	size_t	i;
-
-	i = 0;
-	size = ft_strlen(s);
-	dest = malloc(sizeof(char) * size + 1);
-	if (!dest)
-		return (NULL);
-	while (i < size)
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
 }
 
 char	*ft_gnl_strjoin(char *s1, const char *s2)

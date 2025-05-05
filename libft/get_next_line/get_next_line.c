@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 16:48:43 by npederen          #+#    #+#             */
-/*   Updated: 2025/01/27 20:04:19 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:20:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*init_stash(int fd, char *stash, char *buffer)
 		}
 		buffer[nbytes] = '\0';
 		stash = ft_gnl_strjoin(stash, buffer);
-		if ((ft_strchr(buffer, '\n')))
+		if ((ft_strchr_gnl(buffer, '\n')))
 			break ;
 	}
 	free(buffer);

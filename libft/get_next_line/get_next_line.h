@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 16:48:22 by npederen          #+#    #+#             */
-/*   Updated: 2025/01/14 16:48:22 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 22:20:14 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include "../libft.h"
 
 size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
+char	*ft_strchr_gnl(const char *s, int c);
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s);
 char	*ft_gnl_strjoin(char *s1, const char *s2);
