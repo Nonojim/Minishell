@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/05 21:57:54 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/05 23:51:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,36 @@ int	is_ok_double(char c)
 		return (0);
 }
 
+int	type_token(char c)
+{
+	if (c == '|')
+		return (PIPE);
+	//else if (c == '||')
+		//return (LOGICAL_OR);
+	//else if (c == '&&')
+		//return (LOGICAL_AND);
+	else if (c == ';')
+		return (SEMICOLON);
+	else if (c == '<')
+		return (INPUT_REDIRECTION);
+	else if (c == '>')
+		return (OUTPUT_REDIRECTION);
+	//else if (c == '>>')
+		//return (HERE_DOCUMENT);
+	//else if (c == '<<')
+		//return (APPEND_OUTPUT_REDIRECTION);
+	else if (c == '\'')
+		return (SIMPLE_QUOTE);
+	//else if (c == '"')
+		//return (DOUBLE_QUOTE);
+	else if (c == '(')
+		return (BRACKETS_R);
+	else if (c == ')')
+		return (BRACKETS_L);
+	else
+		return (WORD);
+}
+
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
 int	main(void)
 {
@@ -50,6 +80,7 @@ int	main(void)
 	int		i;
 	t_token	*token;
 	char	*str;
+	//int	type;
 
 	while (1)
 	{
