@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/05 14:49:42 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:09:59 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	is_operator_logical(char c)
 	if (c == '|' || c == '&' || c == ';' || c == '<' || c == '>'
 		|| c == '(' || c == ')')
 	{
-		return (1);
+		return (c);
 	}
 	else
 		return (0);
@@ -58,7 +58,7 @@ int	main(void)
 			break ;
 		if (line)
 			add_history(line);
-		printf("line = [%s]\n", line);
+ 		printf("line = [%s]\n", line);
 		size_line = ft_strlen(line);
 		printf("taille prompt: %d\n", size_line);
 		printf("carac: %c\n", line[1]);
@@ -66,36 +66,34 @@ int	main(void)
 		{
 			//AJOUT - Tokenise bien les operateurs logique.
 			//MAIS, si double op tokénise et aprés repasse et retokénise le i+1;
-			while (line[i] != '\0' && (line[i] == ' '
-					|| line[i] == '\t' || line[i] == '\n'))
+			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
 				i++;
-			if (is_operator_logical(line[i]) == 1)
+			start = i;
+			if (is_operator_logical(line[i]) == line[i])
 			{
-				if (is_operator_logical(line[i + 1]) == 1)
+				if (is_operator_logical(line[i + 1]) == line[i])
 				{
-					str = ft_substr(line, i, 2);
+					str = ft_substr(line, start, 2);
 					add_token_end(&token, create_token(OPERATOR, str));
-					i++;
+					i += 2;
 				}
 				else
 				{
-					str = ft_substr(line, i, 1);
+					str = ft_substr(line, start, 1);
 					add_token_end(&token, create_token(OPERATOR, str));
+					i++;
 				}
 			}
 			//FIN_AJOUT
-			start = i;
-			while (line[i] != '\0' && ft_istokenword(line[i]) == 1)
-				i++;
-			str = ft_substr(line, start, i - start);
-		//	printf("str = [%s]\n", str);
-			if (ft_istokenword(*str) == 1)
+			else if (line[i] != '\0' && ft_istokenword(line[i]) == 1)
 			{
-				add_token_end(&token, create_token(WORD, str));
-			}
-			else
-			{
-				i++;
+				while (line[i] != '\0' && ft_istokenword(line[i]) == 1)
+					i++;
+				str = ft_substr(line, start, i - start);
+				if (ft_istokenword(*str) == 1)
+					add_token_end(&token, create_token(WORD, str));
+				else
+					i++;
 			}
 			print_token_list(token);
 		}
