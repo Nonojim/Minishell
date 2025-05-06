@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/06 10:46:56 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 22:24:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ enum e_TOKEN_TYPE
 	DOUBLE_QUOTE, //" 10 ASCII = 34
 	BRACKETS_R, //( 11 ASCII = 40
 	BRACKETS_L, //) 12 ASCII = 41
-	ENV_VAR, //$ 13 ASCII = 36
 	TILDE, // ~ 14  ASCII = 126
 };
 
