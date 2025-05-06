@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/06 22:18:33 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:45:42 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,13 @@ char	*read_until_quote_closed(char *line, char quote)
 		if (!next_line)
 			break ;
 		tmp = line;
-		line = ft_strjoin(line, "\n"); // Pour simuler un retour ligne comme dans Bash
+		line = ft_strjoin(line, "\n"); // to emulate the \n that bash produce
 		free(tmp);
 		tmp = line;
-		line = ft_strjoin(line, next_line);
+		line = ft_strjoin(line, next_line); //to join the all the new lines to the first one
 		free(tmp);
 		free(next_line);
-		if (ft_strchr(line, quote)) // vérifie si la quote est fermée
+		if (ft_strchr(line, quote)) // check if quote is closed
 			break ;
 	}
 	return (line);
@@ -128,26 +128,30 @@ int	main(void)
 		//printf("carac: %c\n", line[1]);
 		while (line[i] != '\0')
 		{
+			//skip whitespaces
 			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
 				i++;
 			start = i;
-			if (line[i] == '\'' && line[i])
+			//if single or double quote
+			if ((line[i] == '\'' || line[i] == '\"') && line[i])
 			{
-				while (line[i] == '\'')
+				char quote = line[i];
+				while (line[i] == quote)
 					i++;
 				start = i;
-				while (line[i] && line[i] != '\'')
+				while (line[i] && line[i] != quote)
 					i++;
+				//if its unclosed
 				if(!line[i])
 				{
-					line = read_until_quote_closed(line, '\'');
+					line = read_until_quote_closed(line, quote);
 					i = start - 1;
 					continue;
 				}
 				str = ft_substr(line, start, i - start);
 				type = type_token(str);
 				add_token_end(&token, create_token(type, str));
-				while (line[i] == '\'')
+				while (line[i] == quote)
 					i++;
 			}
 			//Ajout traitement des tokens variable $
