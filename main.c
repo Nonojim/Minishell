@@ -6,11 +6,14 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/06 03:39:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 10:59:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// TOKENS ASCII : | = 124 | || = 124,124 | && = 38,38 | ; = 59 | < = 60 | << = 60,60 | > = 62
+// | >> = 62,62 | ' = 39 | " = 34 | ( = 40 | ) = 41 | $ = 36 | ~ = 126
 
 int	ft_istokenword(int str)
 {
@@ -44,22 +47,22 @@ int	is_ok_double(char str)
 //commande nvim pour changer mon ancien char c en char str :%s/\<c\>/str/g
 int	type_token(char *str)
 {
-	if (str[0] == '|')
-		return (PIPE);
-	else if (str[0] == '|' && str[1] == '|' )
+	if (str[0] == '|' && str[1] == '|' )
 		return (LOGICAL_OR);
+	else if (str[0] == '>' && str[1] == '>')
+		return (OUTPUT_REDIRECTION);
+	else if (str[0] == '<' && str[1] == '<')
+		return (APPEND_OUTPUT_REDIRECTION);
 	else if (str[0] == '&' && str[1] == '&')
 		return (LOGICAL_AND);
+	else if (str[0] == '|')
+		return (PIPE);
 	else if (str[0] == ';')
 		return (SEMICOLON);
 	else if (str[0] == '<')
 		return (INPUT_REDIRECTION);
-	else if (str[0] == '<' && str[1] == '<')
-		return (APPEND_OUTPUT_REDIRECTION);
 	else if (str[0] == '>')
 		return (HERE_DOCUMENT);
-	else if (str[0] == '>' && str[1] == '>')
-		return (OUTPUT_REDIRECTION);
 	else if (str[0] == '\'')
 		return (SIMPLE_QUOTE);
 	else if (str[0] == '"')
@@ -68,6 +71,10 @@ int	type_token(char *str)
 		return (BRACKETS_R);
 	else if (str[0] == ')')
 		return (BRACKETS_L);
+	else if (str[0] == '~')
+		return (TILDE);
+	else if (*str == '$')
+		return (ENV_VAR);
 	else
 		return (WORD);
 }
@@ -76,7 +83,7 @@ int	type_token(char *str)
 int	main(void)
 {
 	char	*line;
-	int		size_line;
+//	int		size_line;
 	int		start;
 	int		i;
 	t_token	*token;
@@ -87,16 +94,16 @@ int	main(void)
 	{
 		token = NULL;
 		i = 0;
-		type = -1;
 		start = 0;
+		type = -1;
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
 		if (line)
 			add_history(line);
  		printf("line = [%s]\n", line);
-		size_line = ft_strlen(line);
-		printf("taille prompt: %d\n", size_line);
+		//size_line = ft_strlen(line);
+		//printf("taille prompt: %d\n", size_line);
 		//printf("carac: %str\n", line[1]);
 		while (line[i] != '\0')
 		{
@@ -114,7 +121,7 @@ int	main(void)
 				type = type_token(str);
 				add_token_end(&token, create_token(type, str));
 				while (line[i] == '\'')
-					i++;	
+					i++;
 			}
 			else if (is_operator_logical(line[i]) == line[i] && line[i])
 			{
