@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/06 00:02:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:18:33 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // TOKENS ASCII : | = 124 | || = 124,124 | && = 38,38 | ; = 59 | < = 60 | << = 60,60 | > = 62
 // | >> = 62,62 | ' = 39 | " = 34 | ( = 40 | ) = 41 | $ = 36 | ~ = 126
 
-int	ft_istokenword(int str)
+int	ft_istokenword(int c)
 {
 	if (c == 38 || c == 124 || c == 60 || c == 62 || c == 59
 		|| c == 40 || c == 41 || c == 34 || c == 39)
@@ -25,20 +25,20 @@ int	ft_istokenword(int str)
 	return (0);
 }
 
-int	is_operator_logical(char str)
+int	is_operator_logical(char c)
 {
-	if (str == '|' || str == '&' || str == ';' || str == '<' || str == '>'
-		|| str == '(' || str == ')')
+	if (c == '|' || c == '&' || c == ';' || c == '<' || c == '>'
+		|| c == '(' || c == ')')
 	{
-		return (str);
+		return (c);
 	}
 	else
 		return (0);
 }
 
-int	is_ok_double(char str)
+int	is_ok_double(char c)
 {
-	if (str == '|' || str == '&' || str == '<' || str == '<')
+	if (c == '|' || c == '&' || c == '<' || c == '<')
 		return (1);
 	else
 		return (0);
