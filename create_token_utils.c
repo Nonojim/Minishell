@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   create_token_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:11:59 by lduflot           #+#    #+#             */
 /*   Updated: 2025/05/06 10:48:37 by lduflot          ###   ########.fr       */
@@ -42,9 +42,25 @@ void	add_token_end(t_token **token, t_token *new_token)
 
 void	print_token_list(t_token *token_list)
 {
+	int		i;
+	char	*str;
+
 	while (token_list)
 	{
-		printf("[%d : %s] -> ", token_list->type, token_list->str);
+		str = token_list->str;
+		printf("[%d : ", token_list->type);
+		i = 0;
+		while (str[i])
+		{
+			if (str[i] == '\n')
+				printf("\\n");
+			else if (str[i] == '\t')
+				printf("\\t");
+			else
+				printf("%c", str[i]);
+			i++;
+		}
+		printf("] -> ");
 		token_list = token_list->next;
 	}
 	printf("NULL\n");

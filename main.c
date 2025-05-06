@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/06 11:49:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 00:02:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 int	ft_istokenword(int str)
 {
-	if (str == 38 || str == 92 || str == 124 || str == 60 || str == 62 || str == 59
-		|| str == 40 || str == 41 || str == 34 || str == 39)
+	if (c == 38 || c == 124 || c == 60 || c == 62 || c == 59
+		|| c == 40 || c == 41 || c == 34 || c == 39)
 		return (0);
-	if (str >= 33 && str <= 126)
+	if ((c >= 33 && c <= 126) || c == 92)
 		return (1);
 	return (0);
 }
@@ -44,7 +44,6 @@ int	is_ok_double(char str)
 		return (0);
 }
 
-//commande nvim pour changer mon ancien char c en char str :%s/\<c\>/str/g
 int	type_token(char *str)
 {
 	if (str[0] == '|' && str[1] == '|' )
@@ -79,11 +78,35 @@ int	type_token(char *str)
 		return (WORD);
 }
 
+char	*read_until_quote_closed(char *line, char quote)
+{
+	char	*next_line;
+	char	*tmp;
+
+	while (1)
+	{
+		next_line = readline("> ");
+		if (!next_line)
+			break ;
+		tmp = line;
+		line = ft_strjoin(line, "\n"); // Pour simuler un retour ligne comme dans Bash
+		free(tmp);
+		tmp = line;
+		line = ft_strjoin(line, next_line);
+		free(tmp);
+		free(next_line);
+		if (ft_strchr(line, quote)) // vérifie si la quote est fermée
+			break ;
+	}
+	return (line);
+
+}
+
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
 int	main(void)
 {
 	char	*line;
-//	int		size_line;
+	//int		size_line;
 	int		start;
 	int		i;
 	t_token	*token;
@@ -99,12 +122,10 @@ int	main(void)
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
-		if (line)
-			add_history(line);
- 		printf("line = [%s]\n", line);
+		//printf("line = [%s]\n", line);
 		//size_line = ft_strlen(line);
 		//printf("taille prompt: %d\n", size_line);
-		//printf("carac: %str\n", line[1]);
+		//printf("carac: %c\n", line[1]);
 		while (line[i] != '\0')
 		{
 			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
@@ -117,6 +138,12 @@ int	main(void)
 				start = i;
 				while (line[i] && line[i] != '\'')
 					i++;
+				if(!line[i])
+				{
+					line = read_until_quote_closed(line, '\'');
+					i = start - 1;
+					continue;
+				}
 				str = ft_substr(line, start, i - start);
 				type = type_token(str);
 				add_token_end(&token, create_token(type, str));
@@ -168,14 +195,12 @@ int	main(void)
 					i++;
 				str = ft_substr(line, start, i - start);
 				if (ft_istokenword(*str) == 1)
-				{
-					type = type_token(str);
-					add_token_end(&token, create_token(type, str));
-				}
+				  add_token_end(&token, create_token(WORD, str));
 				else
 					i++;
 			}
 		}
+		add_history(line);
 		print_token_list(token);
 		free_token(token);
 		free(line);

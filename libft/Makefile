@@ -10,7 +10,7 @@ OBJS = ${SRC:.c=.o}
 #build target name
 NAME = libft.a
 #compiler
-CC = gcc
+CC = cc
 #compiler flags
 CCFLAGS = -Wall -Wextra -Werror
 #include directory == dossier includes
