@@ -17,10 +17,10 @@
 
 int	ft_istokenword(int c)
 {
-	if (c == 38 || c == 124 || c == 60 || c == 62 || c == 59
-		|| c == 40 || c == 41 || c == 34 || c == 39)
+	if (c == '&' || c == '|' || c == '<' || c == '>' || c == ';'
+		|| c == '(' || c == ')' || c == '"' || c == '\'')
 		return (0);
-	if ((c >= 33 && c <= 126) || c == 92)
+	if ((c >= 33 && c <= 126) || c == '\\')
 		return (1);
 	return (0);
 }
@@ -70,10 +70,8 @@ int	type_token(char *str)
 		return (BRACKETS_R);
 	else if (str[0] == ')')
 		return (BRACKETS_L);
-	else if (str[0] == '~')
-		return (TILDE);
-	else if (*str == '$')
-		return (ENV_VAR);
+	//else if (str[0] == '~')
+		//return (TILDE);
 	else
 		return (WORD);
 }
@@ -153,28 +151,6 @@ int	main(void)
 				add_token_end(&token, create_token(type, str));
 				while (line[i] == quote)
 					i++;
-			}
-			//Ajout traitement des tokens variable $
-			if (line[i] == '$')
-			{
-				start = i;
-				//i++;
-				if (line[i + 1] && ft_istokenword(line[i + 1]) == 1)
-				{
-					start = i;
-					while(ft_istokenword(line[i]) && line[i] && !is_operator_logical(line[i]))
-						i++;
-					str = ft_substr(line, start, i - start);
-					type = type_token(str);
-					add_token_end(&token, create_token(type, str));
-				}
-				else
-				{
-					i++;
-					str = ft_substr(line, start, 1);
-					type = type_token(str);
-					add_token_end(&token, create_token(type, str));
-				}
 			}
 			else if (is_operator_logical(line[i]) == line[i] && line[i])
 			{
