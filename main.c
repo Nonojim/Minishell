@@ -12,7 +12,10 @@
 
 #include "minishell.h"
 
-int	ft_istokenword(int c)
+// TOKENS ASCII : | = 124 | || = 124,124 | && = 38,38 | ; = 59 | < = 60 | << = 60,60 | > = 62
+// | >> = 62,62 | ' = 39 | " = 34 | ( = 40 | ) = 41 | $ = 36 | ~ = 126
+
+int	ft_istokenword(int str)
 {
 	if (c == 38 || c == 124 || c == 60 || c == 62 || c == 59
 		|| c == 40 || c == 41 || c == 34 || c == 39)
@@ -22,23 +25,57 @@ int	ft_istokenword(int c)
 	return (0);
 }
 
-int	is_operator_logical(char c)
+int	is_operator_logical(char str)
 {
-	if (c == '|' || c == '&' || c == ';' || c == '<' || c == '>'
-		|| c == '(' || c == ')')
+	if (str == '|' || str == '&' || str == ';' || str == '<' || str == '>'
+		|| str == '(' || str == ')')
 	{
-		return (c);
+		return (str);
 	}
 	else
 		return (0);
 }
 
-int	is_ok_double(char c)
+int	is_ok_double(char str)
 {
-	if (c == '|' || c == '&' || c == '<' || c == '<')
+	if (str == '|' || str == '&' || str == '<' || str == '<')
 		return (1);
 	else
 		return (0);
+}
+
+int	type_token(char *str)
+{
+	if (str[0] == '|' && str[1] == '|' )
+		return (LOGICAL_OR);
+	else if (str[0] == '>' && str[1] == '>')
+		return (OUTPUT_REDIRECTION);
+	else if (str[0] == '<' && str[1] == '<')
+		return (APPEND_OUTPUT_REDIRECTION);
+	else if (str[0] == '&' && str[1] == '&')
+		return (LOGICAL_AND);
+	else if (str[0] == '|')
+		return (PIPE);
+	else if (str[0] == ';')
+		return (SEMICOLON);
+	else if (str[0] == '<')
+		return (INPUT_REDIRECTION);
+	else if (str[0] == '>')
+		return (HERE_DOCUMENT);
+	else if (str[0] == '\'')
+		return (SIMPLE_QUOTE);
+	else if (str[0] == '"')
+		return (DOUBLE_QUOTE);
+	else if (str[0] == '(')
+		return (BRACKETS_R);
+	else if (str[0] == ')')
+		return (BRACKETS_L);
+	else if (str[0] == '~')
+		return (TILDE);
+	else if (*str == '$')
+		return (ENV_VAR);
+	else
+		return (WORD);
 }
 
 char	*read_until_quote_closed(char *line, char quote)
@@ -62,6 +99,7 @@ char	*read_until_quote_closed(char *line, char quote)
 			break ;
 	}
 	return (line);
+
 }
 
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
@@ -73,12 +111,14 @@ int	main(void)
 	int		i;
 	t_token	*token;
 	char	*str;
+	int	type;
 
 	while (1)
 	{
 		token = NULL;
 		i = 0;
 		start = 0;
+		type = -1;
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
@@ -105,22 +145,47 @@ int	main(void)
 					continue;
 				}
 				str = ft_substr(line, start, i - start);
-				add_token_end(&token, create_token(WORD, str));
+				type = type_token(str);
+				add_token_end(&token, create_token(type, str));
 				while (line[i] == '\'')
-					i++;	
+					i++;
+			}
+			//Ajout traitement des tokens variable $
+			if (line[i] == '$')
+			{
+				start = i;
+				//i++;
+				if (line[i + 1] && ft_istokenword(line[i + 1]) == 1)
+				{
+					start = i;
+					while(ft_istokenword(line[i]) && line[i] && !is_operator_logical(line[i]))
+						i++;
+					str = ft_substr(line, start, i - start);
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
+				}
+				else
+				{
+					i++;
+					str = ft_substr(line, start, 1);
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
+				}
 			}
 			else if (is_operator_logical(line[i]) == line[i] && line[i])
 			{
 				if (is_operator_logical(line[i + 1]) == line[i] && is_ok_double(line[i])  == 1)
 				{
 					str = ft_substr(line, start, 2);
-					add_token_end(&token, create_token(OPERATOR, str));
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
 					i += 2;
 				}
 				else
 				{
 					str = ft_substr(line, start, 1);
-					add_token_end(&token, create_token(OPERATOR, str));
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
 					i++;
 				}
 			}
@@ -130,7 +195,7 @@ int	main(void)
 					i++;
 				str = ft_substr(line, start, i - start);
 				if (ft_istokenword(*str) == 1)
-				add_token_end(&token, create_token(WORD, str));
+				  add_token_end(&token, create_token(WORD, str));
 				else
 					i++;
 			}

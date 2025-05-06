@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/05 16:38:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 10:46:56 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,21 @@
 
 enum e_TOKEN_TYPE
 {
-	WORD,
-	OPERATOR,
-	PIPE, //|
-	LOGICAL_OR, //||
-	LOGICAL_AND, //&&
-	SEMICOLON, //;
-	INPUT_REDIRECTION, //<
-	HERE_DOCUMENT, //>
-	OUTPUT_REDIRECTION, //>>
-	APPEND_OUTPUT_REDIRECTION, //<<
-	SIMPLE_QUOTE, //'
-	DOUBLE_QUOTE, //"
-	BRACKETS_R, //(
-	BRACKETS_L, //)
+	WORD, //0
+	PIPE, //| 1 ASCII = 124
+	LOGICAL_OR, //|| 2 ASCII = 124,124
+	LOGICAL_AND, //&& 3 ASCII = 38,38
+	SEMICOLON, //; 4 ASCII = 59
+	INPUT_REDIRECTION, //< 5 ASCII = 60
+	HERE_DOCUMENT, //> 6 ASCII = 60,60
+	OUTPUT_REDIRECTION, //>> 7 ASCII = 62
+	APPEND_OUTPUT_REDIRECTION, //<< 8 ASCII = 62,62
+	SIMPLE_QUOTE, //' 9 ASCII = 39
+	DOUBLE_QUOTE, //" 10 ASCII = 34
+	BRACKETS_R, //( 11 ASCII = 40
+	BRACKETS_L, //) 12 ASCII = 41
+	ENV_VAR, //$ 13 ASCII = 36
+	TILDE, // ~ 14  ASCII = 126
 };
 
 typedef struct s_token

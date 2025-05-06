@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:11:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/05 23:47:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/06 10:48:37 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void	free_token(t_token *token_list)
 	while (token_list)
 	{
 		tmp = token_list->next;
-		free(token_list->str);
+		if (token_list->str)
+			free(token_list->str);
 		free(token_list);
 		token_list = tmp;
 	}
