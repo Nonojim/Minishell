@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/06 10:59:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 11:49:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,28 @@ int	main(void)
 				while (line[i] == '\'')
 					i++;
 			}
+			//Ajout traitement des tokens variable $
+			if (line[i] == '$')
+			{
+				start = i;
+				//i++;
+				if (line[i + 1] && ft_istokenword(line[i + 1]) == 1)
+				{
+					start = i;
+					while(ft_istokenword(line[i]) && line[i] && !is_operator_logical(line[i]))
+						i++;
+					str = ft_substr(line, start, i - start);
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
+				}
+				else
+				{
+					i++;
+					str = ft_substr(line, start, 1);
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
+				}
+			}
 			else if (is_operator_logical(line[i]) == line[i] && line[i])
 			{
 				if (is_operator_logical(line[i + 1]) == line[i] && is_ok_double(line[i])  == 1)
@@ -134,7 +156,7 @@ int	main(void)
 				}
 				else
 				{
-					str = ft_substr(line, start, 1);	
+					str = ft_substr(line, start, 1);
 					type = type_token(str);
 					add_token_end(&token, create_token(type, str));
 					i++;
