@@ -6,66 +6,67 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/05 23:51:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 03:39:05 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_istokenword(int c)
+int	ft_istokenword(int str)
 {
-	if (c == 38 || c == 92 || c == 124 || c == 60 || c == 62 || c == 59
-		|| c == 40 || c == 41 || c == 34 || c == 39)
+	if (str == 38 || str == 92 || str == 124 || str == 60 || str == 62 || str == 59
+		|| str == 40 || str == 41 || str == 34 || str == 39)
 		return (0);
-	if (c >= 33 && c <= 126)
+	if (str >= 33 && str <= 126)
 		return (1);
 	return (0);
 }
 
-int	is_operator_logical(char c)
+int	is_operator_logical(char str)
 {
-	if (c == '|' || c == '&' || c == ';' || c == '<' || c == '>'
-		|| c == '(' || c == ')')
+	if (str == '|' || str == '&' || str == ';' || str == '<' || str == '>'
+		|| str == '(' || str == ')')
 	{
-		return (c);
+		return (str);
 	}
 	else
 		return (0);
 }
 
-int	is_ok_double(char c)
+int	is_ok_double(char str)
 {
-	if (c == '|' || c == '&' || c == '<' || c == '<')
+	if (str == '|' || str == '&' || str == '<' || str == '<')
 		return (1);
 	else
 		return (0);
 }
 
-int	type_token(char c)
+//commande nvim pour changer mon ancien char c en char str :%s/\<c\>/str/g
+int	type_token(char *str)
 {
-	if (c == '|')
+	if (str[0] == '|')
 		return (PIPE);
-	//else if (c == '||')
-		//return (LOGICAL_OR);
-	//else if (c == '&&')
-		//return (LOGICAL_AND);
-	else if (c == ';')
+	else if (str[0] == '|' && str[1] == '|' )
+		return (LOGICAL_OR);
+	else if (str[0] == '&' && str[1] == '&')
+		return (LOGICAL_AND);
+	else if (str[0] == ';')
 		return (SEMICOLON);
-	else if (c == '<')
+	else if (str[0] == '<')
 		return (INPUT_REDIRECTION);
-	else if (c == '>')
+	else if (str[0] == '<' && str[1] == '<')
+		return (APPEND_OUTPUT_REDIRECTION);
+	else if (str[0] == '>')
+		return (HERE_DOCUMENT);
+	else if (str[0] == '>' && str[1] == '>')
 		return (OUTPUT_REDIRECTION);
-	//else if (c == '>>')
-		//return (HERE_DOCUMENT);
-	//else if (c == '<<')
-		//return (APPEND_OUTPUT_REDIRECTION);
-	else if (c == '\'')
+	else if (str[0] == '\'')
 		return (SIMPLE_QUOTE);
-	//else if (c == '"')
-		//return (DOUBLE_QUOTE);
-	else if (c == '(')
+	else if (str[0] == '"')
+		return (DOUBLE_QUOTE);
+	else if (str[0] == '(')
 		return (BRACKETS_R);
-	else if (c == ')')
+	else if (str[0] == ')')
 		return (BRACKETS_L);
 	else
 		return (WORD);
@@ -80,12 +81,13 @@ int	main(void)
 	int		i;
 	t_token	*token;
 	char	*str;
-	//int	type;
+	int	type;
 
 	while (1)
 	{
 		token = NULL;
 		i = 0;
+		type = -1;
 		start = 0;
 		line = readline("Minishell$ ");
 		if (line == NULL)
@@ -95,7 +97,7 @@ int	main(void)
  		printf("line = [%s]\n", line);
 		size_line = ft_strlen(line);
 		printf("taille prompt: %d\n", size_line);
-		printf("carac: %c\n", line[1]);
+		//printf("carac: %str\n", line[1]);
 		while (line[i] != '\0')
 		{
 			while (line[i] != '\0' && (line[i] == ' '|| line[i] == '\t' || line[i] == '\n'))
@@ -109,7 +111,8 @@ int	main(void)
 				while (line[i] && line[i] != '\'')
 					i++;
 				str = ft_substr(line, start, i - start);
-				add_token_end(&token, create_token(WORD, str));
+				type = type_token(str);
+				add_token_end(&token, create_token(type, str));
 				while (line[i] == '\'')
 					i++;	
 			}
@@ -118,13 +121,15 @@ int	main(void)
 				if (is_operator_logical(line[i + 1]) == line[i] && is_ok_double(line[i])  == 1)
 				{
 					str = ft_substr(line, start, 2);
-					add_token_end(&token, create_token(OPERATOR, str));
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
 					i += 2;
 				}
 				else
 				{
-					str = ft_substr(line, start, 1);
-					add_token_end(&token, create_token(OPERATOR, str));
+					str = ft_substr(line, start, 1);	
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
 					i++;
 				}
 			}
@@ -134,7 +139,10 @@ int	main(void)
 					i++;
 				str = ft_substr(line, start, i - start);
 				if (ft_istokenword(*str) == 1)
-					add_token_end(&token, create_token(WORD, str));
+				{
+					type = type_token(str);
+					add_token_end(&token, create_token(type, str));
+				}
 				else
 					i++;
 			}

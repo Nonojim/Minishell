@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/05 16:38:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/06 02:54:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,19 @@
 
 enum e_TOKEN_TYPE
 {
-	WORD,
-	OPERATOR,
-	PIPE, //|
-	LOGICAL_OR, //||
-	LOGICAL_AND, //&&
-	SEMICOLON, //;
-	INPUT_REDIRECTION, //<
-	HERE_DOCUMENT, //>
-	OUTPUT_REDIRECTION, //>>
-	APPEND_OUTPUT_REDIRECTION, //<<
-	SIMPLE_QUOTE, //'
-	DOUBLE_QUOTE, //"
-	BRACKETS_R, //(
-	BRACKETS_L, //)
+	WORD, //0
+	PIPE, //| 1
+	LOGICAL_OR, //|| 2
+	LOGICAL_AND, //&& 3
+	SEMICOLON, //; 4
+	INPUT_REDIRECTION, //< 5
+	HERE_DOCUMENT, //> 6
+	OUTPUT_REDIRECTION, //>> 7
+	APPEND_OUTPUT_REDIRECTION, //<< 8
+	SIMPLE_QUOTE, //' 9
+	DOUBLE_QUOTE, //" 10
+	BRACKETS_R, //( 11
+	BRACKETS_L, //) 12
 };
 
 typedef struct s_token
