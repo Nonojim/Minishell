@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/07 15:06:33 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:40:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	token_quote(int *i, int start, char *line, t_token **token)
 	str = ft_substr(line, start, *i - start);
 	type = type_token(str);
 	add_token_end(token, create_token(type, str));
-	while (line[*i] == quote)
+	if (line[*i] == quote)
 		(*i)++;
 	return (0);
 }
@@ -109,8 +109,8 @@ int	main(void)
 				//token_quote(&i, start, line, &token);
 				if (token_quote(&i, start, line, &token) == 1)
 					continue ;
-				else
-					break;
+				//else
+					//break;
 			}
 			////BEGIN A COUPER
 			/*{
