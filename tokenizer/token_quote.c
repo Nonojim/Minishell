@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 13:01:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:58:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 * line = ft_strjoin(line, next_line); = join the all new lines to the first one
 * if (ft_strchr(line, quote)) = check if quote is closed
 */
-char	*read_until_quote_closed(char *line, char quote)
+/*char	*read_until_quote_closed(char *line, char quote)
 {
 	char	*next_line;
 	char	*tmp;
@@ -40,4 +40,4 @@ char	*read_until_quote_closed(char *line, char quote)
 			break ;
 	}
 	return (line);
-}
+}*/
