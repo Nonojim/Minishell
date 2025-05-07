@@ -1,0 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
+/*   Updated: 2025/05/07 20:30:23 by npederen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+t_token	*tokenize(t_token *token, char *line)
+{
+	int start;
+	int		i;
+
+	i = 0;
+	start = 0;
+	while (line[i] != '\0')
+	{
+		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '\t'
+					|| line[i] == '\n'))
+				i++;
+		start = i;
+		if ((line[i] == '\'' || line[i] == '\"') && line[i])
+		{
+			if (token_quote(&i, start, line, &token) == 1)
+				continue ;
+		}
+		else if (is_operator_logical(line[i]) == line[i] && line[i])
+			token_logical_operator(&i, start, line, &token);
+		else if (line[i] != '\0' && is_word(line[i]) == 1)
+			token_word(&i, start, line, &token);
+	}
+	return (token);
+}

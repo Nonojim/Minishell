@@ -11,7 +11,8 @@ LIBFT = libft/libft.a
 ###############################
 ##SOURCES
 
-FILES = tokenizer/token_operator.c \
+FILES = 		tokenizer/tokenizer.c \
+				tokenizer/token_operator.c \
 				tokenizer/token_quote.c \
 				tokenizer/token_utils.c \
 				tokenizer/token_word.c \

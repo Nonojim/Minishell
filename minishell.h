@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 17:40:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/07 20:11:41 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_token
 }			t_token;
 
 // Fonctions tokenisations
+//tokenize the input
+t_token	*tokenize(t_token *token, char *line);
 //Create_free_print Token
 t_token	*create_token(int type, char *str);
 void	add_token_end(t_token **token, t_token *new_token);
