@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/06 22:24:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:40:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,23 @@ typedef struct s_token
 }			t_token;
 
 // Fonctions tokenisations
+//Create_free_print Token
 t_token	*create_token(int type, char *str);
 void	add_token_end(t_token **token, t_token *new_token);
 void	print_token_list(t_token *token_list);
 void	free_token(t_token *token_list);
+//Type Token
+int		type_token(char *str);
+int		type_token_double_operator(char *str);
+//Token_word
+int		is_word(int c);
+void	token_word(int *i, int start, char *line, t_token **token);
+//Token_operator
 int		is_operator_logical(char c);
-int		ft_istokenword(int c);
+int		is_ok_double(char c);
+void	token_logical_operator(int *i, int start, char *line, t_token **token);
+//Token_quote
+char	*read_until_quote_closed(char *line, char quote);
+int	token_quote(int *i, int start, char *line, t_token **token);
 
 #endif

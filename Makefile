@@ -3,7 +3,7 @@
 MAKEFLAGS += --silent
 
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra
 READFLAG = -lreadline
 NAME = minishell
 LIBFT = libft/libft.a
@@ -11,8 +11,11 @@ LIBFT = libft/libft.a
 ###############################
 ##SOURCES
 
-FILES = minishell.c \
-				create_token_utils.c \
+FILES = tokenizer/token_operator.c \
+				tokenizer/token_quote.c \
+				tokenizer/token_utils.c \
+				tokenizer/token_word.c \
+				tokenizer/token_type.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
