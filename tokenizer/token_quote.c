@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 21:06:13 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/07 22:17:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,14 @@
 char	*read_until_quote_closed(char *line, char quote)
 {
 	char	*next_line;
-	char	*tmp;
 
 	while (1)
 	{
 		next_line = readline("> ");
 		if (!next_line)
 			break ;
-		tmp = line;
-		line = ft_strjoin(line, "\n");
-		free(tmp);
-		tmp = line;
+		//line = ft_strjoin(line, "\n");
 		line = ft_strjoin(line, next_line);
-		free(tmp);
 		free(next_line);
 		if (ft_strchr(line, quote))
 			break ;
@@ -47,7 +42,7 @@ char	*read_until_quote_closed(char *line, char quote)
 * If the quote is not closed = read_until_closed
 * When the same quote is found, prompt is closed and token is create
  */
-int	token_quote(int *i, int start, char *line, t_token **token)
+char	*token_quote(int *i, int start, char *line, t_token **token)
 {
 	char	quote;
 	char	*str;
@@ -61,7 +56,7 @@ int	token_quote(int *i, int start, char *line, t_token **token)
 	{
 		line = read_until_quote_closed(line, quote);
 		*i = start - 1;
-		return(1) ;
+		return(line) ;
 	}
 	if (*i - start > 0)
 	{
@@ -69,5 +64,5 @@ int	token_quote(int *i, int start, char *line, t_token **token)
 		add_token_end(token, create_token(WORD, str));
 	}
 	(*i)++;
-	return (0);
+	return (line);
 }

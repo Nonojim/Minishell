@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 20:11:41 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/07 21:55:57 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ int		is_ok_double(char c);
 void	token_logical_operator(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
-int	token_quote(int *i, int start, char *line, t_token **token);
+char	*token_quote(int *i, int start, char *line, t_token **token);
 
 #endif
