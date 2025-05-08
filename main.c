@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/08 02:05:49 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/08 02:18:25 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(void)
 		print_token_list(token);
 		free_token(token);
 		free(line);
-		rl_clear_history());
+		rl_clear_history();
 	}
 	return (0);
 }
