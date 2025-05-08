@@ -1,0 +1,20 @@
+#valgrind --leak-check=full --track-fds=yes --trace-children=yes --show-leak-kinds=all --suppressions=readline.supp ./minishell
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:readline
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:add_history
+}
+#{
+# <insert_a_suppression_name_here>
+# Memcheck:Leak
+#  ...
+#  obj:/*/bin/*
+#  ...
+#}
