@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 12:56:56 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/08 01:31:03 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*create_token(int type, char *str)
 {
 	t_token	*new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = ft_calloc(1, sizeof(t_token));
 	if (new_token == NULL)
 		return (NULL);
 	new_token->type = type;
@@ -73,8 +73,7 @@ void	free_token(t_token *token_list)
 	while (token_list)
 	{
 		tmp = token_list->next;
-		if (token_list->str)
-			free(token_list->str);
+		free(token_list->str);
 		free(token_list);
 		token_list = tmp;
 	}
