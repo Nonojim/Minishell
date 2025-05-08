@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/08 01:40:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/09 00:26:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <readline/history.h>
 # include <limits.h>
 # include "libft/libft.h"
+# include "parser/ast.h"
 
 enum e_TOKEN_TYPE
 {
