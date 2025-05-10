@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/10 12:02:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/10 12:21:15 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ typedef struct s_treenode
 
 enum e_DIRECTION
 {
-	LEFT,
-	RIGHT,
+	LEFT, //0
+	RIGHT, //1
 };
 
 //Init AST
