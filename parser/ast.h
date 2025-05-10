@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/10 12:21:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/10 13:22:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define AST_H
 
 # include "../minishell.h"
+# include "../includes/tokenizer.h"
 
 /*
  * Grammaire LL : va definir la structure syntaxique d'une ligne de commande Shell.
@@ -73,5 +74,8 @@ enum e_DIRECTION
 t_treenode	*create_treenode(int type, char *str);
 void		add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void		free_treenode(t_treenode *treenode);
+
+//Parse
+void	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir);
 
 #endif

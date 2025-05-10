@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/10 12:43:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/10 13:24:33 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,19 @@ void	*parse_simple_command_without_redirection(t_token **token, t_treenode *pare
 {
 	t_treenode *simple_command_node = NULL;
 	
-	if (*token->type == WORD)
+	if ((*token)->type == WORD)
 	{
 		if (parent_node == NULL) //if is the first node;
 		{
-			command_note = create_treennode(WORD, *token->str)
+			simple_command_node = create_treenode(WORD, (*token)->str);
 		}
 		if (parent_node != NULL)
 		{
-			add_node(parent_node, command_node, dir);
+			add_node(parent_node, simple_command_node, dir);
 			//*token = *token->right;
 			//*token = *token->left
 		}
 	}
-	else
-		return ;
 	return(simple_command_node);
 }
 
@@ -49,7 +47,7 @@ void	print_ast(t_treenode *node, int dir)
 		}
 		if (node->right && dir == 1)
 		{
-			printf("\");
+			printf("\\");
 			printf("[%d : %s]\n", node->type, node->str);
 			node = node->right;
 		}
