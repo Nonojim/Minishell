@@ -6,13 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/09 11:19:27 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/10 11:25:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-
 
 t_treenode	*create_treenode(int type, char *str)
 {
