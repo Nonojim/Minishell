@@ -6,23 +6,100 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:27:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/13 15:46:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/15 17:30:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-	https://www.howtogeek.com/438882/how-to-use-pipes-on-linux/ 
+ * Type de sorties :
+stdin = entrée standart = ce que le programme lit int 0
+stdout = sortie standart = ce que le programme affiche int 1
+stderr = erreur standart = erreur envoyé par le programme int 2 
+DONC si on fait ls -l | wc -l
+ls -l est renvoyé sur le sdout du pipe, et wc -l à le stdin.
+Les sorties sont une variable en c (FILE *stdout, *stdin, *stderr);
+= pointeur vers des flux
+_FILENO (à la fin des sorties), numéro de fichier
+= descripteur de fichier
 */
+
+int	create_pipe(int *pipefd)
+{
+	if (pipe(pipefd) == -1)
+	{
+		printf("Error create pipe\n");
+		exit (EXIT_FAILURE);
+	}
+	return (0);
+}
+
+void	exec_pipeline(t_pipe *cmd)
+{
+	int	pipefd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+
+	create_pipe(pipefd);
+	pid1 = fork();
+	if (pid1 == -1)
+	{
+		printf("Error create fork\n");
+		exit (EXIT_FAILURE);
+	}
+	if (pid1 == 0)
+	{
+		close(pipefd[0]); //le premier processus écrit dans le pipe et le ne lit donc close lecture
+		dup2(pipefd[1], STDOUT_FILENO); // redirection stdout vers le pipe
+		close(pipefd[1]);
+		execvp(cmd->argv[0], cmd->argv);
+		exit(EXIT_FAILURE);
+	}
+	pid2 = fork();
+	if (pid2 == -1)
+	{
+		printf("Error create fork\n");
+		exit (EXIT_FAILURE);
+	}
+	if (pid2 == 0)
+	{
+		close(pipefd[1]); //le 2nd processus lit mais n'écrit pas, donc fermeture ecriture
+		dup2(pipefd[0], STDIN_FILENO); // redirection stdin vers le pipe
+		close(pipefd[0]);
+		execvp(cmd->argv[0], cmd->argv);
+		exit(EXIT_FAILURE);
+	}
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_pipe cmd;
+	t_pipe cmd2;
+
+	(void)argc;
+
+	cmd.argv = ft_split(argv[1], ' ');
+	cmd.next = &cmd2;
+	cmd2.argv = ft_split(argv[2], ' ');
+	cmd2.next = NULL;
+	exec_pipeline(&cmd);
+	//exec_pipeline(&cmd2);
+	return (0);
+}
+
 //Exemple du man pipe :
 // Creation d'un pipe.
 // Le processus parents écrit "argv" dans le pipe
 // Le processus enfant lit ce que le parent a écrit et l'affiche caractere par caractere sur la sortie standart (stdout).
-int	main(int argc, char **argv)
+/*int	main(int argc, char **argv)
 {
 	int pipefd[2]; //Tableau qui stocke les 2 extrémités du pipe. 0 = lecture, 1 = écriture
-	// Stockera les 2 files descriptors 
+	// Stockera les 2 files descriptors
 	pid_t cpid; //PID du processus enfant
 	char buf; //stock 1 caractere à la fois pour l'afficher dans l'enfant
 
@@ -55,4 +132,4 @@ int	main(int argc, char **argv)
 		wait(NULL); //atend que l'enfant se termine 
 		exit(EXIT_SUCCESS);
 	}
-}
+}*/

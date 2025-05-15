@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:18:22 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/13 15:11:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/15 16:27:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 
 # include "../minishell.h"
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -23,6 +24,14 @@
 # include <sys/wait.h>
 
 # include <assert.h>
+
+
+//Structure provisoire en attendant de le relier à l'AST
+typedef struct s_pipe
+{
+	char **argv;
+	struct s_pipe *next;
+}			t_pipe;
 
 /* urlographie
 https://www.geeksforgeeks.org/fork-system-call/
