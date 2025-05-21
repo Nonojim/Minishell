@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/21 13:55:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:58:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	main(void)
 		token = tokenize(token, &line);
 		add_history(line);
 		print_token_list(token);
-		create_tree(token);
+		t_treenode *tree = create_tree(token);
+		astreeprint(tree, 0);
 		//parse_simple_command_without_redirection(&token, NULL, 1);
 		free_token(token);
 		free(line);
