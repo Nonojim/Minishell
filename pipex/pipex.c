@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:27:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/15 17:30:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/18 09:01:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,34 @@ int	create_pipe(int *pipefd)
 	return (0);
 }
 
+/*
+ * FORK = sert à dupliquer le processus courant. 
+ * fork > 0 = processus pareil (processsus original)
+ * fork == 0 = processus enfant
+ * fork == -1 = erreur
+ * Les processus sont independant mais peuvent communiquer via des pipes; ou partager des fichiers ouvert.
+ * Exemple ls | wc -l 
+          [ Processus parent ]
+                |
+     ┌──────────┴──────────┐
+     |                     |
+ [ fork() ]           [ fork() ]
+     |                     |
+ [ Enfant 1 ]         [ Enfant 2 ]
+ (devient ls)         (devient wc -l)
+     |                     |
+ dup2(pipefd[1], 1)   dup2(pipefd[0], 0)
+     |                     |
+    stdout ───► pipe ───► stdin
+Resultat = 
+> ./a.out
+ls produit :        "fichier1\nfichier2\n..."
+→ passe dans pipe
+wc lit :            "fichier1\nfichier2\n..."
+→ compte les lignes
+→ affiche :         "2"
+
+ */
 void	exec_pipeline(t_pipe *cmd)
 {
 	int	pipefd[2];

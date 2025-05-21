@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/10 13:22:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/21 11:17:37 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 line                       ::= command_sequence (";" command_sequence)*;
 commande_sequence           ::= and_or ;
 and_or         ::= pipeline ( ("&&" | "||") pipeline )* ;
-pipeline       ::= command ( "|" command )+ ;
+pipeline       ::= command ( "|" command )* ;
 command        ::= "(" line ")" | simple_command ;
 simple_command ::= word ( word | redirection )* ;
 redirection    ::= ( "<" | "<<" | ">" | ">>" ) word ;
@@ -49,11 +49,11 @@ line           ::= command_sequence (SEMICOLON command_sequence)*
 command_sequence           ::= and_or ;
 and_or         ::= pipeline ( (LOGICAL_AND | LOGICAL_OR) pipeline )* ;
 pipeline       ::= command ( PIPE command )* ;
-command        ::= (BRACKETS_R line BRACKETS_L) | simple_command ;
+command        ::= (BRACKETS_L line BRACKETS_R) | simple_command ;
 simple_command ::= WORD ( WORD | redirection )* ;
 redirection    ::= (INPUT_REDIRECTION | HERE_DOCUMENT
 						OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION) WORD ;
-word 					 ::= (word word)+ | (word "word")+;
+word 					 ::= WORD+;
 */
 
 typedef struct s_treenode
@@ -74,8 +74,8 @@ enum e_DIRECTION
 t_treenode	*create_treenode(int type, char *str);
 void		add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void		free_treenode(t_treenode *treenode);
-
+void	print_ast(t_treenode *node, int dir);
 //Parse
-void	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir);
+t_treenode	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir);
 
 #endif
