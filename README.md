@@ -1,3 +1,37 @@
+   ### **MINISHELL**
+---
+
+**Etape 1**
+
+    - **Tokenizer**
+
+- Le Tokenizer réprésente le découpage du prompt saisie par l'utilisateur (avec readline).
+- Analyse de la string entrée par l'useur pour identifier les différents composants syntaxiques.
+- Creation d'un token composé : d'un type et du contenu pour chaque composants syntaxiques.
+- Type de token : word (command et argument), opérator logique, redirection, simple et double quote
+- Creation d'une liste chainé (t_token), chaque node comportant le type et la valeur du token.
+
+- Dossier concerné : ```tokenizer/```
+
+**Etape 2**
+
+    - **Parser**
+
+- Cette étape va transformer la liste de tokens en un AST (abstarct syntax tree). Représenté par la structure : t_treenode.
+- Création d'une grammaire de type LL = 'L' = Lecture de gauche à droite (Left to right). Lecture de la ligne de gauche a droite. Et construction de l'AST en partant du haut vers les élements les plus à gauche d'abord.
+- LL = récursive. 
+
+**Etape 3**
+
+    - **Expanseur**
+-Modification de l'AST
+
+**Etape 4**
+
+    - **Executeur**
+
+--- 
+
 ### **BIBLIOGRAPHIE** 
 ---
  - **Concepts et théorie des shells**
