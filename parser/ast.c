@@ -6,57 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/21 12:50:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/21 15:06:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-// Fonction test pour le parsing si c'est une simple command exemple = echo hello
-// Dans la grammaire simple command peut être couplé au redirection non mis dans la fonction pour l'instant
-t_treenode	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir)
-{
-	t_treenode *simple_command_node = NULL;
-	
-	if ((*token)->type == WORD)
-	{
-		if (parent_node == NULL) //if is the first node;
-		{
-			simple_command_node = create_treenode(WORD, (*token)->str);
-			printf("node créer the first\n");
-			print_ast(simple_command_node, 0);
-		}
-		if (parent_node != NULL)
-		{
-			add_node(parent_node, simple_command_node, dir);
-			printf("node child créer\n");
-		}
-		//printf("node créer\n");
-		print_ast(simple_command_node, 1);
-		*token = (*token)->next;
-	}
-	return(simple_command_node);
-}
-
-// Print AST - NON FONCTIONNEL - A TRAVAILLER
-void	print_ast(t_treenode *node, int dir)
-{
-//	while(node)
-	//{
-		if (node->left && dir == 0)
-		{
-			printf("/");
-			printf("[%d : %s]\n", node->type, node->str);
-			node = node->left;
-		}
-		if (node->right && dir == 1)
-		{
-			printf("\\");
-			printf("[%d : %s]\n", node->type, node->str);
-			node = node->right;
-		}
-	//}
-}
 
 // INIT NODE - ADD NODE - FREE NODE 
 t_treenode	*create_treenode(int type, char *str)
@@ -97,3 +52,57 @@ void	free_treenode(t_treenode *treenode)
 		free(treenode);
 	}
 }
+t_treenode	*create_tree(t_token *token_list)
+{
+	t_treenode	*ast = NULL;
+	t_treenode	*tmp = NULL;
+	t_treenode	*tmp2 = NULL;
+	
+	while (token_list && token_list->type == WORD)
+	{
+		tmp2 = create_treenode(token_list->type, token_list->str);
+		if (!ast)
+		{
+			ast = tmp2;
+			tmp = ast;
+		}
+		else
+		{
+			add_node(tmp, tmp2, LEFT);
+			tmp = tmp2;
+		}
+		token_list = token_list->next;
+	}
+	if (token_list && token_list->type != WORD)
+	{
+		tmp2 = create_treenode(token_list->type, token_list->str);
+		add_node(tmp2, ast, LEFT);
+		ast = tmp2;
+		token_list = token_list->next;
+	}
+	tmp = ast;
+	while (token_list && token_list->type == WORD)
+	{
+		tmp2 = create_treenode(token_list->type, token_list->str);
+		add_node(tmp, tmp2, RIGHT);
+		tmp = tmp2;
+		token_list = token_list->next;
+	}
+	tmp = ast;
+	while (tmp)
+	{
+		printf("%i", tmp->type);
+		printf("[%s]", tmp->str);
+		tmp = tmp->left;
+	}
+	while (ast->right)
+	{
+		ast = ast->right;
+		printf("%i", ast->type);
+		printf("[%s]", ast->str);
+	}
+	printf("\n");
+	return (NULL);
+}
+
+

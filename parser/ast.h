@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/21 11:17:37 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:54:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ void		free_treenode(t_treenode *treenode);
 void	print_ast(t_treenode *node, int dir);
 //Parse
 t_treenode	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir);
+t_treenode	*create_tree(t_token *token_list);
 
 #endif
