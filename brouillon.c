@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:02:29 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/21 12:56:48 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:44:27 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,54 @@
 //			node = node->right;
 //		}
 //	//}
+//}
+//				ADAPTATION DU CODE JAVA
+//t_ast *parse_command_line(t_token **tokens) {
+//    return parse_pipeline(tokens);
+//}
+//t_ast *parse_pipeline(t_token **tokens) {
+//    t_ast *left = parse_command(tokens);
+//
+//    while (*tokens && (*tokens)->type == TOKEN_PIPE) {
+//        *tokens = (*tokens)->next;  // skip the pipe
+//
+//        t_ast *right = parse_command(tokens);
+//        t_ast *pipe_node = malloc(sizeof(t_ast));
+//        pipe_node->type = NODE_PIPE;
+//        pipe_node->left = left;
+//        pipe_node->right = right;
+//        pipe_node->args = NULL;
+//
+//        left = pipe_node;
+//    }
+//    return left;
+//}
+//#include <stdlib.h>
+//
+//t_ast *parse_command(t_token **tokens) {
+//    if (!*tokens || (*tokens)->type != TOKEN_WORD)
+//        return NULL;
+//
+//    int argc = 0;
+//    t_token *start = *tokens;
+//
+//    while (*tokens && (*tokens)->type == TOKEN_WORD) {
+//        argc++;
+//        *tokens = (*tokens)->next;
+//    }
+//
+//    char **args = malloc(sizeof(char *) * (argc + 1));
+//    for (int i = 0; i < argc; i++) {
+//        args[i] = start->str;
+//        start = start->next;
+//    }
+//    args[argc] = NULL;
+//
+//    t_ast *cmd = malloc(sizeof(t_ast));
+//    cmd->type = NODE_COMMAND;
+//    cmd->left = NULL;
+//    cmd->right = NULL;
+//    cmd->args = args;
+//
+//    return cmd;
 //}
