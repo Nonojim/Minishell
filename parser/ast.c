@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   root.c                                              :+:      :+:    :+:   */
+/*   root.c                                              :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,145 +12,155 @@
 
 #include "ast.h"
 
+void	astreeprint(t_treenode* node, int depth);
+void	print_indent(int depth);
+t_treenode	*create_treenode(int type, char *str);
+void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
+void	free_treenode(t_treenode *treenode);
+t_treenode	*create_branch_words(t_token **token_list);
 
-void	print_indent(int depth)
+//<line>                ::= 	<and_or> (";" <and_or>)* 1 
+//							|	<and_or> ";" 2 
+//							|	<and_or> 3 
+//<and_or>              ::= 	<pipeline> ( ("&&" | "||") <pipeline> )* 
+//							|	<pipeline> "&&" <pipeline>
+//							|	<pipeline> "||" <pipeline>
+//							|	<pipeline>
+//<pipeline>            ::= <command> ( "|" <command> )*
+//							|	<command> "|" <command>
+//							|	<command>
+//<command>             ::= "(" <line> ")" | <simple_command>
+//							|	"(" <line> ")"
+//							|	<simple_command>
+//<simple_command>      ::= <word> ( <word> | <redirection> )*
+//							|	<word> <redirection> word
+//							|	<word>
+//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
+//							|	">" <word>
+//							|	">>" <word>
+//							|	"<" <word>
+//							|	"<<" <word>
+//<word>          ::= [WORD token]
+//							| NULL
+
+/*
+* Problematique du code : pointeur trees certainement,
+lorsaue node right = bouger token_list ? 
+Liste circulaire double chaine = maybe dans le tokenizer ? en reflexion
+* Modifier le tokenizer = quote,&& || sans arg 
+*/
+t_treenode *parse_and_or_node(t_token *token_list)
 {
-	while (depth-- > 0)
-		printf("  ");
-}
+	t_token *tmp = token_list;
+	t_treenode *node;
 
-void	astreeprint(t_treenode* node, int depth)
+	if (node = parse_and_or_node1(&token_list) != NULL)
+		return (node);
+	if (node = parse_and_or_node2(&token_list) != NULL)
+		return (node);
+	if (node = parse_and_or_node3(&token_list) != NULL)
+		return (node);
+	if (node = parse_and_or_node4(&token_list) != NULL)
+		return (node);
+	return (NULL);
+} 
+t_treenode *parse_and_or_node1(t_token *token_list)
 {
-	if (!node)
-		return;
+	t_treenode *left;
+	t_treenode *right;
+	t_treenode *node;
+	//t_treenode *result;
 
-	print_indent(depth);
-	printf("Node type: %i", node->type);
-
-	if (node->str)
-		printf(", data: \"%s\"", node->str);
-	printf("\n");
-	if (node->left)
-	{
-		print_indent(depth);
-		printf("Left:\n");
-		astreeprint(node->left, depth + 1);
-	}
-	if (node->right)
-	{
-		print_indent(depth);
-		printf("Right:\n");
-		astreeprint(node->right, depth + 1);
-	}
-}
-
-// INIT NODE - ADD NODE - FREE NODE 
-t_treenode	*create_treenode(int type, char *str)
-{
-	t_treenode	*new_node;
-
-	new_node = ft_calloc(1, sizeof(t_treenode));
-	if (new_node == NULL)
+	if (left = parse_pipeline(token_list) == NULL)
 		return (NULL);
-	new_node->type = type;
-	new_node->str = str;
-	new_node->left = NULL;
-	new_node->right = NULL;
-	return (new_node);
+	if (token_list->type != LOGICAL_AND || token_list->type != LOGICAL_OR)
+		return (NULL);
+	if (right = parse_line(token_list) == NULL)
+		return (NULL);
+	node = create_branch_words(token_list->type);
+	node->left = left;
+	node->rigt = right;
+	return (node);
+}
+t_treenode *parse_and_or_node2(t_token *token_list)
+{
+
+}
+t_treenode *parse_and_or_node3(t_token *token_list)
+{
+
+}
+t_treenode *parse_and_or_node4(t_token *token_list)
+{
+
 }
 
-void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
+
+t_treenode *parse_line_node(t_token *token_list)
 {
-	if (parent_node == NULL)
-		parent_node = new_child;
-	else
-	{
-		if (dir == 0)
-			parent_node->left = new_child;
-		else if (dir == 1)
-			parent_node->right = new_child;
-	}
+	t_token *tmp = token_list;
+	t_treenode *node;
+
+	if (node = parse_line1(&token_list) != NULL)
+		return (node);
+	if (node = parse_line2(&token_list) != NULL)
+		return (node);
+	if (node = parse_line3(&token_list) != NULL)
+		return (node);
+	return (NULL);
 }
 
-void	free_treenode(t_treenode *treenode)
+t_treenode	*parse_line1(t_token *token_list)
 {
-	if (!treenode)
-	{
-		if (treenode->str)
-			free(treenode->str);
-		free_treenode(treenode->left);
-		free_treenode(treenode->right);
-		free(treenode);
-	}
-}
-t_treenode	*create_branch_words(t_token **token_list)
-{
-	t_treenode	*root = NULL;
-	t_treenode	*current = NULL;
-	t_treenode	*new_node = NULL;
+	t_treenode *left;
+	t_treenode *right;
+	t_treenode *node;
+	//t_treenode *result;
 
-	while (*token_list && (*token_list)->type == WORD)
-	{
-		new_node = create_treenode((*token_list)->type, (*token_list)->str);
-		if (!root)
-		{
-			root = new_node;
-			current = root;
-		}
-		else
-		{
-			add_node(current, new_node, LEFT);
-			current = new_node;
-		}
-		*token_list = (*token_list)->next;
-	}
-	return (root);
-}
-		
-t_treenode	*create_tree(t_token *token_list)
-{
-	t_treenode	*root = NULL;
-	t_treenode	*left_node = NULL;
-	t_treenode	*right_node = NULL;
-	t_treenode	*op_node = NULL;
+	if (left = parse_and_or(token_list) == NULL)
+		return (NULL);
+	if (token_list->type != SEMICOLON)
+		return (NULL);
 	
-//	t_treenode *relie_branche = NULL;
-
-	if (token_list && token_list->type == WORD)
-		left_node = create_branch_words(&token_list);
-	root = left_node;
-	if (token_list && token_list->type != WORD)
-	{
-		op_node = create_treenode(token_list->type, token_list->str);
-		add_node(op_node, root, LEFT);
-		root = op_node;
-		token_list = token_list->next;
-	}
-	if (token_list && token_list->type == WORD)
-	{
-		right_node = create_branch_words(&token_list);
-		add_node(op_node, right_node, RIGHT);
-	}
-
-	if (token_list)
-	{
-		create_tree(token_list);
-		//relie_branche = create_tree(token_list);
-		//add_node(relie_branche, root, LEFT);
-	}
-	/*if (token_list && token_list->type != WORD)
-	{
-		op_node = create_treenode(token_list->type, token_list->str);
-		add_node(op_node, root, LEFT);
-		root = op_node;
-		token_list = token_list->next;
-	}
-	if (token_list && token_list->type == WORD)
-	{
-		right_node = create_branch_words(&token_list);
-		add_node(op_node, right_node, RIGHT);
-	}*/
-	return (root);
+	if (right = parse_line(token_list) == NULL)
+		return (NULL);
+	node = create_branch_words(token_list->type);
+	node->left = left;
+	node->rigt = right;
+	return (node);
 }
 
+t_treenode	*parse_line2(t_token *token_list)
+{
+	t_treenode *left;
+	t_treenode *node;
 
+	if (left = parse_and_or(token_list) == NULL)
+		return (NULL);
+	if(token_list->type != SEMICOLON)
+		return (NULL);
+	if(token_list->next->type != NULL)
+		return (NULL);
+	node = create_branch_words(token_list->type);
+	node->left = left;
+	node->right = NULL;
+	return (node);
+}
+t_treenode	*parse_line3(t_token *token_list)
+{
+	t_treenode *left;
+	t_treenode *right;
+
+	if (token_list->type != SEMICOLON)
+		return (NULL);
+	if (right = parse_and_or(tmp) != NULL)
+		return (node)
+	node = create_branch_words(token_list->type);
+	node->left = left;
+	node->right = right;
+	return (node);
+}
+t_treenode	*parse_pipeline(void);
+t_treenode	*parse_command(void);
+t_treenode	*parse_simple_command(void);
+t_treenode	*parse_redirection(void);

@@ -47,7 +47,6 @@ int	main(void)
 		print_token_list(token);
 		t_treenode *tree = create_tree(token);
 		astreeprint(tree, 0);
-		//parse_simple_command_without_redirection(&token, NULL, 1);
 		free_token(token);
 		free(line);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:41:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/07 12:42:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/22 20:31:42 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_operator_logical(char c)
 */
 int	is_ok_double(char c)
 {
-	if (c == '|' || c == '&' || c == '<' || c == '<')
+	if (c == '|' || c == '&' || c == '<' || c == '>')
 		return (1);
 	else
 		return (0);

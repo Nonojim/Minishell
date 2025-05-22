@@ -34,26 +34,23 @@
 
  Grammaire LL - Symbole token
 
-line                       ::= command_sequence (";" command_sequence)*;
-commande_sequence           ::= and_or ;
-and_or         ::= pipeline ( ("&&" | "||") pipeline )* ;
-pipeline       ::= command ( "|" command )* ;
-command        ::= "(" line ")" | simple_command ;
-simple_command ::= word ( word | redirection )* ;
-redirection    ::= ( "<" | "<<" | ">" | ">>" ) word ;
-word            ::= (une command + un mot brut ou une chaîne entre guillemets)+
-
-Grammaire LL - Token name
+<line>                ::= <command_sequence> (";" <command_sequence>)*
+<command_sequence>    ::= <and_or>
+<and_or>              ::= <pipeline> ( ("&&" | "||") <pipeline> )*
+<pipeline>            ::= <command> ( "|" <command> )*
+<command>             ::= "(" <line> ")" | <simple_command>
+<simple_command>      ::= <word> ( <word> | <redirection> )*
+<redirection>         ::= ( "<" | "<<" | ">" | ">>" )+ <word>
+<word>                ::= /* token representing a word 
 
 line           ::= command_sequence (SEMICOLON command_sequence)*
-command_sequence           ::= and_or ;
+command_sequence ::= and_or ;
 and_or         ::= pipeline ( (LOGICAL_AND | LOGICAL_OR) pipeline )* ;
 pipeline       ::= command ( PIPE command )* ;
 command        ::= (BRACKETS_L line BRACKETS_R) | simple_command ;
 simple_command ::= WORD ( WORD | redirection )* ;
 redirection    ::= (INPUT_REDIRECTION | HERE_DOCUMENT
-						OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION) WORD ;
-word 					 ::= WORD+;
+				   OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION)+ WORD ;
 */
 
 typedef struct s_treenode
@@ -70,14 +67,16 @@ enum e_DIRECTION
 	RIGHT, //1
 };
 
-//Init AST
+//Utils / Init AST
+void	astreeprint(t_treenode* node, int depth);
+void	print_indent(int depth);
 t_treenode	*create_treenode(int type, char *str);
-void		add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
-void		free_treenode(t_treenode *treenode);
+void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
+void	free_treenode(t_treenode *treenode);
+t_treenode	*create_branch_words(t_token **token_list);
+
 //Parse
 t_treenode	*create_tree(t_token *token_list);
 t_treenode	*create_branch_words(t_token **token_list);
-void		astreeprint(t_treenode* node, int depth);
-void		print_indent(int depth);
 
 #endif
