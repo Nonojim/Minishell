@@ -30,28 +30,52 @@
  ? == zéro ou 1 fois
  
  **  exemple = echo "Hello" && ls -l ; echo test
- * echo = WORD, "Hello" = WORD, && = LOGICAL_AND, ls = WORD, -l = WORD ; = SEMICOLON, echo = WORD test = WORD
+ * echo = WORD, "Hello" = WORD, && = logical_and, ls = WORD, -l = WORD ; = SEMICOLON, echo = WORD test = WORD
 
  Grammaire LL - Symbole token
 
-<line>                ::= <command_sequence> (";" <command_sequence>)*
-<command_sequence>    ::= <and_or>
-<and_or>              ::= <pipeline> ( ("&&" | "||") <pipeline> )*
-<pipeline>            ::= <command> ( "|" <command> )*
-<command>             ::= "(" <line> ")" | <simple_command>
-<simple_command>      ::= <word> ( <word> | <redirection> )*
-<redirection>         ::= ( "<" | "<<" | ">" | ">>" )+ <word>
-<word>                ::= /* token representing a word 
+//<line>                ::= <command_sequence> (";" <command_sequence>)*
+//<command_sequence>    ::= <and_or>
+//<and_or>              ::= <pipeline> ( ("&&" | "||") <pipeline> )*
+//<pipeline>            ::= <command> ( "|" <command> )*
+//<command>             ::= "(" <line> ")" | <simple_command>
+//<simple_command>      ::= <word> ( <word> | <redirection> )*
+//<redirection>         ::= ( "<" | "<<" | ">" | ">>" )+ <word>
+//<word>                ::= /* token representing a word 
+//
+//line           ::= command_sequence (SEMICOLON command_sequence)*
+//command_sequence ::= and_or ;
+//and_or         ::= pipeline ( (LOGICAL_AND | LOGICAL_OR) pipeline )* ;
+//pipeline       ::= command ( PIPE command )* ;
+//command        ::= (BRACKETS_L line BRACKETS_R) | simple_command ;
+//simple_command ::= WORD ( WORD | redirection )* ;
+//redirection    ::= (INPUT_REDIRECTION | HERE_DOCUMENT
+//				   OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION)+ WORD ;
+//*/
 
-line           ::= command_sequence (SEMICOLON command_sequence)*
-command_sequence ::= and_or ;
-and_or         ::= pipeline ( (LOGICAL_AND | LOGICAL_OR) pipeline )* ;
-pipeline       ::= command ( PIPE command )* ;
-command        ::= (BRACKETS_L line BRACKETS_R) | simple_command ;
-simple_command ::= WORD ( WORD | redirection )* ;
-redirection    ::= (INPUT_REDIRECTION | HERE_DOCUMENT
-				   OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION)+ WORD ;
-*/
+//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
+//							|	<logical_and> ";" 2 
+//							|	<logical_and> 3 
+//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
+//							|	<logical_or>
+//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//							|	<pipeline>
+//<pipeline>            ::= <command> ( "|" <command> )*
+//							|	<command> "|" <command>
+//							|	<command>
+//<command>             ::= "(" <line> ")" | <simple_command>
+//							|	"(" <line> ")"
+//							|	<simple_command>
+//<simple_command>      ::= <word> ( <word> | <redirection> )*
+//							|	<word> <redirection> word
+//							|	<word>
+//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
+//							|	">" <word>
+//							|	">>" <word>
+//							|	"<" <word>
+//							|	"<<" <word>
+//<word>          ::= [WORD token]
+//							| NULL
 
 typedef struct s_treenode
 {

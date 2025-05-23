@@ -1,0 +1,82 @@
+POINT IMPORTANT A ADD DANS LE TOKENIZER =
+BRAKETS ET SEMI COLON
+BRAKETS ET NEWLINE
+OPERATOR LOGICAL ET NEW LINE
+QUOTE = CONSERVER TOKEN AVEC QUOTE ! 
+
+################## REDIRECTIONS
+PAS D ORDRE DE PRIORITE 
+Priorite = sens de lecture ( de left a right) 
+Dans shell si on met une brackets sans rien apres n ouvre pas de new line mais renvoie une error. 
+
+################### BRACKETS 
+(test | test
+> ) 
+= (test | test ; )
+MARCHE SKIP SEMICOLON
+(test | test;)
+MARCHE - SKIP SEMICOLON
+(;test | test)
+MARCHE - SKIP SEMICOLON
+(echo Hello ; echo salutation)
+= MARCHE fais son role de semi colon
+
+
+bash-5.1$ (echo | echo
+> )
+
+bash-5.1$ (echo | echo
+> echo
+> salut
+> )
+
+
+bash: salut: command not found
+bash-5.1$ (echo | echo; echo; salut; )
+
+bash-5.1$ (echo popo |
+> echo
+> coucou
+> )
+
+bash: coucou: command not found
+bash-5.1$ 
+
+-> Il faut gerer new line quand bracket non ferme. 
+MAIS si (; ou ;) == skip the semicolon
+MAIS si ( test ; | test) == no skip semicolo!!! 
+
+########################################## OP LOGIQUE 
+Pour les && et || sans rien apres 
+-> ADD new line,
+La new line accepte seulement les retour a la ligne et un word ou plusieurs word sur la meme ligne. 
+Si l on remet && ou | -> erreur
+Si l on remet word OPERATOR -> new ligne en attente de WORD
+
+
+bash-5.1$ echo salut && 
+>  
+> salut
+salut
+bash: salut: command not found
+bash-5.1$ echo salut &&    salut
+salut
+bash: salut: command not found
+bash-5.1$ echo salut &&
+> echo Salut
+salut
+Salut
+bash-5.1$ echo salut &&
+>        
+> echo salut &&
+> echo salut
+salut
+salut
+salut
+bash-5.1$ echo salut &&
+> &&
+bash: syntax error near unexpected token `&&'
+bash-5.1$ 
+
+################################# QUOTES
+
