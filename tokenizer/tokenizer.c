@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/26 20:27:49 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/26 22:32:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ t_token	*tokenize(t_token *token, char **line_ptr)
 		else if ((line[i] == '&' && line[i + 1] == '&')
 			|| (line[i] == '|' && line[i + 1] == '|'))
 			line = token_logical_incomplete(&i, start, line, &token);
+		else if((line[i] == '(') && line[i])
+			line = token_bracket(&i, start, line, &token);
 		// END NEW
 		else if (is_operator_logical(line[i]) == line[i] && line[i])
 			token_logical_operator(&i, start, line, &token);

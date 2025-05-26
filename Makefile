@@ -17,6 +17,7 @@ FILES = tokenizer/tokenizer.c \
 				tokenizer/token_utils.c \
 				tokenizer/token_word.c \
 				tokenizer/token_type.c \
+				tokenizer/token_operator_logical.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
