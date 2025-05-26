@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/15 17:30:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:03:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,12 @@ void	token_logical_operator(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
+
+//NEW
+
+int	is_orlogical_andlogical(char c);
+char	*token_logical_incomplete(int *i, int start, char *line, t_token **token);
+//END NEW
+
 
 #endif

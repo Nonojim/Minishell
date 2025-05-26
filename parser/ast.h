@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/21 18:13:16 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:53:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 //<command>             ::= "(" <line> ")" | <simple_command>
 //<simple_command>      ::= <word> ( <word> | <redirection> )*
 //<redirection>         ::= ( "<" | "<<" | ">" | ">>" )+ <word>
-//<word>                ::= /* token representing a word 
+//<word>                ::=  token representing a word 
 //
 //line           ::= command_sequence (SEMICOLON command_sequence)*
 //command_sequence ::= and_or ;
