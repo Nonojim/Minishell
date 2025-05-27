@@ -1,3 +1,15 @@
+############ PARSER 
+BRACKEt = 
+* (echo test
+> ) echo test
+bash: syntax error near unexpected token `echo'
+$ ( echo test
+> ) && echo test
+test
+test
+si juste command renvoyer erreur, si op logique + commande on valide.
+
+
 POINT IMPORTANT A ADD DANS LE TOKENIZER =
 BRAKETS ET SEMI COLON
 BRAKETS ET NEWLINE
