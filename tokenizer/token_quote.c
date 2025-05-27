@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/26 21:25:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:05:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ char	*read_until_quote_closed(char *line, char quote)
 	while (1)
 	{
 		next_line = readline("> ");
-		printf("next_line: [%s]\n", next_line);
 		if (!next_line)
 			break ;
 		tmp = ft_strjoin(line, "\n");
@@ -52,23 +51,25 @@ char	*token_quote(int *i, int start, char *line, t_token **token)
 {
 	char	quote;
 	char	*str;
+	int		type;
 
 	quote = line[*i];
-	(*i)++;
 	start = *i;
+	if (quote == '\'')
+		type = SIMPLE_QUOTE;
+	else
+		type = DOUBLE_QUOTE;
+	(*i)++;
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
 	if (!line[*i])
 	{
 		line = read_until_quote_closed(line, quote);
-		*i = start - 1;
+		*i = start;
 		return (line);
 	}
-	if (*i - start > 0)
-	{
-		str = ft_substr(line, start, *i - start);
-		add_token_end(token, create_token(WORD, str));
-	}
 	(*i)++;
+	str = ft_substr(line, start, *i - start);
+	add_token_end(token, create_token(type, str));
 	return (line);
 }

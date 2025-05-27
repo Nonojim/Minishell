@@ -6,11 +6,27 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/27 13:13:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:11:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+ * Utils for token_logical_incomplete
+ * When the prompt finish by && or || with multiple space
+ */
+int	only_spaces_after_operator_logical(char *line, int i)
+{
+	i += 2;
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 /*
  * When the prompt finish by && or ||
@@ -18,17 +34,17 @@
  */
 char	*token_logical_incomplete(int *i, int start, char *line, t_token **token)
 {
-	char	*next_line = NULL; //ligne suivante dans readline
-	char	*tmp = NULL; //tmp pour concatener
-	char	*tmp_newline= NULL; //tmp pour contacatener 
+	char	*next_line; //ligne suivante dans readline
+	char	*tmp; //tmp pour concatener
+	char	*tmp_newline; //tmp pour contacatener
 
-	if (line[*i + 2] == '\0' /*|| ft_isspace(line)*/)
+	if (only_spaces_after_operator_logical(line, *i))
 	{
 		while (1)
 		{
 			next_line = readline(" > ");
 			if (!next_line)
-				break;
+				break ;
 			tmp = ft_strjoin(line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
 			free (tmp);
@@ -55,11 +71,11 @@ Solution actuelle : création d'un history_line qui redisplay une ligne avec les
 char	*token_bracket_incomplete(char *line)
 {
 	char	*next_line;
-	char *tmp;
-
+	char	*tmp;
 	char	*history_line;
 
 	history_line = ft_strdup(line);
+	rl_clear_history();
 	while (1)
 	{
 		next_line = readline("> ");
@@ -68,14 +84,12 @@ char	*token_bracket_incomplete(char *line)
 		tmp = ft_strjoin(line, "\n");
 		free(line);
 		line = tmp;
-
 		tmp = ft_strjoin(history_line, "; ");
 		free(history_line);
 		history_line = tmp;
 		tmp = ft_strjoin(history_line, next_line);
 		free(history_line);
 		history_line = tmp;
-
 		tmp = ft_strjoin(line, next_line);
 		free(line);
 		line = tmp;
@@ -91,19 +105,19 @@ char	*token_bracket_incomplete(char *line)
 char	*token_bracket(int *i, int start, char *line, t_token **token)
 {
 	char	*str;
-	int	index_start_bracket;
-	int	index_end_bracket;
+	int		ix_start_bracket;
+	int		ix_end_bracket;
 
 	str = ft_substr(line, start, 1);
 	add_token_end(token, create_token(BRACKETS_R, str));
 	(*i)++;
 	if (!ft_strchr(line + *i, ')'))
 		line = token_bracket_incomplete(line);
-	index_start_bracket = *i;
+	ix_start_bracket = *i;
 	while (line[*i] && line[*i] != ')')
 		(*i)++;
-	index_end_bracket = *i;
-	str = ft_substr(line, index_start_bracket, index_end_bracket - index_start_bracket);
+	ix_end_bracket = *i;
+	str = ft_substr(line, ix_start_bracket, ix_end_bracket - ix_start_bracket);
 	tokenize(*token, &str);
 	free(str);
 	if (!line[*i])

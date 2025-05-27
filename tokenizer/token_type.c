@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:48 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/27 11:54:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/27 15:57:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ int	type_token(char *str)
 		return (INPUT_REDIRECTION);
 	else if (str[0] == '>')
 		return (HERE_DOCUMENT);
-	else if (str[0] == '\'')
-		return (SIMPLE_QUOTE);
-	else if (str[0] == '"')
-		return (DOUBLE_QUOTE);
 	else if (str[0] == '(')
 		return (BRACKETS_R);
 	else if (str[0] == ')')

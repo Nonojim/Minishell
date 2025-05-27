@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:41:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/26 23:06:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:04:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	is_ok_double(char c)
 	else
 		return (0);
 }
-
 
 /*
 * Identifie and extract logical operator simple or double

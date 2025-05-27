@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/27 13:04:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:05:50 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,13 @@ t_token	*tokenize(t_token *token, char **line_ptr)
 		start = i;
 		if ((line[i] == '\'' || line[i] == '\"') && line[i])
 			line = token_quote(&i, start, line, &token);
-		//NEW
 		else if ((line[i] == '&' && line[i + 1] == '&')
 			|| (line[i] == '|' && line[i + 1] == '|'))
 			line = token_logical_incomplete(&i, start, line, &token);
-		else if((line[i] == '(') && line[i])
+		else if ((line[i] == '(') && line[i])
 			line = token_bracket(&i, start, line, &token);
 		else if (is_operator_logical(line[i]) == line[i] && line[i])
-		{
-			//if (line[i + 1] == '\001')
-			//	i += 2;
-		// END NEW
-		//	else
-				token_logical_operator(&i, start, line, &token);
-		}
+			token_logical_operator(&i, start, line, &token);
 		else if (line[i] != '\0' && is_word(line[i]) == 1)
 			token_word(&i, start, line, &token);
 	}
