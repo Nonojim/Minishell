@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/15 17:30:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/28 11:02:26 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ enum e_TOKEN_TYPE
 	DOUBLE_QUOTE, //" 10 ASCII = 34
 	BRACKETS_R, //( 11 ASCII = 40
 	BRACKETS_L, //) 12 ASCII = 41
-	TILDE, // ~ 14  ASCII = 126
+	EXPANSION, //$ 13 ASCII = 36
 };
 
 typedef struct s_token
@@ -43,6 +43,7 @@ typedef struct s_token
 // Fonctions tokenisations
 //tokenize the input
 t_token	*tokenize(t_token *token, char **line);
+char	*tokenize2(int	*i, int start, char *line, t_token **token);
 //Create_free_print Token
 t_token	*create_token(int type, char *str);
 void	add_token_end(t_token **token, t_token *new_token);
@@ -58,6 +59,13 @@ void	token_word(int *i, int start, char *line, t_token **token);
 int		is_operator_logical(char c);
 int		is_ok_double(char c);
 void	token_logical_operator(int *i, int start, char *line, t_token **token);
+int		is_orlogical_andlogical(char c);
+char	*token_logical_unclose(int *i, int start, char *line, t_token **token);
+int		only_spaces_after_operator_logical(char *line, int i);
+char	*token_bracket_unclose(char *line);
+void	bracket_unclosed(char **line, char **history_line, char*next_line);
+char	*token_bracket(int *i, int start, char *line, t_token **token);
+void	token_expansion(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
