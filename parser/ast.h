@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/28 11:43:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/28 12:02:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,30 +86,30 @@ t_treenode	*create_tree(t_token *token_list);
 t_treenode	*create_branch_words(t_token **token_list);
 
 //LINE
-t_treenode *parse_line_node(t_token *token_list);
+t_treenode	*parse_line_node(t_token *token_list);
 t_treenode	*parse_line1(t_token *token_list);
 t_treenode	*parse_line2(t_token *token_list);
 t_treenode	*parse_line3(t_token *token_list);
 
 //Logical_and
-t_treenode *parse_logical_and_node(t_token *token_list);
-t_treenode *parse_logical_and1(t_token *token_list);
-t_treenode *parse_logical_and2(t_token *token_list);
+t_treenode	*parse_logical_and_node(t_token *token_list);
+t_treenode	*parse_logical_and1(t_token *token_list);
+t_treenode	*parse_logical_and2(t_token *token_list);
 
 //Logical_or
-t_treenode *parse_logical_or_node(t_token *token_list);
-t_treenode *parse_logical_or1(t_token *token_list);
-t_treenode *parse_logical_or2(t_token *token_list);
+t_treenode	*parse_logical_or_node(t_token *token_list);
+t_treenode	*parse_logical_or1(t_token *token_list);
+t_treenode	*parse_logical_or2(t_token *token_list);
 
 //Pipeline
-t_treenode *parse_pipeline_node(t_token *token_list);
-t_treenode *parse_pipeline1(t_token *token_list);
-t_treenode *parse_pipeline2(t_token *token_list);
+t_treenode	*parse_pipeline_node(t_token *token_list);
+t_treenode	*parse_pipeline1(t_token *token_list);
+t_treenode	*parse_pipeline2(t_token *token_list);
 
 //Command 
 t_treenode	*parse_command_node(t_token *token_list);
-t_treenode *parse_command_node1(t_token *token_list);
-t_treenode *parse_command_node2(t_token *token_list);
+t_treenode	*parse_command_node1(t_token *token_list);
+t_treenode	*parse_command_node2(t_token *token_list);
 
 //Simple_command
 t_treenode	*parse_simple_command_node(t_token *token_list);
@@ -118,11 +118,11 @@ t_treenode	*parse_simple_command2(t_token *token_list);
 
 //Redirection
 t_treenode	*parse_redirection_node(t_token *token_list);
-t_treenode *parse_redirection1(t_token *token_list);
-t_treenode *parse_redirection2(t_token *token_list);
+t_treenode	*parse_redirection1(t_token *token_list);
+t_treenode	*parse_redirection2(t_token *token_list);
 
 //WORD
-t_treenode *parse_word_node(t_token *token_list);
-t_treenode *parse_word1(t_token *token_list);
+t_treenode	*parse_word_node(t_token *token_list);
+t_treenode	*parse_word1(t_token *token_list);
 
 #endif

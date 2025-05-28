@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 11:40:41 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/28 12:20:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,43 @@
 
 t_treenode	*parse_simple_command_node(t_token *token_list);
 t_treenode	*parse_simple_command1(t_token *token_list);
-t_treenode	*parse_simple_command2(t_token *token_list); 
+t_treenode	*parse_simple_command2(t_token *token_list);
 
 t_treenode	*parse_simple_command_node(t_token *token_list)
 {
-	t_treenode *node; 
+	t_treenode	*node;
 
-	if (node = parse_simple_command1(token_list))
+	if ((node = parse_simple_command1(token_list)))
 		return (node);
-	if (node = parse_simple_command2(token_list))
+	if ((node = parse_simple_command2(token_list)))
 		return (node);
 	return (NULL);
 }
-//PARSE_COMMAND END
 
-//PARSE_SIMPLE_COMMAND
-t_treenode	*parse_simple_command1(t_token *token_list) 
-// par de priorite entre redirection, prio se fait sens de lecture (gauche a droite)
+//no priorité ds les redirection, prio dans le sens de lecture (gauche à droite)
+t_treenode	*parse_simple_command1(t_token *token_list)
 {
-	t_treenode *node;
-	t_treenode *right;
-	t_treenode *left;
+	t_treenode	*node;
+	t_treenode	*right;
+	t_treenode	*left;
 
-	if (left = parse_simple_word_node(token_list) != NULL)
+	if ((left = parse_word_node(token_list)) != NULL)
 		return (NULL);
-	if (parse_redirection_node(token_list) != NULL)
-		return (NULL); 
-
-// PAS SUR de devoir laisser celle la 
-	if (right = parse_simple_command_node(token_list))
+	if ((parse_redirection_node(token_list) != NULL))
 		return (NULL);
+	if ((right = parse_simple_command_node(token_list)))
+		return (NULL);
+	node = create_treenode(token_list->type, token_list->str);
+	node->left = left;
+	node->right = right;
+	return (node);
 }
+
 t_treenode	*parse_simple_command2(t_token *token_list)
 {
-	t_treenode *node;
+	t_treenode	*node;
 
-	node = parse_simple_word_node(token_list);
+	node = parse_word_node(token_list);
 	return(node);
 }
-//PARSE_SIMPLE_COMMAND END
 
