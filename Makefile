@@ -18,6 +18,16 @@ FILES = tokenizer/tokenizer.c \
 				tokenizer/token_word.c \
 				tokenizer/token_type.c \
 				tokenizer/token_operator_incomplete.c \
+				parser/ast.c \
+				parser/ast_utils.c \
+				parser/line.c \
+				parser/logical_and.c \
+				parser/logical_or.c \
+				parser/pipeline.c \
+				parser/command.c \
+				parser/simple_command.c \
+				parser/redirection.c \
+				parser/word.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
