@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 11:02:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:43:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int		is_operator_logical(char c);
 int		is_ok_double(char c);
 void	token_logical_operator(int *i, int start, char *line, t_token **token);
 int		is_orlogical_andlogical(char c);
+char	*token_pipe_unclose(int *i, int start, char *line, t_token ** token);
 char	*token_logical_unclose(int *i, int start, char *line, t_token **token);
 int		only_spaces_after_operator_logical(char *line, int i);
 char	*token_bracket_unclose(char *line);

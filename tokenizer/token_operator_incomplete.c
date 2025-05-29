@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 11:08:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:46:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,51 @@ char	*token_logical_unclose(int *i, int start, char *line, t_token **token)
 	return (line);
 }
 
+int	only_spaces_after_pipe(char *line, int i)
+{
+	i++;
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+char	*token_pipe_unclose(int *i, int start, char *line, t_token ** token)
+{
+	char	*next_line;
+	char	*tmp;
+	char	*tmp_newline;
+
+	if (only_spaces_after_pipe(line, *i))
+	{
+		while (1)
+		{
+			next_line = readline(" > ");
+			if (!next_line)
+				break ;
+			tmp = ft_strjoin(line, "\n");
+			tmp_newline = ft_strjoin(tmp, next_line);
+			free (tmp);
+			free (next_line);
+			free (line);
+			if (!tmp_newline)
+				break ;
+			line = tmp_newline;
+			break ;
+		}
+	}
+	else
+		token_logical_operator(i, start, line, token);
+	return (line);
+
+
+
+
+
+}
 /*
 * When the bracket in prompt are not closed
 * MISS = new line = ajout ';'
