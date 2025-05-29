@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 13:14:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 22:24:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ t_treenode	*parse_logical_and_node(t_token **token_list)
 	}
 	*token_list = tmp;
 	return (NULL);
-} 
+}
+
+//create_node = avant d'avancer dans la liste afin de créer le bon node (et pas le noeud suivant).
 t_treenode	*parse_logical_and1(t_token **token_list)
 {
 	t_treenode	*left;
@@ -67,12 +69,13 @@ t_treenode	*parse_logical_and1(t_token **token_list)
 
 	if ((left = parse_logical_or_node(token_list)) == NULL)
 		return (NULL);
-	if ((*token_list)->type != LOGICAL_AND)
+	if (*token_list == NULL || (*token_list)->type != LOGICAL_AND)
 		return (NULL);
+	t_token *create_node = *token_list;
 	*token_list = (*token_list)->next;
 	if ((right = parse_logical_and_node(token_list)) == NULL)
 		return (NULL);
-	node = create_treenode((*token_list)->type, (*token_list)->str);
+	node = create_treenode(create_node->type, create_node->str);
 	node->left = left;
 	node->right = right;
 	return (node);

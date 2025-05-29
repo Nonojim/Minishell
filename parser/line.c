@@ -6,11 +6,31 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 16:27:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 23:02:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+
+/*
+CE QUI NE FONCTIONNE PAS
+Pas d'AST si = bracket; expansion; redirection; plusieurs word côte à côte
+Verifier entre || et && qui s'exe en first
+Mauvais ordre dans les noeuds
+Minishell$ test && test | test
+[0 : test] -> [3 : &&] -> [0 : test] -> [1 : |] -> [0 : test] -> NULL
+Node type: 3, data: "&&"
+Left:
+  Node type: 0, data: "test"
+Right:
+  Node type: 1, data: "|"
+  Left:
+    Node type: 0, data: "test"
+  Right:
+    Node type: 0, data: "test"
+Minishell$ 
+
+*/
 
 //<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
 //							|	<logical_and> ";" 2 
@@ -75,18 +95,18 @@ t_treenode	*parse_line1(t_token **token_list)
 
 	if ((left = parse_logical_and_node(token_list)) == NULL)
 	{
-		printf("entre first");
+		//printf("entre first");
 		return (NULL);
 	}
-	if ((*token_list)->type != SEMICOLON)
+	if (*token_list == NULL || (*token_list)->type != SEMICOLON)
 	{
-		printf("entre second");
+		//printf("entre second");
 		return (NULL);
 	}
 	*token_list = (*token_list)->next;
 	if ((right = parse_line_node(token_list)) == NULL)
 	{
-		printf("entre 3");
+		//printf("entre 3");
 		return (NULL);
 	}
 	node = create_treenode(SEMICOLON, ";");
@@ -102,8 +122,8 @@ t_treenode	*parse_line2(t_token **token_list)
 	t_treenode	*node;
 
 	if ((left = parse_logical_and_node(token_list)) == NULL)
-	return (NULL);
-	if ((*token_list)->type != SEMICOLON)
+		return (NULL);
+	if (*token_list == NULL || (*token_list)->type != SEMICOLON)
 		return (NULL);
 	*token_list = (*token_list)->next;
 	node = create_treenode(SEMICOLON, ";");

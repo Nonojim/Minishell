@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 13:26:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 22:09:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,9 @@ t_treenode	*parse_word1(t_token **token_list)
 {
 	t_treenode	*node;
 
-	if (token_list == NULL)
-		return (NULL);
-	if ((*token_list)->type != WORD)
+	if (token_list == NULL || *token_list == NULL || (*token_list)->type != WORD)
 		return (NULL);
 	node = create_treenode((*token_list)->type, (*token_list)->str);
+	*token_list = (*token_list)->next;
 	return (node);
 }

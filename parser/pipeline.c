@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 13:21:39 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 21:47:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,13 @@ t_treenode	*parse_pipeline1(t_token **token_list)
 	if ((left = parse_command_node(token_list)) == NULL)
 		return (NULL);
 
-	if ((*token_list)->type != PIPE)
+	if (*token_list == NULL || (*token_list)->type != PIPE)
 		return (NULL);
+	t_token *create_node = *token_list;
 	*token_list = (*token_list)->next;
 	if ((right = parse_pipeline_node(token_list)) == NULL)
 		return (NULL);
-	node = create_treenode((*token_list)->type, (*token_list)->str);
+	node = create_treenode(create_node->type, create_node->str);
 	node->left = left;
 	node->right = right;
 	return (node);
