@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/29 13:28:53 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:26:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,13 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 
 void	free_treenode(t_treenode *treenode)
 {
-	if (!treenode)
-	{
-		if (treenode->str)
-			free(treenode->str);
-		free_treenode(treenode->left);
-		free_treenode(treenode->right);
-		free(treenode);
-	}
+	if (treenode == NULL)
+		return ;
+	free_treenode(treenode->left);
+	free_treenode(treenode->right);
+	if (treenode->str)
+		free(treenode->str);
+	free(treenode);
 }
 t_treenode	*create_branch_words(t_token **token_list)
 {

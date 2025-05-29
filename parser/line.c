@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 13:08:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:27:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_treenode	*parse_line1(t_token **token_list)
 		return (NULL);
 	}
 	node = create_treenode(SEMICOLON, ";");
+//	create_branch_words(token_list);
 	node->left = left;
 	node->right = right;
 	return (node);
@@ -106,6 +107,7 @@ t_treenode	*parse_line2(t_token **token_list)
 		return (NULL);
 	*token_list = (*token_list)->next;
 	node = create_treenode(SEMICOLON, ";");
+	//node =create_branch_words(token_list);
 	node->left = left;
 	node->right = NULL;
 	return (node);
