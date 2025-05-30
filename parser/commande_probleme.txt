@@ -11,9 +11,6 @@ test
 si juste command renvoyer erreur, si op logique + commande on valide.
 
 
-POINT IMPORTANT A ADD DANS LE TOKENIZER =
-
-QUOTE = CONSERVER TOKEN AVEC QUOTE ! 
 
 ################## REDIRECTIONS
 PAS D ORDRE DE PRIORITE 

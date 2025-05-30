@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/26 17:53:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:12:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,6 @@
 
  Grammaire LL - Symbole token
 
-//<line>                ::= <command_sequence> (";" <command_sequence>)*
-//<command_sequence>    ::= <and_or>
-//<and_or>              ::= <pipeline> ( ("&&" | "||") <pipeline> )*
-//<pipeline>            ::= <command> ( "|" <command> )*
-//<command>             ::= "(" <line> ")" | <simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" )+ <word>
-//<word>                ::=  token representing a word 
-//
-//line           ::= command_sequence (SEMICOLON command_sequence)*
-//command_sequence ::= and_or ;
-//and_or         ::= pipeline ( (LOGICAL_AND | LOGICAL_OR) pipeline )* ;
-//pipeline       ::= command ( PIPE command )* ;
-//command        ::= (BRACKETS_L line BRACKETS_R) | simple_command ;
-//simple_command ::= WORD ( WORD | redirection )* ;
-//redirection    ::= (INPUT_REDIRECTION | HERE_DOCUMENT
-//				   OUTPUT_REDIRECTION | APPEND_OUTPUT_REDIRECTION)+ WORD ;
-//*/
-
 //<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
 //							|	<logical_and> ";" 2 
 //							|	<logical_and> 3 
@@ -76,6 +57,7 @@
 //							|	"<<" <word>
 //<word>          ::= [WORD token]
 //							| NULL
+*/
 
 typedef struct s_treenode
 {
@@ -102,5 +84,44 @@ t_treenode	*create_branch_words(t_token **token_list);
 //Parse
 t_treenode	*create_tree(t_token *token_list);
 t_treenode	*create_branch_words(t_token **token_list);
+
+//LINE
+t_treenode	*parse_line_node(t_token **token_list);
+t_treenode	*parse_line1(t_token **token_list);
+t_treenode	*parse_line2(t_token **token_list);
+t_treenode	*parse_line3(t_token **token_list);
+
+//Logical_and
+t_treenode	*parse_logical_and_node(t_token **token_list);
+t_treenode	*parse_logical_and1(t_token **token_list);
+
+
+//Logical_or
+t_treenode	*parse_logical_or_node(t_token **token_list);
+t_treenode	*parse_logical_or1(t_token **token_list);
+
+//Pipeline
+t_treenode	*parse_pipeline_node(t_token **token_list);
+t_treenode	*parse_pipeline1(t_token **token_list);
+t_treenode	*parse_pipeline2(t_token **token_list);
+
+//Command 
+t_treenode	*parse_command_node(t_token **token_list);
+t_treenode	*parse_command_node1(t_token **token_list);
+t_treenode	*parse_command_node2(t_token **token_list);
+
+//Simple_command
+t_treenode	*parse_simple_command_node(t_token **token_list);
+t_treenode	*parse_simple_command1(t_token **token_list);
+t_treenode	*parse_simple_command2(t_token **token_list);
+
+//Redirection
+t_treenode	*parse_redirection_node(t_token **token_list);
+t_treenode	*parse_redirection1(t_token **token_list);
+t_treenode	*parse_redirection2(t_token **token_list);
+
+//WORD
+t_treenode	*parse_word_node(t_token **token_list);
+t_treenode	*parse_word1(t_token **token_list);
 
 #endif

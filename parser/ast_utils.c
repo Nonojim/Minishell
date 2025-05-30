@@ -6,11 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/22 20:52:51 by npederen         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:00:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+
 
 void	print_indent(int depth)
 {
@@ -24,10 +25,10 @@ void	astreeprint(t_treenode* node, int depth)
 		return;
 
 	print_indent(depth);
-	printf("Node type: %i", node->type);
+	printf("[Type: %i", node->type);
 
 	if (node->str)
-		printf(", data: \"%s\"", node->str);
+		printf(", data: \"%s\"]", node->str);
 	printf("\n");
 	if (node->left)
 	{
@@ -72,14 +73,13 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 
 void	free_treenode(t_treenode *treenode)
 {
-	if (!treenode)
-	{
-		if (treenode->str)
-			free(treenode->str);
-		free_treenode(treenode->left);
-		free_treenode(treenode->right);
-		free(treenode);
-	}
+	if (treenode == NULL)
+		return ;
+	free_treenode(treenode->left);
+	free_treenode(treenode->right);
+	if (treenode->str)
+		free(treenode->str);
+	free(treenode);
 }
 t_treenode	*create_branch_words(t_token **token_list)
 {
