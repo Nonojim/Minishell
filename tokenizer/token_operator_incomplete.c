@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 16:46:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 23:14:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	only_spaces_after_pipe(char *line, int i)
 	return (1);
 }
 
-char	*token_pipe_unclose(int *i, int start, char *line, t_token ** token)
+char	*token_pipe_unclose(int *i, int start, char *line, t_token **token)
 {
 	char	*next_line;
 	char	*tmp;
@@ -99,12 +99,8 @@ char	*token_pipe_unclose(int *i, int start, char *line, t_token ** token)
 	else
 		token_logical_operator(i, start, line, token);
 	return (line);
-
-
-
-
-
 }
+
 /*
 * When the bracket in prompt are not closed
 * MISS = new line = ajout ';'

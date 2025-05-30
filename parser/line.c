@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 23:02:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/30 12:48:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /*
 CE QUI NE FONCTIONNE PAS
+tout les noeuds ce crée à droite au lieu de gauche
 Pas d'AST si = bracket; expansion; redirection; plusieurs word côte à côte
 Verifier entre || et && qui s'exe en first
 Mauvais ordre dans les noeuds

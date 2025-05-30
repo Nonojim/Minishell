@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 22:36:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/29 23:12:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_treenode	*parse_redirection_node(t_token **token_list)
 		return (node);
 	}
 	*token_list = tmp;
-	//if ((node = parse_redirection2(token_list)))
+	//if ((node = parse_redirection2(token_list))) 
 		//return (node);
 	
 	return (NULL);
@@ -73,7 +73,6 @@ t_treenode	*parse_redirection1(t_token **token_list)
 	*token_list = (*token_list)->next;
 	if ((right = parse_word_node(token_list)) != NULL)
 		return (NULL);
-	
 	node = create_treenode(create_node->type, create_node->str);
 //	node->left = NULL;
 	node->right = right;

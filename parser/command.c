@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 21:50:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:22:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_treenode	*parse_command_node(t_token **token_list);
 t_treenode	*parse_command_node1(t_token **token_list);
 t_treenode	*parse_command_node2(t_token **token_list);
 
+
+// Ne fonctionne pas,
 t_treenode	*parse_command_node(t_token **token_list)
 {
 	t_token *tmp = *token_list;
@@ -54,23 +56,35 @@ t_treenode	*parse_command_node(t_token **token_list)
 	return (NULL);
 }
 
+//Passe sur la brackets_R ok repasse dans parse_line
+//Sauf que une fois que tout ce qui est a l'intérieur a été parsé on revient dans parse_command_node1 et return null sur bracket_R
+// donc on token jamais la bracket_L
+// Maybe faire 2 fonction une qui parse la bracket_R une qui parse la bracket_L
 t_treenode	*parse_command_node1(t_token **token_list)
 {
 	t_treenode	*node;
+	t_treenode	*node2;
 	//t_treenode	*left;
 	t_treenode	*right;
 
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
-		return (NULL);
-	if ((right = parse_line_node(token_list)) != NULL)
-		return (NULL);
 	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
 		return (NULL);
-	t_token *create_node = *token_list;
+//	t_token *create_node = *token_list;
 	*token_list = (*token_list)->next;
+	if ((right = parse_line_node(token_list)) != NULL)
+		return (NULL);
+	if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
+		return (NULL);
+	if ((*token_list)->type == BRACKETS_L)
+	{
+		node2 = create_treenode(BRACKETS_L, ")");
+		return (node2);
+	}
+	//t_token *create_node = *token_list;
+	//*token_list = (*token_list)->next;
 	if ((right = parse_command_node1(token_list)) != NULL)
 		return (NULL);
-	node = create_treenode(create_node->type, create_node->str);
+	node = create_treenode(BRACKETS_R, "(");
 	//node->left = NULL;
 	node->right = right;
 	return (node);

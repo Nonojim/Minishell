@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/29 15:26:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:00:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	astreeprint(t_treenode* node, int depth)
 		return;
 
 	print_indent(depth);
-	printf("Node type: %i", node->type);
+	printf("[Type: %i", node->type);
 
 	if (node->str)
-		printf(", data: \"%s\"", node->str);
+		printf(", data: \"%s\"]", node->str);
 	printf("\n");
 	if (node->left)
 	{
