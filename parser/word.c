@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/30 13:51:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 10:40:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,15 @@ t_treenode	*parse_word_node(t_token **token_list)
 	*token_list = tmp;
 	return (NULL);
 }
+
 t_treenode	*parse_word1(t_token **token_list)
 {
-	t_treenode	*node;
+	t_treenode *node;
+
+	return (node = create_branch_words(token_list));
+/*	t_treenode	*node;
+	t_token *create_node = *token_list;
+	//t_treenode *right;
 
 	if (token_list == NULL || *token_list == NULL
 		|| ((*token_list)->type != WORD
@@ -62,7 +68,21 @@ t_treenode	*parse_word1(t_token **token_list)
 		&& (*token_list)->type != SIMPLE_QUOTE
 		&& (*token_list)->type != DOUBLE_QUOTE))
 		return (NULL);
-	node = create_treenode((*token_list)->type, (*token_list)->str);
+	create_node = *token_list;
 	*token_list = (*token_list)->next;
-	return (node);
+	node = create_treenode(create_node->type, create_node->str);
+ 	if ((*token_list)->type == create_node->type && *token_list != NULL) // si a droite se trouve un autre &&
+	{
+		node->left = node;
+		return (node->left);
+	}
+	else
+	{
+		node->right = NULL;
+		node->left = NULL;
+		return (node);
+	}
+	node->left = NULL;
+	node->right = NULL;
+	return (node);*/
 }
