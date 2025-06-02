@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/02 10:52:45 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 15:03:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,18 @@ t_treenode	*create_treenode(int type, char *str)
 	return (new_node);
 }
 
+
+void	free_treenode(t_treenode *treenode)
+{
+	if (treenode == NULL)
+		return ;
+	free_treenode(treenode->left);
+	free_treenode(treenode->right);
+	if (treenode->str)
+		free(treenode->str);
+	free(treenode);
+}
+
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 {
 	if (parent_node == NULL)
@@ -71,16 +83,6 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 	}
 }
 
-void	free_treenode(t_treenode *treenode)
-{
-	if (treenode == NULL)
-		return ;
-	free_treenode(treenode->left);
-	free_treenode(treenode->right);
-	if (treenode->str)
-		free(treenode->str);
-	free(treenode);
-}
 t_treenode	*create_branch_words(t_token **token_list)
 {
 	t_treenode	*root = NULL;
@@ -101,7 +103,7 @@ t_treenode	*create_branch_words(t_token **token_list)
 		}
 		else
 		{
-			add_node(current, new_node, LEFT);
+			add_node(current, new_node, RIGHT);
 			current = new_node;
 		}
 		*token_list = (*token_list)->next;

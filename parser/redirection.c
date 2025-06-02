@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/02 13:12:38 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 14:52:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,34 @@ t_treenode	*parse_redirection_node(t_token **token_list)
 	
 	return (NULL);
 }
-//NE FONCTIONN PAS !
+
 t_treenode	*parse_redirection1(t_token **token_list)
 {
 	t_treenode	*node;
 	t_treenode	*right;
+	//t_treenode	*left;
 
 	if (*token_list == NULL)
 		return (NULL);
+
 	if((*token_list)->type != INPUT_REDIRECTION &&
 		(*token_list)->type != OUTPUT_REDIRECTION &&
 		(*token_list)->type != HERE_DOCUMENT &&
 		(*token_list)->type != APPEND_OUTPUT_REDIRECTION)
 		return (NULL);
+
 	t_token *create_node = *token_list;
 	*token_list = (*token_list)->next;
+	
+	if (*token_list == NULL)
+		return (NULL);
 	if ((right = parse_word_node(token_list)) == NULL)
 		return (NULL);
 	node = create_treenode(create_node->type, create_node->str);
 	node->left = NULL;
 	node->right = right;
+//	printf("center %s\n", node->str);
 	//printf("right %s\n", node->right->str);
+	//printf("left %s\n", node->left->str);
 	return (node);
 }

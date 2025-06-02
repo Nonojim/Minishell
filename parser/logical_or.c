@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/31 11:58:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 14:56:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_treenode	*parse_logical_or1(t_token **token_list)
 	t_treenode	*right;
 	t_treenode	*node;
 
-	if ((left = parse_pipeline_node(token_list)) == NULL)
+	if ((left = parse_logical_and_node(token_list)) == NULL)
 		return (NULL);
 
 	if (*token_list == NULL || (*token_list)->type != LOGICAL_OR)
@@ -92,5 +92,5 @@ t_treenode	*parse_logical_or2(t_token **token_list)
 {
 	t_treenode	*node;
 	
-	return (node = parse_pipeline_node(token_list));
+	return (node = parse_logical_and_node(token_list));
 }
