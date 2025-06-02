@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/31 12:26:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 10:52:45 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,11 @@ t_treenode	*create_branch_words(t_token **token_list)
 	t_treenode	*current = NULL;
 	t_treenode	*new_node = NULL;
 
-	while (*token_list && (*token_list)->type == WORD)
+	while (*token_list != NULL
+		&& ((*token_list)->type == WORD
+	|| (*token_list)->type == EXPANSION
+	|| (*token_list)->type == SIMPLE_QUOTE
+	|| (*token_list)->type == DOUBLE_QUOTE ))
 	{
 		new_node = create_treenode((*token_list)->type, (*token_list)->str);
 		if (!root)
