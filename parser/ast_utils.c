@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/02 15:06:37 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 16:53:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,28 @@ t_treenode	*create_treenode(int type, char *str)
 	return (new_node);
 }
 
+/*void ASTreeNodeDelete(ASTreeNode* node)
+{
+    if (node == NULL)
+        return;
+
+    if (node->type & NODE_DATA)
+        free(node->szData);
+
+
+    ASTreeNodeDelete(node->left);
+    ASTreeNodeDelete(node->right);
+    free(node);
+}*/
 
 void	free_treenode(t_treenode *treenode)
 {
 	if (treenode == NULL)
 		return ;
-	free_treenode(treenode->left);
-	free_treenode(treenode->right);
 	if (treenode->str)
 		free(treenode->str);
+	free_treenode(treenode->left);
+	free_treenode(treenode->right);
 	free(treenode);
 }
 

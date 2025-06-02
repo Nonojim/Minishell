@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/29 16:03:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 17:15:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ t_treenode	*create_branch_words(t_token **token_list);
 
 // Manque dans la grammaire = token simple_quote et double_quote ; token_expansion
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
+//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
+//							|	<logical_or> ";" 2 
+//							|	<logical_or> 3 
+//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
 //							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*
 //							|	<command> "|" <command>
@@ -45,5 +45,3 @@ t_treenode	*create_branch_words(t_token **token_list);
 //							|	"<<" <word>
 //<word>          ::= [WORD token]
 //							| NULL
-
-

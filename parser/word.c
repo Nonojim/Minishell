@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/02 10:40:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 17:16:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 t_treenode	*parse_word_node(t_token **token_list);
 t_treenode	*parse_word1(t_token **token_list);
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
-//							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
+//							|	<logical_or> ";" 2 
+//							|	<logical_or> 3 
+//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
+//							|	<logical_and>
+//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*
 //							|	<command> "|" <command>
@@ -41,21 +41,20 @@ t_treenode	*parse_word1(t_token **token_list);
 
 t_treenode	*parse_word_node(t_token **token_list)
 {
-	t_treenode	*node;
+	t_treenode	*node = NULL;
 	t_token *tmp = *token_list;
 
 	if ((node = parse_word1(token_list)))
-	{
-		//token_list = tmp;
 		return (node);
-	}
 	*token_list = tmp;
+//	free_treenode(node);
 	return (NULL);
 }
 
+//word vont à LEFT, possibilité de les mettres à RIGHT en changeant dans create branch (addnode)
 t_treenode	*parse_word1(t_token **token_list)
 {
-	t_treenode *node;
+	t_treenode *node = NULL;
 
 	return (node = create_branch_words(token_list));
 /*	t_treenode	*node;

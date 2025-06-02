@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/29 17:27:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 16:42:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(void)
 		print_token_list(token);
 		t_treenode *tree = parse_line_node(&token);
 		astreeprint(tree, 0);
+		free_treenode(tree);
 		free_token(token);
 		free(line);
 	}

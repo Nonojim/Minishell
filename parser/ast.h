@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/31 12:04:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 16:53:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@
 
  Grammaire LL - Symbole token
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
+//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
+//							|	<logical_or> ";" 2 
+//							|	<logical_or> 3 
+//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
 //							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*
 //							|	<command> "|" <command>
@@ -56,8 +56,7 @@
 //							|	"<" <word>
 //							|	"<<" <word>
 //<word>          ::= [WORD token]
-//							| NULL
-*/
+//							| NULL*/
 
 typedef struct s_treenode
 {

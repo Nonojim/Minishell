@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/02 14:52:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/02 17:19:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ t_treenode	*parse_redirection_node(t_token **token_list);
 t_treenode	*parse_redirection1(t_token **token_list);
 //t_treenode	*parse_redirection2(t_token *token_list);
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
+//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
+//							|	<logical_or> ";" 2 
+//							|	<logical_or> 3 
+//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
 //							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*
 //							|	<command> "|" <command>
@@ -44,26 +44,20 @@ t_treenode	*parse_redirection1(t_token **token_list);
 
 t_treenode	*parse_redirection_node(t_token **token_list)
 {
-	t_treenode	*node;
+	t_treenode	*node = NULL;
 	t_token *tmp = *token_list;
 
 	if ((node = parse_redirection1(token_list)) != NULL)
-	{
-	//	token_list = tmp;
 		return (node);
-	}
 	*token_list = tmp;
-	//if ((node = parse_redirection2(token_list))) 
-		//return (node);
-	
+//	free_treenode(node);
 	return (NULL);
 }
 
 t_treenode	*parse_redirection1(t_token **token_list)
 {
-	t_treenode	*node;
-	t_treenode	*right;
-	//t_treenode	*left;
+	t_treenode	*node = NULL;
+	t_treenode	*right = NULL;
 
 	if (*token_list == NULL)
 		return (NULL);
