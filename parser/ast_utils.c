@@ -6,12 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/02 16:53:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/04 23:54:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
 
 void	print_indent(int depth)
 {
@@ -19,14 +18,12 @@ void	print_indent(int depth)
 		printf("  ");
 }
 
-void	astreeprint(t_treenode* node, int depth)
+void	astreeprint(t_treenode *node, int depth)
 {
 	if (!node)
-		return;
-
+		return ;
 	print_indent(depth);
 	printf("[Type: %i", node->type);
-
 	if (node->str)
 		printf(", data: \"%s\"]", node->str);
 	printf("\n");
@@ -43,6 +40,7 @@ void	astreeprint(t_treenode* node, int depth)
 		astreeprint(node->right, depth + 1);
 	}
 }
+
 // INIT NODE - ADD NODE - FREE NODE 
 t_treenode	*create_treenode(int type, char *str)
 {
@@ -53,24 +51,11 @@ t_treenode	*create_treenode(int type, char *str)
 		return (NULL);
 	new_node->type = type;
 	new_node->str = str;
+	//new_node->argv = NULL;
 	new_node->left = NULL;
 	new_node->right = NULL;
 	return (new_node);
 }
-
-/*void ASTreeNodeDelete(ASTreeNode* node)
-{
-    if (node == NULL)
-        return;
-
-    if (node->type & NODE_DATA)
-        free(node->szData);
-
-
-    ASTreeNodeDelete(node->left);
-    ASTreeNodeDelete(node->right);
-    free(node);
-}*/
 
 void	free_treenode(t_treenode *treenode)
 {

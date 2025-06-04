@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/02 17:20:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/04 21:55:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,21 @@ t_treenode	*parse_logical_or_node(t_token **token_list);
 t_treenode	*parse_logical_or1(t_token **token_list);
 t_treenode	*parse_logical_or2(t_token **token_list);
 
-//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
-//							|	<logical_or> ";" 2 
-//							|	<logical_or> 3 
-//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
-//							|	<logical_or>
-//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
-//							|	<pipeline>
-//<pipeline>            ::= <command> ( "|" <command> )*
-//							|	<command> "|" <command>
-//							|	<command>
-//<command>             ::= "(" <line> ")" | <simple_command>
-//							|	"(" <line> ")"
-//							|	<simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//							|	<word> <redirection> word
-//							|	<word>
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
-//							|	">" <word>
-//							|	">>" <word>
-//							|	"<" <word>
-//							|	"<<" <word>
-//<word>          ::= [WORD token]
-//							| NULL
 
 t_treenode	*parse_logical_or_node(t_token **token_list)
 {
-	t_token			*tmp = *token_list;
-	t_treenode	*node = NULL;
+	t_token		*tmp;
+	t_treenode	*node;
 
-	if ((node = parse_logical_or1(token_list)) != NULL)
+	tmp = *token_list;
+	node = NULL;
+	node = parse_logical_or1(token_list);
+	if (node != NULL)
 		return (node);
 	(*token_list) = tmp;
 	//free_treenode(node);
-	if ((node = parse_logical_or2(token_list)) != NULL)
+	node = parse_logical_or2(token_list);
+	if (node != NULL)
 		return (node);
 	(*token_list) = tmp;
 	//free_treenode(node);
@@ -58,21 +39,26 @@ t_treenode	*parse_logical_or_node(t_token **token_list)
 
 t_treenode	*parse_logical_or1(t_token **token_list)
 {
-	t_treenode	*left = NULL;
-	t_treenode	*right = NULL;
-	t_treenode	*node = NULL;
+	t_treenode	*left;
+	t_treenode	*right;
+	t_treenode	*node;
+	t_token		*create_node;
 
-	if ((left = parse_logical_and_node(token_list)) == NULL)
+	left = NULL;
+	right = NULL;
+	node = NULL;
+	left = parse_logical_and_node(token_list);
+	if (left == NULL)
 		return (NULL);
-
 	if (*token_list == NULL || (*token_list)->type != LOGICAL_OR)
 	{
 	//	free_treenode(left);
 		return (NULL);
 	}
-	t_token *create_node = *token_list;
+	create_node = *token_list;
 	*token_list = (*token_list)->next;
-	if ((right = parse_logical_or_node(token_list)) == NULL)
+	right = parse_logical_or_node(token_list);
+	if (right == NULL)
 	{
 		//free_treenode(left);
 		return (NULL);
@@ -94,7 +80,8 @@ t_treenode	*parse_logical_or1(t_token **token_list)
 
 t_treenode	*parse_logical_or2(t_token **token_list)
 {
-	t_treenode	*node = NULL;
-	
+	t_treenode	*node;
+
+	node = NULL;
 	return (node = parse_logical_and_node(token_list));
 }
