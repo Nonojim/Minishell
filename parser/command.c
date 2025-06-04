@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/04 19:36:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/04 20:54:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,11 +182,11 @@ t_treenode	*parse_command_node3(t_token **token_list)
 {
 		t_treenode	*node = NULL;
 	t_token	*tmp;
-	t_treenode	*left = NULL;
+	//t_treenode	*left = NULL;
 	t_treenode	*right = NULL;
 
-	if ((left = parse_simple_command_node(token_list)) != NULL)
-		return (NULL);
+//	if ((left = parse_simple_command_node(token_list)) != NULL)
+	//	return (NULL);
 
 	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
 		return (NULL);
@@ -213,7 +213,7 @@ t_treenode	*parse_command_node3(t_token **token_list)
 		*token_list = (*token_list)->next;
 		if ((right = parse_simple_command_node(token_list)) == NULL)
 			return (NULL);
-		node->left = left;
+		//node->left = left;
 		node->right = right;
 		//node->right = new_node;
 		return (node);
