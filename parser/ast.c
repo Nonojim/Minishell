@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/02 17:15:49 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/04 19:35:58 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void	free_treenode(t_treenode *treenode);
 t_treenode	*create_branch_words(t_token **token_list);
 
+
+/*
+A FAIRE !!!! 
+Gérer dans le tokenizer (a(b)c) = ouvre une readline = incorrect;
+Modifier la priorité des pipe sur les redirection dans le code (mais grammaire bonne)
+Gerer les leaks
+Normer (good luck)
+*/
 
 // Manque dans la grammaire = token simple_quote et double_quote ; token_expansion
 
