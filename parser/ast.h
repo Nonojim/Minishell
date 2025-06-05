@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/05 12:44:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 15:31:43 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ Minishell$
 typedef struct s_treenode
 {
 	int					type;
-	//char			**argv;
+	char			**argv;
 	char				*str;
 	struct s_treenode	*right;
 	struct s_treenode	*left;
@@ -77,7 +77,7 @@ typedef struct s_treenode
 
 enum e_NODE
 {
-	SUBSHELL //
+	SUBSHELL
 };
 
 enum e_DIRECTION

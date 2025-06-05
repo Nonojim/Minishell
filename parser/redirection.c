@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:45:49 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 17:34:14 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_treenode	*parse_redirection_node(t_token **token_list)
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	return (NULL);
 }
 
@@ -53,13 +52,13 @@ t_treenode	*parse_redirection1(t_token **token_list)
 	right = parse_word_node(token_list);
 	if (right == NULL)
 	{
-		free_treenode(right);
+		//free_treenode(right);
 		return (NULL);
 	}
 	node = create_treenode(create_node->type, create_node->str);
 	if (!node)
 	{
-		free_treenode(right);
+		//free_treenode(right);
 		return (NULL);
 	}
 	node->left = NULL;

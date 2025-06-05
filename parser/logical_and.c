@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logical_and.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:44:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 17:34:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ t_treenode	*parse_logical_and_node(t_token **token_list)
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_logical_and2(token_list);
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	return (NULL);
 }
 
@@ -61,7 +59,7 @@ t_treenode	*parse_logical_and1(t_token **token_list)
 	right = parse_logical_and_node(token_list);
 	if (right == NULL)
 	{
-		free_treenode(left);
+		//free_treenode(left);
 		return (NULL);
 	}
 	node = create_treenode(create_node->type, create_node->str);

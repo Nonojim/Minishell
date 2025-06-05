@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:43:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 18:01:24 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,14 @@ t_treenode	*parse_line_node(t_token **token_list)
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_line2(token_list);
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_line3(token_list);
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	print_error(token_list);
 	return (NULL);
 }
@@ -69,14 +66,14 @@ t_treenode	*parse_line1(t_token **token_list)
 		return (NULL);
 	if (*token_list == NULL || (*token_list)->type != SEMICOLON)
 	{
-		//free_treenode(left);
+		free_treenode(left);
 		return (NULL);
 	}
 	create_node = *token_list;
 	*token_list = (*token_list)->next;
 	if (*token_list == NULL)
 	{ 
-		free_treenode(left);
+		//free_treenode(left);
 		right = NULL;
 	}
 	right = parse_line_node(token_list);

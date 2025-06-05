@@ -17,3 +17,4 @@ ouvre une readline (ne devrait pas)
 double historique des parenthese toujours à regler 
 
 
+wtf

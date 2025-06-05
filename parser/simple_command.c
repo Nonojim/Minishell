@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:46:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 19:48:16 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ t_treenode	*parse_simple_command_node(t_token **token_list)
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_simple_command2(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	return (NULL);
 }
 
@@ -57,6 +55,11 @@ t_treenode	*parse_simple_command1(t_token **token_list)
 	left = parse_word_node(token_list);
 	if (left == NULL)
 		return (NULL);
+	if (*token_list == NULL || !is_redirection((*token_list)->type))
+	{
+		free_treenode(left);
+		return (NULL);
+	}
 	while (*token_list != NULL && is_redirection((*token_list)->type))
 	{
 		redir_tok = *token_list;
@@ -64,6 +67,7 @@ t_treenode	*parse_simple_command1(t_token **token_list)
 		if (*token_list == NULL || (*token_list)->type != WORD)
 		{
 			free_treenode(left);
+			printf("syntax error near unexpected token `newline'\n");
 			return NULL;
 		}
 		file = *token_list;
@@ -71,15 +75,15 @@ t_treenode	*parse_simple_command1(t_token **token_list)
 		redir = create_treenode(redir_tok->type, redir_tok->str);
 		if (!redir)
 		{
-			free_treenode(left);
+			//free_treenode(left);
 			return (NULL);
 		}
 		redir->left = left;
 		redir->right = create_treenode(file->type, file->str);
 		if (!redir->right)
 		{
-			free_treenode(left);
-			free_treenode(redir);
+			//free_treenode(left);
+			//free_treenode(redir);
 			return (NULL);
 		}
 		left = redir;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:45:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 18:05:55 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ t_treenode	*parse_pipeline_node(t_token **token_list)
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_pipeline2(token_list);
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	return (NULL);
 }
 
@@ -48,6 +46,11 @@ t_treenode	*left;
 	if (left == NULL)
 		return (NULL);
 
+	if (*token_list == NULL || (*token_list)->type != PIPE)
+	{
+		free_treenode(left);
+		return (NULL);
+	}
 	while (*token_list != NULL && (*token_list)->type == PIPE)
 	{
 		create_node = *token_list;
@@ -55,14 +58,14 @@ t_treenode	*left;
 		right = parse_command_node(token_list);
 		if (right == NULL)
 		{
-			free_treenode(left);
+			//free_treenode(left);
 			return (NULL);
 		}
 		node = create_treenode(create_node->type, create_node->str);
 		if (!node)
 		{
-			free_treenode(left);
-			free_treenode(right);
+			//free_treenode(left);
+			//free_treenode(right);
 			return (NULL);
 		}
 		node->left = left;

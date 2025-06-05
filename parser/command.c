@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 11:49:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 20:03:44 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,22 @@ t_treenode	*parse_command_node(t_token **token_list)
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_command_node2(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_command_node3(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_command_node4(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	node = parse_command_node5(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	free_treenode(node);
 	return (NULL);
 }
 
@@ -67,10 +62,12 @@ t_treenode	*parse_command_node1(t_token **token_list)
 	left = NULL;
 	left = parse_simple_command_node(token_list);
 	if (left != NULL)
-		return (NULL);
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
 	{
 		free_treenode(left);
+		return (NULL);
+	}
+	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
+	{
 		return (NULL);
 	}
 	tmp = *token_list;
@@ -88,11 +85,7 @@ t_treenode	*parse_command_node1(t_token **token_list)
 		if (node->left == NULL)
 		{
 			free_treenode(node);
-			return (NULL);
-		}
-		if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
-		{
-			free_treenode(node);
+			printf("syntax error near unexpected token `)'\n");
 			return (NULL);
 		}
 		*token_list = (*token_list)->next;
@@ -113,7 +106,7 @@ t_treenode	*parse_command_node1(t_token **token_list)
 	}
 }
 
-//simple_command "(" <line> ")"
+// simple_command "(" <line> ")"
 t_treenode	*parse_command_node2(t_token **token_list)
 {
 	t_treenode	*node;
@@ -136,7 +129,7 @@ t_treenode	*parse_command_node2(t_token **token_list)
 	*token_list = (*token_list)->next;
 	while ((*token_list)->type != BRACKETS_L && *token_list != NULL)
 		*token_list = (*token_list)->next;
-	if ((*token_list)->type == BRACKETS_L && *token_list != NULL)
+	if ((*token_list)->type == BRACKETS_L)
 	{
 		*token_list = tmp;
 		node = create_treenode(SUBSHELL, "()");
@@ -144,11 +137,7 @@ t_treenode	*parse_command_node2(t_token **token_list)
 		node->right = parse_line_node(token_list);
 		if (node->right == NULL)
 		{
-			free_treenode(node);
-			return (NULL);
-		}
-		if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
-		{
+			free_treenode(left);
 			free_treenode(node);
 			return (NULL);
 		}
