@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/05 08:56:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:44:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ Minishell$
 //							|	<logical_or> ";" 2 
 //							|	<logical_or> 3 
 //<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
-//							|	<logical_or>
+//							|	<logical_and>
 //<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*

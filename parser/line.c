@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 12:28:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:43:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	print_error(t_token **token_list)
 	if ((*token_list)->type == INPUT_REDIRECTION)
 		printf("bash: test: No such file or directory\n");
 }
+
 t_treenode	*parse_line_node(t_token **token_list)
 {
 	t_token		*tmp;
@@ -52,6 +53,7 @@ t_treenode	*parse_line_node(t_token **token_list)
 	return (NULL);
 }
 
+//<logical_or> (";" <logical_or>)*
 t_treenode	*parse_line1(t_token **token_list)
 {
 	t_treenode	*left;
@@ -89,6 +91,7 @@ t_treenode	*parse_line1(t_token **token_list)
 	return (node);
 }
 
+//<logical_or> ";"
 t_treenode	*parse_line2(t_token **token_list)
 {
 	t_treenode	*left;
@@ -113,6 +116,7 @@ t_treenode	*parse_line2(t_token **token_list)
 	return (node);
 }
 
+//<logical_or>
 t_treenode	*parse_line3(t_token **token_list)
 {
 	t_treenode	*node;

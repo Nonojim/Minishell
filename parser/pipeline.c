@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 11:53:09 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:45:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_treenode	*parse_pipeline_node(t_token **token_list)
 	return (NULL);
 }
 
+//<command> "|" <command>
 t_treenode	*parse_pipeline1(t_token **token_list)
 {
 t_treenode	*left;
@@ -71,6 +72,7 @@ t_treenode	*left;
 	return (left);
 }
 
+//<command>
 t_treenode	*parse_pipeline2(t_token **token_list)
 {
 	t_treenode	*node;

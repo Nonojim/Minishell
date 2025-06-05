@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 11:10:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:45:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_treenode	*parse_logical_or_node(t_token **token_list)
 	return (NULL);
 }
 
+//<logical_and> ("&&" <logical_and> )*
 t_treenode	*parse_logical_or1(t_token **token_list)
 {
 	t_treenode	*left;
@@ -78,6 +79,7 @@ t_treenode	*parse_logical_or1(t_token **token_list)
 	}
 }
 
+//<logical_and>
 t_treenode	*parse_logical_or2(t_token **token_list)
 {
 	t_treenode	*node;

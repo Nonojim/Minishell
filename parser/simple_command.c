@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 11:50:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:46:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ return (type == INPUT_REDIRECTION
 		|| type == APPEND_OUTPUT_REDIRECTION);
 }
 //no priorité ds les redirection, prio dans le sens de lecture (gauche à droite)
+//<word> <redirection> word
 t_treenode	*parse_simple_command1(t_token **token_list)
 {
 	t_token		*redir_tok;
@@ -55,10 +56,7 @@ t_treenode	*parse_simple_command1(t_token **token_list)
 	left = NULL;
 	left = parse_word_node(token_list);
 	if (left == NULL)
-	{
-		free_treenode(left);
 		return (NULL);
-	}
 	while (*token_list != NULL && is_redirection((*token_list)->type))
 	{
 		redir_tok = *token_list;
@@ -89,6 +87,7 @@ t_treenode	*parse_simple_command1(t_token **token_list)
 	return (left);
 }
 
+//<word>
 t_treenode	*parse_simple_command2(t_token **token_list)
 {
 	t_treenode	*node;

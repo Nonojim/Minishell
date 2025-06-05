@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 11:09:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:44:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_treenode	*parse_logical_and_node(t_token **token_list)
 }
 
 //create_node = avant d'avancer dans la liste afin de créer le bon node (et pas le noeud suivant).
+//<pipeline> ("||"  <pipeline> )* 
 t_treenode	*parse_logical_and1(t_token **token_list)
 {
 	t_treenode	*left;
@@ -78,6 +79,7 @@ t_treenode	*parse_logical_and1(t_token **token_list)
 	}
 }
 
+//	<pipeline>
 t_treenode	*parse_logical_and2(t_token **token_list)
 {
 	t_treenode	*node;
