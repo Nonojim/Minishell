@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/04 23:54:55 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 08:56:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ enum e_DIRECTION
 void	astreeprint(t_treenode* node, int depth);
 void	print_indent(int depth);
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
-void	free_treenode(t_treenode *treenode);
+void	free_treenode(t_treenode *node);
 t_treenode	*create_branch_words(t_token **token_list);
 t_treenode	*create_treenode(int type, char *str);
 

@@ -1,22 +1,19 @@
-############ PARSER 
-BRACKEt = 
-* (echo test
-> ) echo test
-bash: syntax error near unexpected token `echo'
-$ ( echo test
-> ) && echo test
-test
-test
 
-si juste command renvoyer erreur, si op logique + commande on valide.
+COMMANDE PROBLEME ou douteuse =
+
+[OK] test ;  
+segfault 
+
+[OK]quand entrée = segfault
+[OK]quand espace = segfault
+
+[X] $ a && ;
+[0 : a] -> [3 : &&] -> [4 : ;] -> NULL
+[Type: 0, data: "a"]
+Minishell$ 
+
+[X] (a(b)c) > )
+ouvre une readline (ne devrait pas)
+double historique des parenthese toujours à regler 
 
 
-
-################## REDIRECTIONS
-PAS D ORDRE DE PRIORITE 
-Priorite = sens de lecture ( de left a right) 
-Dans shell si on met une brackets sans rien apres n ouvre pas de new line mais renvoie une error. 
-
-################################# QUOTES
-
-Rendre les quotes visibles

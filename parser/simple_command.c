@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/04 23:12:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:50:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ t_treenode	*parse_simple_command_node(t_token **token_list)
 	if (node)
 		return (node);
 	*token_list = tmp;
-//	free_treenode(node);
+	free_treenode(node);
 	node = parse_simple_command2(token_list);
 	if (node)
 		return (node);
 	*token_list = tmp;
-	//free_treenode(node);
+	free_treenode(node);
 	return (NULL);
 }
 
@@ -46,38 +46,45 @@ return (type == INPUT_REDIRECTION
 //no priorité ds les redirection, prio dans le sens de lecture (gauche à droite)
 t_treenode	*parse_simple_command1(t_token **token_list)
 {
-	//t_treenode	*node;
-	//t_treenode	*new_node;
+	t_token		*redir_tok;
+	t_token		*file;
 	t_treenode	*left;
+	t_treenode	*redir;
 
-	//node = NULL;
-	//new_node = NULL;
+	redir = NULL;
 	left = NULL;
 	left = parse_word_node(token_list);
 	if (left == NULL)
+	{
+		free_treenode(left);
 		return (NULL);
+	}
 	while (*token_list != NULL && is_redirection((*token_list)->type))
 	{
-		t_token *redir_tok = *token_list;
+		redir_tok = *token_list;
 		*token_list = (*token_list)->next;
 		if (*token_list == NULL || (*token_list)->type != WORD)
+		{
+			free_treenode(left);
 			return NULL;
-		t_token *file = *token_list;
+		}
+		file = *token_list;
 		*token_list = (*token_list)->next;
-		t_treenode *redir = create_treenode(redir_tok->type, redir_tok->str);
+		redir = create_treenode(redir_tok->type, redir_tok->str);
+		if (!redir)
+		{
+			free_treenode(left);
+			return (NULL);
+		}
 		redir->left = left;
 		redir->right = create_treenode(file->type, file->str);
-		left = redir;
-		//new_node = parse_redirection_node(token_list);
-		//pas de création de node ici puisqu'il est déjà crer dans redirection sinon le crée en double
-		/*t_token *create_node = *token_list;
-		*token_list = (*token_list)->next;
-		if ((right = parse_simple_command_node(token_list)) == NULL)
+		if (!redir->right)
+		{
+			free_treenode(left);
+			free_treenode(redir);
 			return (NULL);
-		node = create_treenode(create_node->type, create_node->str);
-		node->left = left;
-		node->right = right;
-		return (node);*/
+		}
+		left = redir;
 	}
 	return (left);
 }

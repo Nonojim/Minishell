@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/04 23:54:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 12:23:34 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	astreeprint(t_treenode *node, int depth)
 	}
 }
 
+//extern int g_node_count;
 // INIT NODE - ADD NODE - FREE NODE 
 t_treenode	*create_treenode(int type, char *str)
 {
@@ -49,23 +50,34 @@ t_treenode	*create_treenode(int type, char *str)
 	new_node = ft_calloc(1, sizeof(t_treenode));
 	if (new_node == NULL)
 		return (NULL);
+	//g_node_count++;
+	//printf("CREATE NODE: %d (%s)\n", g_node_count, str ? str : "NULL");
 	new_node->type = type;
-	new_node->str = str;
+	if (str)
+		new_node->str = ft_strdup(str); //evite le partage de memoire; les doubles free etc
 	//new_node->argv = NULL;
 	new_node->left = NULL;
 	new_node->right = NULL;
 	return (new_node);
 }
 
-void	free_treenode(t_treenode *treenode)
+void	free_treenode(t_treenode *node)
 {
-	if (treenode == NULL)
+	if (node == NULL)
 		return ;
-	if (treenode->str)
-		free(treenode->str);
-	free_treenode(treenode->left);
-	free_treenode(treenode->right);
-	free(treenode);
+	free_treenode(node->left);
+	node->left = NULL;
+	free_treenode(node->right);
+	node->right = NULL;
+	if (node->str != NULL)
+	{
+		//printf("free str: %s\n", node->str);
+		free(node->str);
+		node->str = NULL;
+	}
+	//printf("FREE NODE: %d\n", g_node_count);
+		//g_node_count--;
+	free(node);
 }
 
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
@@ -94,6 +106,11 @@ t_treenode	*create_branch_words(t_token **token_list)
 	|| (*token_list)->type == DOUBLE_QUOTE ))
 	{
 		new_node = create_treenode((*token_list)->type, (*token_list)->str);
+		if (!new_node || !new_node->str)
+		{
+			free_treenode(root);
+			return (NULL);
+		}
 		if (!root)
 		{
 			root = new_node;

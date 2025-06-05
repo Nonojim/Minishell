@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/04 23:07:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:53:09 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ t_treenode	*parse_pipeline_node(t_token **token_list)
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	//free_treenode(node);
+	free_treenode(node);
 	node = parse_pipeline2(token_list);
 	if (node != NULL)
 		return (node);
 	*token_list = tmp;
-	//free_treenode(node);
+	free_treenode(node);
 	return (NULL);
 }
 
@@ -51,16 +51,22 @@ t_treenode	*left;
 	{
 		create_node = *token_list;
 		*token_list = (*token_list)->next;
-
 		right = parse_command_node(token_list);
 		if (right == NULL)
-			return (NULL); // erreur de syntaxe
-
+		{
+			free_treenode(left);
+			return (NULL);
+		}
 		node = create_treenode(create_node->type, create_node->str);
+		if (!node)
+		{
+			free_treenode(left);
+			free_treenode(right);
+			return (NULL);
+		}
 		node->left = left;
 		node->right = right;
-
-		left = node; // nouvelle racine = pipe
+		left = node;
 	}
 	return (left);
 }
