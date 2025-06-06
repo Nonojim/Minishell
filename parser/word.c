@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/30 13:51:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:14:06 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,54 +15,61 @@
 t_treenode	*parse_word_node(t_token **token_list);
 t_treenode	*parse_word1(t_token **token_list);
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
-//							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
-//							|	<pipeline>
-//<pipeline>            ::= <command> ( "|" <command> )*
-//							|	<command> "|" <command>
-//							|	<command>
-//<command>             ::= "(" <line> ")" | <simple_command>
-//							|	"(" <line> ")"
-//							|	<simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//							|	<word> <redirection> word
-//							|	<word>
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
-//							|	">" <word>
-//							|	">>" <word>
-//							|	"<" <word>
-//							|	"<<" <word>
-//<word>          ::= [WORD token]
-//							| NULL
-
-t_treenode	*parse_word_node(t_token **token_list)
+t_treenode *parse_word_node(t_token **tokens)
 {
-	t_treenode	*node;
-	t_token *tmp = *token_list;
+	int	argc = 0;
+	int	i = 0;
+	t_token *tmp = *tokens;
 
-	if ((node = parse_word1(token_list)))
+	while (tmp != NULL
+		&& (tmp->type == WORD
+	|| tmp->type == EXPANSION
+	|| tmp->type == SIMPLE_QUOTE
+	|| tmp->type == DOUBLE_QUOTE))
 	{
-		//token_list = tmp;
-		return (node);
+		argc++;
+		tmp = tmp->next;
 	}
-	*token_list = tmp;
-	return (NULL);
-}
-t_treenode	*parse_word1(t_token **token_list)
-{
-	t_treenode	*node;
+	if (argc == 0)
+		return NULL;
 
-	if (token_list == NULL || *token_list == NULL
-		|| ((*token_list)->type != WORD
-		&& (*token_list)->type != EXPANSION
-		&& (*token_list)->type != SIMPLE_QUOTE
-		&& (*token_list)->type != DOUBLE_QUOTE))
-		return (NULL);
-	node = create_treenode((*token_list)->type, (*token_list)->str);
-	*token_list = (*token_list)->next;
-	return (node);
+	char **argv = malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
+		return NULL;
+
+	while (i < argc)
+	{
+		argv[i] = ft_strdup((*tokens)->str);
+		*tokens = (*tokens)->next;
+		i++;
+	}
+	argv[argc] = NULL;
+
+	t_treenode *cmd = create_treenode(0, argv[0]);
+	cmd->argv = argv;
+	return cmd;
 }
+
+//t_treenode	*parse_word_node(t_token **token_list)
+//{
+//	t_treenode	*node;
+//	t_token		*tmp;
+//
+//	node = NULL;
+//	tmp = *token_list;
+//	node = parse_word1(token_list);
+//	if (node)
+//		return (node);
+//	*token_list = tmp;
+//	free_treenode(node);
+//	return (NULL);
+//}
+//
+////[WORD token]
+//t_treenode	*parse_word1(t_token **token_list)
+//{
+//	t_treenode	*node;
+//
+//	node = NULL;
+//	return (node = create_branch_words(token_list));
+//}

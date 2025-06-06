@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:48 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 10:06:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/06 20:07:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	type_token(char *str)
 	else if (str[0] == '>')
 		return (HERE_DOCUMENT);
 	else if (str[0] == '(')
-		return (BRACKETS_R);
-	else if (str[0] == ')')
 		return (BRACKETS_L);
+	else if (str[0] == ')')
+		return (BRACKETS_R);
 	else if (str[0] == '$')
 		return (EXPANSION);
 	else

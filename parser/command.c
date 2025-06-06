@@ -3,96 +3,110 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/30 13:22:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/06 20:10:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
-//							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
-//							|	<pipeline>
-//<pipeline>            ::= <command> ( "|" <command> )*
-//							|	<command> "|" <command>
-//							|	<command>
-//<command>             ::= "(" <line> ")" | <simple_command>
-//							|	"(" <line> ")"
-//							|	<simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//							|	<word> <redirection> word
-//							|	<word>
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
-//							|	">" <word>
-//							|	">>" <word>
-//							|	"<" <word>
-//							|	"<<" <word>
-//<word>          ::= [WORD token]
-//							| NULL
-
 t_treenode	*parse_command_node(t_token **token_list);
 t_treenode	*parse_command_node1(t_token **token_list);
 t_treenode	*parse_command_node2(t_token **token_list);
 
+/*
+<command>     ::= "(" <line> ")" | <simple_command>
+							|	"(" <line> ")" 
+							| "(" <line> ")" redirection
+							|	<simple_command>
+*/
 
-// Ne fonctionne pas,
 t_treenode	*parse_command_node(t_token **token_list)
 {
-	t_token *tmp = *token_list;
+	t_token		*tmp;
 	t_treenode	*node;
 
-	if ((node = parse_command_node1(token_list)))
+	tmp = *token_list;
+	node = NULL;
+	node = parse_command_node1(token_list);
+	if (node)
 		return (node);
 	*token_list = tmp;
-	if ((node = parse_command_node2(token_list)))
+	node = parse_command_node2(token_list);
+	if (node)
 		return (node);
 	*token_list = tmp;
-	return (NULL);
+
+	return(NULL);
 }
 
-//Passe sur la brackets_R ok repasse dans parse_line
-//Sauf que une fois que tout ce qui est a l'intérieur a été parsé on revient dans parse_command_node1 et return null sur bracket_R
-// donc on token jamais la bracket_L
-// Maybe faire 2 fonction une qui parse la bracket_R une qui parse la bracket_L
+int	operator_or_nothing_before_subshell(int type)
+{
+	return(type == LOGICAL_AND
+		|| type == LOGICAL_OR
+		|| type == PIPE
+		|| type == SEMICOLON);
+}
+
+// "(" <line> ")" redirection
 t_treenode	*parse_command_node1(t_token **token_list)
 {
 	t_treenode	*node;
-	t_treenode	*node2;
-	//t_treenode	*left;
-	t_treenode	*right;
-
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
-		return (NULL);
-//	t_token *create_node = *token_list;
-	*token_list = (*token_list)->next;
-	if ((right = parse_line_node(token_list)) != NULL)
-		return (NULL);
+	t_token		*tmp;
+	
+	node = NULL;
+	tmp = *token_list;
 	if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
 		return (NULL);
-	if ((*token_list)->type == BRACKETS_L)
+	tmp = *token_list;
+	while ((*token_list)->type != BRACKETS_R && *token_list != NULL)
+		*token_list = (*token_list)->next;
+	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
 	{
-		node2 = create_treenode(BRACKETS_L, ")");
-		return (node2);
-	}
-	//t_token *create_node = *token_list;
-	//*token_list = (*token_list)->next;
-	if ((right = parse_command_node1(token_list)) != NULL)
+		*token_list = tmp;
 		return (NULL);
-	node = create_treenode(BRACKETS_R, "(");
-	//node->left = NULL;
-	node->right = right;
+	}
+	*token_list = tmp;
+	node = create_treenode(SUBSHELL, "()");
+	if (!node)
+		return (NULL);
+	*token_list = (*token_list)->next;
+	node->left = parse_line_node(token_list);
+	if (node->left == NULL || *token_list == NULL)
+	{
+		free_treenode(node);
+		return (NULL);
+  }
+	*token_list = (*token_list)->next;
+	t_token	*tmp2 = *token_list;
+	t_treenode *node_redir;
+	//FAIT DISPARAITRE LES TOKEN
+	while((node_redir = parse_redirection_node(token_list)) != NULL)
+	{
+		node_redir->left = node;
+		node = node_redir;
+	}
+	if (*token_list != NULL && !operator_or_nothing_before_subshell((*token_list)->type) && !is_redirection((*token_list)->type))
+	{
+		free_treenode(node);
+		*token_list = tmp2;
+		return (NULL);
+	}
+	if (node_redir != NULL)
+	{
+		free_treenode(node_redir);
+	}
 	return (node);
 }
 
+//simple_command
 t_treenode	*parse_command_node2(t_token **token_list)
 {
 	t_treenode	*node;
 
-	return (node = parse_simple_command_node(token_list));
+	node  = parse_simple_command_node(token_list);
+	return (node);
+
 }

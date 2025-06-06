@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 21:47:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/05 18:05:55 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,72 +16,70 @@ t_treenode	*parse_pipeline_node(t_token **token_list);
 t_treenode	*parse_pipeline1(t_token **token_list);
 t_treenode	*parse_pipeline2(t_token **token_list);
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
-//							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
-//							|	<pipeline>
-//<pipeline>            ::= <command> ( "|" <command> )*
-//							|	<command> "|" <command>
-//							|	<command>
-//<command>             ::= "(" <line> ")" | <simple_command>
-//							|	"(" <line> ")"
-//							|	<simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//							|	<word> <redirection> word
-//							|	<word>
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
-//							|	">" <word>
-//							|	">>" <word>
-//							|	"<" <word>
-//							|	"<<" <word>
-//<word>          ::= [WORD token]
-//							| NULL
-
 t_treenode	*parse_pipeline_node(t_token **token_list)
 {
-	t_token			*tmp = *token_list;
+	t_token		*tmp;
 	t_treenode	*node;
 
-	if ((node = parse_pipeline1(token_list)) != NULL)
-	{
+	tmp = *token_list;
+	node = NULL;
+	node = parse_pipeline1(token_list);
+	if (node != NULL)
 		return (node);
-	}
-		*token_list = tmp;
-	if ((node = parse_pipeline2(token_list)) != NULL)
-	{
+	*token_list = tmp;
+	node = parse_pipeline2(token_list);
+	if (node != NULL)
 		return (node);
-	}
-		*token_list = tmp;
+	*token_list = tmp;
 	return (NULL);
 }
 
+//<command> "|" <command>
 t_treenode	*parse_pipeline1(t_token **token_list)
 {
-	t_treenode	*left;
+t_treenode	*left;
 	t_treenode	*right;
 	t_treenode	*node;
+	t_token		*create_node;
 
-	if ((left = parse_command_node(token_list)) == NULL)
+	left = parse_command_node(token_list);
+	if (left == NULL)
 		return (NULL);
 
 	if (*token_list == NULL || (*token_list)->type != PIPE)
+	{
+		free_treenode(left);
 		return (NULL);
-	t_token *create_node = *token_list;
-	*token_list = (*token_list)->next;
-	if ((right = parse_pipeline_node(token_list)) == NULL)
-		return (NULL);
-	node = create_treenode(create_node->type, create_node->str);
-	node->left = left;
-	node->right = right;
-	return (node);
+	}
+	while (*token_list != NULL && (*token_list)->type == PIPE)
+	{
+		create_node = *token_list;
+		*token_list = (*token_list)->next;
+		right = parse_command_node(token_list);
+		if (right == NULL)
+		{
+			//free_treenode(left);
+			return (NULL);
+		}
+		node = create_treenode(create_node->type, create_node->str);
+		if (!node)
+		{
+			//free_treenode(left);
+			//free_treenode(right);
+			return (NULL);
+		}
+		node->left = left;
+		node->right = right;
+		left = node;
+	}
+	return (left);
 }
 
+//<command>
 t_treenode	*parse_pipeline2(t_token **token_list)
 {
 	t_treenode	*node;
-	
+
+	node = NULL;
 	return (node = parse_command_node(token_list));
 }

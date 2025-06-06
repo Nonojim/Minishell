@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/05/29 13:12:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/06 18:13:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,41 @@
 # include "../includes/tokenizer.h"
 
 /*
+Minishell$ echo hello & test
+[0 : echo] -> [0 : hello] -> [0 : &] -> [0 : test] -> NULL
+[Type: 0, data: "echo", argv: ["echo", "hello", "&", "test"]]
+Left:
+  [Type: 0, data: "hello"]
+  Left:
+    [Type: 0, data: "&"]
+    Left:
+      [Type: 0, data: "test"]
+Minishell$ 
  * Grammaire LL : va definir la structure syntaxique d'une ligne de commande Shell.
  * Begin rule line.
  * Structure adapte a un parseur descendant recursif. 
  * L'AST va être construit à partir de la grammaire, chaque regle de grammaire correspond a un type de noeud AST.
- 
  ** Symbole dans la grammaire (notation EBNF)
  ::= == opérateur d'affectation de règle, "est définit comme"
  | (ou alternatif) == l'élement peut être l'un ou l'autre
  * == peut apparaitre plusieurs fois ou zéro fois
  + == plusieurs fois ou 1 fois minimum
  ? == zéro ou 1 fois
- 
  **  exemple = echo "Hello" && ls -l ; echo test
  * echo = WORD, "Hello" = WORD, && = logical_and, ls = WORD, -l = WORD ; = SEMICOLON, echo = WORD test = WORD
 
  Grammaire LL - Symbole token
 
-//<line>                ::= 	<logical_and> (";" <logical_and>)* 1 
-//							|	<logical_and> ";" 2 
-//							|	<logical_and> 3 
-//<logical_and>              ::= 	<logical_or> ("&&" <logical_or> )* 
-//							|	<logical_or>
-//<logical_or>              ::= 	<pipeline> ("||"  <pipeline> )* 
+//<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
+//							|	<logical_or> ";" 2 
+//							|	<logical_or> 3 
+//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )* 
+//							|	<logical_and>
+//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )* 
 //							|	<pipeline>
 //<pipeline>            ::= <command> ( "|" <command> )*
 //							|	<command> "|" <command>
-//							|	<command>
+//							|	<commandet
 //<command>             ::= "(" <line> ")" | <simple_command>
 //							|	"(" <line> ")"
 //							|	<simple_command>
@@ -56,16 +64,21 @@
 //							|	"<" <word>
 //							|	"<<" <word>
 //<word>          ::= [WORD token]
-//							| NULL
-*/
+//							| NULL*/
 
 typedef struct s_treenode
 {
 	int					type;
+	char			**argv;
 	char				*str;
 	struct s_treenode	*right;
 	struct s_treenode	*left;
 }			t_treenode;
+
+enum e_NODE
+{
+	SUBSHELL
+};
 
 enum e_DIRECTION
 {
@@ -76,10 +89,12 @@ enum e_DIRECTION
 //Utils / Init AST
 void	astreeprint(t_treenode* node, int depth);
 void	print_indent(int depth);
-t_treenode	*create_treenode(int type, char *str);
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
-void	free_treenode(t_treenode *treenode);
+void	free_treenode(t_treenode *node);
 t_treenode	*create_branch_words(t_token **token_list);
+t_treenode	*create_treenode(int type, char *str);
+int	is_redirection(int type);
+int    is_word_type(int type);
 
 //Parse
 t_treenode	*create_tree(t_token *token_list);
@@ -109,6 +124,9 @@ t_treenode	*parse_pipeline2(t_token **token_list);
 t_treenode	*parse_command_node(t_token **token_list);
 t_treenode	*parse_command_node1(t_token **token_list);
 t_treenode	*parse_command_node2(t_token **token_list);
+t_treenode	*parse_command_node3(t_token **token_list);
+t_treenode	*parse_command_node4(t_token **token_list);
+t_treenode	*parse_command_node5(t_token **token_list);
 
 //Simple_command
 t_treenode	*parse_simple_command_node(t_token **token_list);
@@ -125,3 +143,4 @@ t_treenode	*parse_word_node(t_token **token_list);
 t_treenode	*parse_word1(t_token **token_list);
 
 #endif
+
