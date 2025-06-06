@@ -51,9 +51,14 @@ int	main(void)
 		add_history(line);
 		print_token_list(token);
 		ast = parse_line_node(&token);
-		
+		//si des tokens subsistent l'ast sera delete
+		if (token != NULL)
+		{
+			free_treenode(ast);
+			ast = NULL;
+		}
 		printf("node_count before free = %d\n", g_node_count);
-		if (ast)
+		if (ast != NULL)
 		{
 			astreeprint(ast, 0);
 			free_treenode(ast);

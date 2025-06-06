@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 20:10:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:35:27 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,5 @@ t_treenode	*parse_simple_command3(t_token **token_list)
 {
 	t_treenode	*node = NULL;
 	node = parse_word_node(token_list); 
-	if (*token_list != NULL && !is_word((*token_list)->type))
-	{
-		free_treenode(node);
-		return (NULL);
-	}
 	return (node);
 }
