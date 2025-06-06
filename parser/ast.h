@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/05 15:31:43 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:13:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void	free_treenode(t_treenode *node);
 t_treenode	*create_branch_words(t_token **token_list);
 t_treenode	*create_treenode(int type, char *str);
+int	is_redirection(int type);
+int    is_word_type(int type);
 
 //Parse
 t_treenode	*create_tree(t_token *token_list);

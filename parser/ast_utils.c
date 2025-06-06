@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/05 15:31:22 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:36:09 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ void	print_indent(int depth)
 {
 	while (depth-- > 0)
 		printf("  ");
+}
+
+int    is_word_type(int type)
+{
+    return (type == WORD
+            || type == SIMPLE_QUOTE
+            || type == DOUBLE_QUOTE
+            || type == EXPANSION);
 }
 
 void	astreeprint(t_treenode *node, int depth)
@@ -65,7 +73,7 @@ t_treenode	*create_treenode(int type, char *str)
 	if (new_node == NULL)
 		return (NULL);
 	g_node_count++;
-	printf("CREATE NODE: %d (%s)\n", g_node_count, str ? str : "NULL");
+	//printf("CREATE NODE: %d (%s)\n", g_node_count, str ? str : "NULL");
 	new_node->type = type;
 	if (str)
 		new_node->str = ft_strdup(str); //evite le partage de memoire; les doubles free etc
@@ -86,7 +94,7 @@ void	free_treenode(t_treenode *node)
 	node->right = NULL;
 	if (node->str != NULL)
 	{
-		printf("free str: %s\n", node->str);
+		//printf("free str: %s\n", node->str);
 		free(node->str);
 		node->str = NULL;
 	}
@@ -100,7 +108,7 @@ void	free_treenode(t_treenode *node)
 		free(node->argv);
 		node->argv = NULL;
 	}
-	printf("FREE NODE: %d\n", g_node_count);
+	//printf("FREE NODE: %d\n", g_node_count);
 		g_node_count--;
 	free(node);
 	node = NULL;

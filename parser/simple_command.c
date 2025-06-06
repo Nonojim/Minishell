@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 19:48:16 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:10:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,87 +15,91 @@
 t_treenode	*parse_simple_command_node(t_token **token_list);
 t_treenode	*parse_simple_command1(t_token **token_list);
 t_treenode	*parse_simple_command2(t_token **token_list);
+t_treenode	*parse_simple_command3(t_token **token_list);
 
+/*
+ <simple_command>      ::= <word> ( <word> | <redirection> )*
+												|	<word> <redirection> word
+												|	<word>
+*/
 t_treenode	*parse_simple_command_node(t_token **token_list)
 {
-	t_treenode	*node;
-	t_token		*tmp;
+	t_treenode	*node = NULL;
+	t_token		*tmp = *token_list;
 
-	node = NULL;
-	tmp = *token_list;
-	node = parse_simple_command1(token_list);
-	if (node)
+	if ((node = parse_simple_command1(token_list)))
 		return (node);
 	*token_list = tmp;
-	node = parse_simple_command2(token_list);
-	if (node)
+	if ((node = parse_simple_command2(token_list)))
+		return (node);
+	*token_list = tmp;
+	if ((node = parse_simple_command3(token_list)))
 		return (node);
 	*token_list = tmp;
 	return (NULL);
 }
 
-int	is_redirection(int type)
-{
-return (type == INPUT_REDIRECTION
-		|| type == OUTPUT_REDIRECTION
-		|| type == HERE_DOCUMENT
-		|| type == APPEND_OUTPUT_REDIRECTION);
-}
-//no priorité ds les redirection, prio dans le sens de lecture (gauche à droite)
-//<word> <redirection> word
+//word _ redirection _ word
 t_treenode	*parse_simple_command1(t_token **token_list)
 {
-	t_token		*redir_tok;
-	t_token		*file;
-	t_treenode	*left;
-	t_treenode	*redir;
+	t_treenode	*node = NULL;
+	t_treenode	*new_node = NULL;
+	t_treenode	*left = NULL;
 
-	redir = NULL;
-	left = NULL;
-	left = parse_word_node(token_list);
-	if (left == NULL)
+	if ((left = parse_word_node(token_list)) == NULL)
 		return (NULL);
-	if (*token_list == NULL || !is_redirection((*token_list)->type))
+	//FAIT PEUT ETRE DISPARAITRE LES TOKEN
+	while ((new_node = parse_redirection_node(token_list)) != NULL)
+	{
+		new_node->left = left;
+		node = new_node;
+		left = node;
+	}
+	if (node == NULL)
 	{
 		free_treenode(left);
 		return (NULL);
 	}
-	while (*token_list != NULL && is_redirection((*token_list)->type))
-	{
-		redir_tok = *token_list;
-		*token_list = (*token_list)->next;
-		if (*token_list == NULL || (*token_list)->type != WORD)
-		{
-			free_treenode(left);
-			printf("syntax error near unexpected token `newline'\n");
-			return NULL;
-		}
-		file = *token_list;
-		*token_list = (*token_list)->next;
-		redir = create_treenode(redir_tok->type, redir_tok->str);
-		if (!redir)
-		{
-			//free_treenode(left);
-			return (NULL);
-		}
-		redir->left = left;
-		redir->right = create_treenode(file->type, file->str);
-		if (!redir->right)
-		{
-			//free_treenode(left);
-			//free_treenode(redir);
-			return (NULL);
-		}
-		left = redir;
-	}
-	return (left);
+	return (node);
 }
 
-//<word>
+//redirection _ word
 t_treenode	*parse_simple_command2(t_token **token_list)
 {
-	t_treenode	*node;
+	t_treenode	*node = NULL;
+	t_treenode	*new_node = NULL;
+	t_treenode	*left = NULL;
 
-	node = NULL;
-	return (node = parse_word_node(token_list));
+	if ((left = parse_word_node(token_list)) != NULL)
+	{
+		free_treenode(left);
+		return (NULL);
+	}
+	t_token *tmp = *token_list;
+	//FAIT PEUT ETRE DISPARAITRE LES TOKEN
+	while((new_node = parse_redirection_node(token_list)) != NULL)
+	{
+		new_node->left = NULL;
+		node = new_node;
+	}
+	if (node == NULL)
+	{
+		*token_list = tmp;
+		free_treenode(left);
+		return (NULL);
+	}
+	return (node);
+}
+
+//word
+t_treenode	*parse_simple_command3(t_token **token_list)
+{
+	t_treenode	*node = NULL;
+	node = parse_word_node(token_list); 
+	if (*token_list != NULL && !is_word((*token_list)->type))
+	{
+		free_treenode(node);
+		return (NULL);
+	}
+	return (node);
 }

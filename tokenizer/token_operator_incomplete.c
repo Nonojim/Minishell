@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_incomplete.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 00:06:39 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/06 20:06:43 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char	*token_bracket(int *i, int start, char *line, t_token **token)
 	int		ix_end_bracket;
 
 	str = ft_substr(line, start, 1);
-	add_token_end(token, create_token(BRACKETS_R, str));
+	add_token_end(token, create_token(BRACKETS_L, str));
 	(*i)++;
 	if (!ft_strchr(line + *i, ')'))
 		line = token_bracket_unclose(line);

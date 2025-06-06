@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 17:34:14 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:12:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 t_treenode	*parse_redirection_node(t_token **token_list);
 t_treenode	*parse_redirection1(t_token **token_list);
 
+/*
+<redirection>				::= ( "<" | "<<" | ">" | ">>" ) <word>
+*/
 t_treenode	*parse_redirection_node(t_token **token_list)
 {
 	t_treenode	*node;
@@ -29,7 +32,6 @@ t_treenode	*parse_redirection_node(t_token **token_list)
 	return (NULL);
 }
 
-//( "<" | "<<" | ">" | ">>" ) <word>
 t_treenode	*parse_redirection1(t_token **token_list)
 {
 	t_treenode	*node;
@@ -40,28 +42,27 @@ t_treenode	*parse_redirection1(t_token **token_list)
 	right = NULL;
 	if (*token_list == NULL)
 		return (NULL);
-	if ((*token_list)->type != INPUT_REDIRECTION
-		&& (*token_list)->type != OUTPUT_REDIRECTION
-		&& (*token_list)->type != HERE_DOCUMENT
-		&& (*token_list)->type != APPEND_OUTPUT_REDIRECTION)
+	if (!is_redirection((*token_list)->type))
 		return (NULL);
 	create_node = *token_list;
 	*token_list = (*token_list)->next;
-	if (*token_list == NULL)
+	if (*token_list == NULL || !is_word_type((*token_list)->type))
+	{
+		*token_list = create_node;
 		return (NULL);
+	}
 	right = parse_word_node(token_list);
 	if (right == NULL)
 	{
-		//free_treenode(right);
+		*token_list = create_node;
 		return (NULL);
 	}
 	node = create_treenode(create_node->type, create_node->str);
-	if (!node)
+	if (node == NULL)
 	{
-		//free_treenode(right);
+		free_treenode(right);
 		return (NULL);
 	}
-	node->left = NULL;
 	node->right = right;
 	return (node);
 }

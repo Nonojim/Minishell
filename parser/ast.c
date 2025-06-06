@@ -19,6 +19,15 @@ void		add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void		free_treenode(t_treenode *treenode);
 t_treenode	*create_branch_words(t_token **token_list);
 
+
+int	is_redirection(int type)
+{
+	return (type == INPUT_REDIRECTION
+		|| type == OUTPUT_REDIRECTION
+		|| type == HERE_DOCUMENT
+		|| type == APPEND_OUTPUT_REDIRECTION);
+}
+
 /*
 A FAIRE !!!! 
 Gérer dans le tokenizer (a(b)c) = ouvre une readline = incorrect;

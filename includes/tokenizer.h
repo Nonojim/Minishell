@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/29 16:43:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/06 20:05:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ enum e_TOKEN_TYPE
 	APPEND_OUTPUT_REDIRECTION, //<< 8 ASCII = 62,62
 	SIMPLE_QUOTE, //' 9 ASCII = 39
 	DOUBLE_QUOTE, //" 10 ASCII = 34
-	BRACKETS_R, //( 11 ASCII = 40
-	BRACKETS_L, //) 12 ASCII = 41
+	BRACKETS_L, //( 11 ASCII = 40
+	BRACKETS_R, //) 12 ASCII = 41
 	EXPANSION, //$ 13 ASCII = 36
 };
 

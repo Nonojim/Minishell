@@ -51,6 +51,7 @@ int	main(void)
 		add_history(line);
 		print_token_list(token);
 		ast = parse_line_node(&token);
+		
 		printf("node_count before free = %d\n", g_node_count);
 		if (ast)
 		{
