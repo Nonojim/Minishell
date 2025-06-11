@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/06 18:36:09 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:17:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_indent(int depth)
 		printf("  ");
 }
 
-int    is_word_type(int type)
+int	is_word_type(int type)
 {
     return (type == WORD
             || type == SIMPLE_QUOTE

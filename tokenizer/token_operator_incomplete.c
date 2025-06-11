@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 21:06:15 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:21:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char	*token_pipe_unclose(int *i, int start, char *line, t_token **token)
 	return (line);
 }
 
+
 /*
 * When the bracket in prompt are not closed
 * MISS = new line = ajout ';'
@@ -115,6 +116,7 @@ les ";"
 dans l'historique mais présence encore de l'ancienne ligne..... 
 donc necessité de faire 2 fois fleches du haut....
 */
+
 char	*token_bracket_unclose(char *line)
 {
 	char	*next_line;

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 20:10:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:46:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,58 +47,46 @@ int	operator_or_nothing_before_subshell(int type)
 	return(type == LOGICAL_AND
 		|| type == LOGICAL_OR
 		|| type == PIPE
-		|| type == SEMICOLON);
+		|| type == SEMICOLON
+		|| type == BRACKETS_R);
 }
 
 // "(" <line> ")" redirection
 t_treenode	*parse_command_node1(t_token **token_list)
 {
-	t_treenode	*node;
-	t_token		*tmp;
-	
-	node = NULL;
-	tmp = *token_list;
+t_token		*tmp = *token_list;
+	t_treenode	*node; //contenu du sous_shell
+	t_treenode	*redir_node; //stock redirection trouver aprés parenthese
+
 	if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
 		return (NULL);
-	tmp = *token_list;
-	while ((*token_list)->type != BRACKETS_R && *token_list != NULL)
-		*token_list = (*token_list)->next;
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
+
+	*token_list = (*token_list)->next; // on mange la bracket_L 
+
+	node = parse_line_node(token_list); // parse int subshell
+	if (node == NULL || *token_list == NULL || (*token_list)->type != BRACKETS_R)
 	{
+		free_treenode(node);
 		*token_list = tmp;
 		return (NULL);
 	}
-	*token_list = tmp;
-	node = create_treenode(SUBSHELL, "()");
-	if (!node)
-		return (NULL);
-	*token_list = (*token_list)->next;
-	node->left = parse_line_node(token_list);
-	if (node->left == NULL || *token_list == NULL)
+	*token_list = (*token_list)->next; // on mange bracket_R
+	t_treenode *subshell_node = create_treenode(SUBSHELL, "()");
+	subshell_node->left = node; //contient commande subshell	
+	tmp = *token_list;
+//	printf("%p\n", (*token_list)->str);
+	while ((redir_node = parse_redirection_node(token_list)) != NULL)
 	{
-		free_treenode(node);
-		return (NULL);
-  }
-	*token_list = (*token_list)->next;
-	t_token	*tmp2 = *token_list;
-	t_treenode *node_redir;
-	//FAIT DISPARAITRE LES TOKEN
-	while((node_redir = parse_redirection_node(token_list)) != NULL)
-	{
-		node_redir->left = node;
-		node = node_redir;
+		redir_node->left = subshell_node;
+		subshell_node = redir_node;
 	}
 	if (*token_list != NULL && !operator_or_nothing_before_subshell((*token_list)->type) && !is_redirection((*token_list)->type))
 	{
 		free_treenode(node);
-		*token_list = tmp2;
+		*token_list = tmp;
 		return (NULL);
 	}
-	if (node_redir != NULL)
-	{
-		free_treenode(node_redir);
-	}
-	return (node);
+	return (subshell_node);
 }
 
 //simple_command
