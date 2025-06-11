@@ -6,14 +6,14 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/10 20:23:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/11 15:40:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-	* Add command exit for quit programm properly during the test ./minishell
+Add command exit for quit programm properly during the test ./minishell
 */
 void	command_exit_for_testing(char *line, t_token *token)
 {

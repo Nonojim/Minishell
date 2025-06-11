@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/10 20:46:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/11 20:23:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_treenode	*parse_command_node(t_token **token_list)
 	if (node)
 		return (node);
 	*token_list = tmp;
-
 	return(NULL);
 }
 
@@ -75,17 +74,23 @@ t_token		*tmp = *token_list;
 	subshell_node->left = node; //contient commande subshell	
 	tmp = *token_list;
 //	printf("%p\n", (*token_list)->str);
+	if (node->type == SUBSHELL && node->left && node->left->argv[1] == NULL /*&& node->left->left && node->left->left->argv[1] == NULL*/)
+  {
+  	free_treenode(subshell_node);
+     //*token_list = NULL;
+    return (NULL);
+  }
 	while ((redir_node = parse_redirection_node(token_list)) != NULL)
 	{
 		redir_node->left = subshell_node;
 		subshell_node = redir_node;
 	}
-	if (*token_list != NULL && !operator_or_nothing_before_subshell((*token_list)->type) && !is_redirection((*token_list)->type))
+/*	if (*token_list != NULL && !operator_or_nothing_before_subshell((*token_list)->type) && !is_redirection((*token_list)->type))
 	{
 		free_treenode(node);
 		*token_list = tmp;
 		return (NULL);
-	}
+	}*/
 	return (subshell_node);
 }
 

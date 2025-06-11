@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 18:05:55 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:42:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,20 @@ t_treenode	*parse_pipeline_node(t_token **token_list)
 //<command> "|" <command>
 t_treenode	*parse_pipeline1(t_token **token_list)
 {
-t_treenode	*left;
+	t_treenode	*left;
 	t_treenode	*right;
 	t_treenode	*node;
 	t_token		*create_node;
 
+	if (*token_list == NULL || 
+   ((*token_list)->type != WORD && (*token_list)->type != BRACKETS_L))
+	return (NULL);
+
+	
 	left = parse_command_node(token_list);
 	if (left == NULL)
 		return (NULL);
 
-	if (*token_list == NULL || (*token_list)->type != PIPE)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
 	while (*token_list != NULL && (*token_list)->type == PIPE)
 	{
 		create_node = *token_list;

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 21:29:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:48:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,34 @@ t_treenode	*parse_line1(t_token **token_list);
 t_treenode	*parse_line2(t_token **token_list);
 t_treenode	*parse_line3(t_token **token_list);
 
+
+
+/*void synchronize(t_token **token_list)
+{
+	while (*token_list && (*token_list)->type != SEMICOLON
+		&& (*token_list)->type != LOGICAL_OR
+		&& (*token_list)->type != LOGICAL_AND
+		&& (*token_list)->type != PIPE)
+	{
+		*token_list = (*token_list)->next;
+	}
+	// Mange le token de synchronisation si présent
+	if (*token_list)
+		*token_list = (*token_list)->next;
+}*/
+
 void	print_error(t_token **token_list)
 {
-	if ((*token_list) == NULL)
-		return ;
+	//if ((*token_list) == NULL)
+		//return ;
 	if ((*token_list)->type == LOGICAL_OR || (*token_list)->type == LOGICAL_AND || (*token_list)->type == SEMICOLON || (*token_list)->type == PIPE)
-		printf("bash: syntax error near unexpected token `%s'\n", (*token_list)->str);
-	if ((*token_list)->type == INPUT_REDIRECTION)
-		printf("bash: test: No such file or directory\n");
+		printf("minishell: syntax error near unexpected token %s\n", (*token_list)->str);
+	else if ((*token_list)->type == BRACKETS_R)
+		printf("minishell: syntax error near unexpected token %s\n", (*token_list)->str);
+	else if ((*token_list)->type == INPUT_REDIRECTION)
+		printf("minishell: test: No such file or directory\n");
 }
+
 
 t_treenode	*parse_line_node(t_token **token_list)
 {
@@ -34,17 +53,22 @@ t_treenode	*parse_line_node(t_token **token_list)
 
 	tmp = *token_list;
 	node = NULL;
+	if ((*token_list) == NULL || token_list == NULL)
+		return (NULL);
 	node = parse_line1(token_list);
 	if (node != NULL)
 		return (node);
+	//if (*token_list != NULL)
 	*token_list = tmp;
 	node = parse_line2(token_list);
 	if (node != NULL)
 		return (node);
+	//if (*token_list != NULL)
 	*token_list = tmp;
 	node = parse_line3(token_list);
 	if (node != NULL)
 		return (node);
+	//if (*token_list != NULL)
 	*token_list = tmp;
 	print_error(token_list);
 	return (NULL);

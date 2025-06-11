@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 20:44:29 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:42:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ t_treenode	*parse_logical_and1(t_token **token_list)
 	left = NULL;
 	right = NULL;
 	node = NULL;
+	if (*token_list == NULL || 
+   ((*token_list)->type != WORD && (*token_list)->type != BRACKETS_L))
+	return (NULL);
+
 	left = parse_pipeline_node(token_list);
 	if (left == NULL)
 		return (NULL);

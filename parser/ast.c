@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/04 22:09:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/11 14:40:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	is_redirection(int type)
 		|| type == HERE_DOCUMENT
 		|| type == APPEND_OUTPUT_REDIRECTION);
 }
-
 /*
 A FAIRE !!!! 
 Gérer dans le tokenizer (a(b)c) = ouvre une readline = incorrect;

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 21:35:27 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:11:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ t_treenode	*parse_simple_command_node(t_token **token_list)
 	if ((node = parse_simple_command2(token_list)))
 		return (node);
 	*token_list = tmp;
+//	printf("%p", *token_list);
+//	printf("je rentre");
 	if ((node = parse_simple_command3(token_list)))
 		return (node);
 	*token_list = tmp;
