@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/11 10:17:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/12 19:41:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,19 +127,19 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 	}
 }
 
-t_treenode	*create_branch_words(t_token **token_list)
+t_treenode	*create_branch_words(t_token **tokens)
 {
 	t_treenode	*root = NULL;
 	t_treenode	*current = NULL;
 	t_treenode	*new_node = NULL;
 
-	while (*token_list != NULL
-		&& ((*token_list)->type == WORD
-	|| (*token_list)->type == EXPANSION
-	|| (*token_list)->type == SIMPLE_QUOTE
-	|| (*token_list)->type == DOUBLE_QUOTE ))
+	while (*tokens != NULL
+		&& ((*tokens)->type == WORD
+	|| (*tokens)->type == EXPANSION
+	|| (*tokens)->type == SIMPLE_QUOTE
+	|| (*tokens)->type == DOUBLE_QUOTE ))
 	{
-		new_node = create_treenode((*token_list)->type, (*token_list)->str);
+		new_node = create_treenode((*tokens)->type, (*tokens)->str);
 		if (!new_node || !new_node->str)
 		{
 			free_treenode(root);
@@ -155,7 +155,7 @@ t_treenode	*create_branch_words(t_token **token_list)
 			add_node(current, new_node, LEFT);
 			current = new_node;
 		}
-		*token_list = (*token_list)->next;
+		*tokens = (*tokens)->next;
 	}
 	return (root);
 }

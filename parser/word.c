@@ -6,14 +6,14 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/11 20:25:38 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/12 20:43:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_word_node(t_token **token_list);
-t_treenode	*parse_word1(t_token **token_list);
+t_treenode	*parse_word_node(t_token **tokens);
+t_treenode	*parse_word1(t_token **tokens);
 int	parse_cmd(char *cmd, int *error);
 
 t_treenode *parse_word_node(t_token **tokens)
@@ -21,6 +21,8 @@ t_treenode *parse_word_node(t_token **tokens)
 	int	argc = 0;
 	int	i = 0;
 	t_token *tmp = *tokens;
+	t_treenode *cmd_node;
+	char	**argv;
 	static int	count = 0;
 
 	//printf("je passe ici\n");
@@ -35,35 +37,24 @@ t_treenode *parse_word_node(t_token **tokens)
 		tmp = tmp->next;
 	}
 	if (argc == 0)
-	{
 		return NULL;
-	}
-	char **argv = malloc(sizeof(char *) * (argc + 1));
+	argv = malloc(sizeof(char *) * (argc + 1));
 	if (!argv)
 		return NULL;
 	tmp = *tokens;
-	//printf("%p\n", (*tokens)->str);
 	while (i < argc)
 	{
 		argv[i] = ft_strdup((tmp)->str);
-		//argv[i] = ft_strdup((*tokens)->str);
-		//*tokens = (*tokens)->next;
 		tmp = tmp->next;
 		i++;
 	}
 	argv[argc] = NULL;
-	//printf("%p\n", (*tokens)->str);
-	t_treenode *cmd = create_treenode(0, argv[0]);
-	cmd->argv = argv;
-	/*if (parse_cmd(argv[0], &error) == 1)
-	{
-		free_treenode(cmd);
-		return (NULL);
-	}*/
+	cmd_node = create_treenode(0, argv[0]);
+	cmd_node->argv = argv;
 	*tokens = tmp;
 	count++;
-	printf("-%i-", count);
-	return cmd;
+//	printf("-%i-", count);
+	return (cmd_node);
 }
 
 //ne fonctionne plus au second prompt, il faut réniatialiser la variable statique

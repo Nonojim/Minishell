@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/11 14:27:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/12 19:40:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,61 +91,61 @@ void	astreeprint(t_treenode* node, int depth);
 void	print_indent(int depth);
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir);
 void	free_treenode(t_treenode *node);
-t_treenode	*create_branch_words(t_token **token_list);
+t_treenode	*create_branch_words(t_token **tokens);
 t_treenode	*create_treenode(int type, char *str);
 int	is_redirection(int type);
 int    is_word_type(int type);
 
 //Parse
-t_treenode	*create_tree(t_token *token_list);
-t_treenode	*create_branch_words(t_token **token_list);
+t_treenode	*create_tree(t_token *tokens);
+t_treenode	*create_branch_words(t_token **tokens);
 
 //LINE
-t_treenode	*parse_line_node(t_token **token_list);
-t_treenode	*parse_line1(t_token **token_list);
-t_treenode	*parse_line2(t_token **token_list);
-t_treenode	*parse_line3(t_token **token_list);
+t_treenode	*parse_line_node(t_token **tokens);
+t_treenode	*parse_line1(t_token **tokens);
+t_treenode	*parse_line2(t_token **tokens);
+t_treenode	*parse_line3(t_token **tokens);
 
 //Logical_and
-t_treenode	*parse_logical_and_node(t_token **token_list);
-t_treenode	*parse_logical_and1(t_token **token_list);
+t_treenode	*parse_logical_and_node(t_token **tokens);
+t_treenode	*parse_logical_and1(t_token **tokens);
 
 
 //Logical_or
-t_treenode	*parse_logical_or_node(t_token **token_list);
-t_treenode	*parse_logical_or1(t_token **token_list);
+t_treenode	*parse_logical_or_node(t_token **tokens);
+t_treenode	*parse_logical_or1(t_token **tokens);
 
 //Pipeline
-t_treenode	*parse_pipeline_node(t_token **token_list);
-t_treenode	*parse_pipeline1(t_token **token_list);
-t_treenode	*parse_pipeline2(t_token **token_list);
+t_treenode	*parse_pipeline_node(t_token **tokens);
+t_treenode	*parse_pipeline1(t_token **tokens);
+t_treenode	*parse_pipeline2(t_token **tokens);
 
 //Command 
-t_treenode	*parse_command_node(t_token **token_list);
-t_treenode	*parse_command_node1(t_token **token_list);
-t_treenode	*parse_command_node2(t_token **token_list);
-t_treenode	*parse_command_node3(t_token **token_list);
-t_treenode	*parse_command_node4(t_token **token_list);
-t_treenode	*parse_command_node5(t_token **token_list);
+t_treenode	*parse_command_node(t_token **tokens);
+t_treenode	*parse_command_node1(t_token **tokens);
+t_treenode	*parse_command_node2(t_token **tokens);
+t_treenode	*parse_command_node3(t_token **tokens);
+t_treenode	*parse_command_node4(t_token **tokens);
+t_treenode	*parse_command_node5(t_token **tokens);
 
 //Simple_command
-t_treenode	*parse_simple_command_node(t_token **token_list);
-t_treenode	*parse_simple_command1(t_token **token_list);
-t_treenode	*parse_simple_command2(t_token **token_list);
+t_treenode	*parse_simple_command_node(t_token **tokens);
+t_treenode	*parse_simple_command1(t_token **tokens);
+t_treenode	*parse_simple_command2(t_token **tokens);
 
 //Redirection
-t_treenode	*parse_redirection_node(t_token **token_list);
-t_treenode	*parse_redirection1(t_token **token_list);
-t_treenode	*parse_redirection2(t_token **token_list);
+t_treenode	*parse_redirection_node(t_token **tokens);
+t_treenode	*parse_redirection1(t_token **tokens);
+t_treenode	*parse_redirection2(t_token **tokens);
 
 //WORD
-t_treenode	*parse_word_node(t_token **token_list);
-t_treenode	*parse_word1(t_token **token_list);
+t_treenode	*parse_word_node(t_token **tokens);
+t_treenode	*parse_word1(t_token **tokens);
 
 
 
-void synchronize(t_token **token_list);
-void print_error(t_token **token_list);
+void synchronize(t_token **tokens);
+void print_error(t_token **tokens);
 
 #endif
 

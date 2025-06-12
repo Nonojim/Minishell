@@ -6,86 +6,88 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/11 20:42:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/12 21:11:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_logical_and_node(t_token **token_list);
-t_treenode	*parse_logical_and1(t_token **token_list);
-t_treenode	*parse_logical_and2(t_token **token_list);
+t_treenode	*parse_logical_and_node(t_token **tokens);
+t_treenode	*parse_logical_and1(t_token **tokens);
+t_treenode	*parse_logical_and2(t_token **tokens);
 
-t_treenode	*parse_logical_and_node(t_token **token_list)
+t_treenode	*parse_logical_and_node(t_token **tokens)
 {
 	t_token		*tmp;
-	t_treenode	*node;
+	t_treenode	*and_node;
 
-	tmp = *token_list;
-	node = NULL;
-	node = parse_logical_and1(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
-	node = parse_logical_and2(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
+	tmp = *tokens;
+	and_node = NULL;
+	and_node = parse_logical_and1(tokens);
+	if (and_node != NULL)
+		return (and_node);
+	*tokens = tmp;
+	and_node = parse_logical_and2(tokens);
+	if (and_node != NULL)
+		return (and_node);
+	*tokens = tmp;
 	return (NULL);
 }
 
 //create_node = avant d'avancer dans la liste afin de créer le bon node (et pas le noeud suivant).
 //<pipeline> ("||"  <pipeline> )* 
-t_treenode	*parse_logical_and1(t_token **token_list)
+t_treenode	*parse_logical_and1(t_token **tokens)
 {
 	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*node;
-	t_token		*create_node;
+	t_treenode	*and_node;
+	t_token		*and_token;
 
 	left = NULL;
 	right = NULL;
-	node = NULL;
-	if (*token_list == NULL || 
-   ((*token_list)->type != WORD && (*token_list)->type != BRACKETS_L))
-	return (NULL);
-
-	left = parse_pipeline_node(token_list);
+	and_node = NULL;
+	if (*tokens == NULL || 
+   ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
+	{
+		printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str);
+		return (NULL);
+	}
+	left = parse_pipeline_node(tokens);
 	if (left == NULL)
 		return (NULL);
-	if (*token_list == NULL || (*token_list)->type != LOGICAL_AND)
+	if (*tokens == NULL || (*tokens)->type != LOGICAL_AND)
 	{
 		free_treenode(left);
 		return (NULL);
 	}
-	create_node = *token_list;
-	*token_list = (*token_list)->next;
-	right = parse_logical_and_node(token_list);
+	and_token = *tokens;
+	*tokens = (*tokens)->next;
+	right = parse_logical_and_node(tokens);
 	if (right == NULL)
 	{
 		free_treenode(left);
 		return (NULL);
 	}
-	node = create_treenode(create_node->type, create_node->str);
-	node->left = left;
-	if (right->type == create_node->type) // si a droite se trouve un autre &&
+	and_node = create_treenode(and_token->type, and_token->str);
+	and_node->left = left;
+	if (right->type == and_token->type) // si a droite se trouve un autre &&
 	{
-		node->right = right->left;
-		right->left = node;
+		and_node->right = right->left;
+		right->left = and_node;
 		return (right);
 	}
 	else
 	{
-		node->right = right;
-		return (node);
+		and_node->right = right;
+		return (and_node);
 	}
 }
 
 //	<pipeline>
-t_treenode	*parse_logical_and2(t_token **token_list)
+t_treenode	*parse_logical_and2(t_token **tokens)
 {
-	t_treenode	*node;
+	t_treenode	*pipe_node;
 	
-	node = NULL;
-	return (node = parse_pipeline_node(token_list));
+	pipe_node = NULL;
+	return (pipe_node = parse_pipeline_node(tokens));
 }
