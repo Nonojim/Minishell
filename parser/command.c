@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:29:58 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:58:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ t_treenode	*parse_command_node(t_token **tokens)
 	return(NULL);
 }
 
+// KC = ((test && test)) segfault
+// A GERER : ((test)) (((test))) etc ne renvoie pas d'erreur envoie une newline  (pour l'instant renvoie erreur)
 // "(" <line> ")" redirection
 t_treenode	*parse_command_node1(t_token **tokens)
 {
@@ -54,14 +56,21 @@ t_treenode	*parse_command_node1(t_token **tokens)
 	t_treenode	*line_node; //contenu du sous_shell
 	t_treenode	*subshell_node;
 	t_treenode	*redir_node; //stock redirection trouver aprés parenthese
+	//t_token	*bracket_token;
 
+	/*if (*tokens == NULL || (*tokens)->type == BRACKETS_R)
+	{
+		//print_error(*tokens);
+		return(NULL);
+	}*/
 	if (*tokens == NULL || (*tokens)->type != BRACKETS_L)
 		return (NULL);
+	//bracket_token = *tokens;
 	*tokens = (*tokens)->next; // on mange la bracket_L 
 	line_node = parse_line_node(tokens); // parse int subshell
 	if (line_node == NULL || *tokens == NULL || (*tokens)->type != BRACKETS_R)
 	{
-		print_error(*tokens); // PB ON ENVOIE PAS BRACKET_R IL FAUT TROUVER UNE ALTERNATIVE !!
+		//print_error(bracket_token);
 		free_treenode(line_node);
 		*tokens = tmp;
 		return (NULL);
@@ -73,10 +82,10 @@ t_treenode	*parse_command_node1(t_token **tokens)
 //	printf("%p\n", (*tokens)->str);
 	if (line_node->type == SUBSHELL && line_node->left && line_node->left->argv[1] == NULL /*&& node->left->left && node->left->left->argv[1] == NULL*/)
   {
-		print_error(*tokens); // MEME ERREUR QUE EN HAUT 
+		//print_error(*tokens); // MEME ERREUR QUE EN HAUT 
   	free_treenode(subshell_node);
 			//printf("minishell: syntax error near unexpected token ')'\n");
-     //*tokens = NULL;
+     *tokens = NULL;
     return (NULL);
   }
 	while ((redir_node = parse_redirection_node(tokens)) != NULL)

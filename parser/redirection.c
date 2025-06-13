@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:19:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 17:55:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ t_treenode	*parse_redirection1(t_token **tokens)
 	*tokens = (*tokens)->next;
 	if (*tokens == NULL || !is_word_type((*tokens)->type))
 	{
-		print_error(*tokens);
 		//if (*tokens == NULL)
+			//print_error(*tokens);
+	//	else
+		//	print_error(*tokens);
 			//printf("minishell: syntax error near unexpected token `newline'\n"); // l'affiche trop de fois
 		//else //str est autre chose qu'un word
 			//printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str); // l'affiche trop de fois

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:18:36 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:43:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,20 @@ t_treenode	*parse_logical_and_node(t_token **tokens)
 	if (parse_error(-1) == 1)
 		return (NULL);
 	and_node = parse_logical_and1(tokens);
-		if (parse_error(-1))
+	if (parse_error(-1))
 		return (NULL);
-
 	if (and_node != NULL)
 		return (and_node);
 	*tokens = tmp;
 	and_node = parse_logical_and2(tokens);
 	if (parse_error(-1) == 1)
 		return (NULL);
-
 	if (and_node != NULL)
 		return (and_node);
 	*tokens = tmp;
 	return (NULL);
 }
 
-//create_node = avant d'avancer dans la liste afin de créer le bon node (et pas le noeud suivant).
 //<pipeline> ("||"  <pipeline> )* 
 t_treenode	*parse_logical_and1(t_token **tokens)
 {
@@ -54,8 +51,10 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 	left = NULL;
 	right = NULL;
 	and_node = NULL;
-	if (*tokens == NULL || 
-   ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
+	if (*tokens == NULL
+		|| ((*tokens)->type != WORD
+			&& !is_bracket((*tokens)->type)
+			&& !is_redirection((*tokens)->type)))
 	{
 		print_error(*tokens);
 		return (NULL);
@@ -78,7 +77,7 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 	}
 	and_node = create_treenode(and_token->type, and_token->str);
 	and_node->left = left;
-	if (right->type == and_token->type) // si a droite se trouve un autre &&
+	if (right->type == and_token->type)
 	{
 		and_node->right = right->left;
 		right->left = and_node;
@@ -95,7 +94,7 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 t_treenode	*parse_logical_and2(t_token **tokens)
 {
 	t_treenode	*pipe_node;
-	
+
 	pipe_node = NULL;
 	return (pipe_node = parse_pipeline_node(tokens));
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:18:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:35:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_treenode	*parse_logical_or_node(t_token **tokens);
 t_treenode	*parse_logical_or1(t_token **tokens);
 t_treenode	*parse_logical_or2(t_token **tokens);
 
-
 t_treenode	*parse_logical_or_node(t_token **tokens)
 {
 	t_token		*tmp;
@@ -25,16 +24,16 @@ t_treenode	*parse_logical_or_node(t_token **tokens)
 	tmp = *tokens;
 	or_node = NULL;
 	if (parse_error(-1) == 1)
-		return NULL;
+		return (NULL);
 	or_node = parse_logical_or1(tokens);
 	if (parse_error(-1) == 1)
-		return NULL;
+		return (NULL);
 	if (or_node != NULL)
 		return (or_node);
 	(*tokens) = tmp;
 	or_node = parse_logical_or2(tokens);
 	if (parse_error(-1) == 1)
-		return NULL;
+		return (NULL);
 	if (or_node != NULL)
 		return (or_node);
 	(*tokens) = tmp;
@@ -52,9 +51,9 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 	left = NULL;
 	right = NULL;
 	or_node = NULL;
-
-	if (*tokens == NULL || 
-   ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
+	if (*tokens == NULL
+		|| ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L
+			&& !is_redirection((*tokens)->type)))
 	{
 		print_error(*tokens);
 		return (NULL);
@@ -77,7 +76,7 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 	}
 	or_node = create_treenode(or_token->type, or_token->str);
 	or_node->left = left;
-	if (right->type == or_token->type) // si a droite se trouve un autre ||
+	if (right->type == or_token->type)
 	{
 		or_node->right = right->left;
 		right->left = or_node;

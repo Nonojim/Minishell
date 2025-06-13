@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:18:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:35:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@ t_treenode	*parse_pipeline_node(t_token **tokens)
 	pipe_node = parse_pipeline1(tokens);
 	if (parse_error(-1) == 1)
 		return (NULL);
-
 	if (pipe_node != NULL)
 		return (pipe_node);
 	*tokens = tmp;
 	pipe_node = parse_pipeline2(tokens);
 	if (parse_error(-1) == 1)
 		return (NULL);
-
 	if (pipe_node != NULL)
 		return (pipe_node);
 	*tokens = tmp;
@@ -50,8 +48,9 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	t_treenode	*pipe_node;
 	t_token		*pipe_token;
 
-	if (*tokens == NULL || 
-	   ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
+	if (*tokens == NULL
+		|| ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L
+			&& !is_redirection((*tokens)->type)))
 	{
 		print_error(*tokens);
 		return (NULL);
@@ -68,10 +67,6 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	if (*tokens == NULL || !is_word_type((*tokens)->type))
 	{
 		print_error(*tokens);
-		/*if (is_redirection((*tokens)->type))
-			printf("minishelm: syntax error near unexpected token `newline'\n");
-		else
-			printf("minishell: syntax error near unexpected token `%s'\n", (*tokens)->str);*/
 		free_treenode(left);
 		return(NULL);
 	}

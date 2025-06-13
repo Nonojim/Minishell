@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/11 15:40:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 18:44:50 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,17 @@ int	main(void)
 		command_exit_for_testing(line, token);
 		add_history(line);
 		print_token_list(token);
+		parse_error(0); //remise à zéro de la static int error;
 		ast = parse_line_node(&token);
 		//si des tokens subsistent l'ast sera delete
+		/*if (line_node != NULL && token != NULL)
+		{
+			print_error(token);
+			free_treenode(line_node);
+		}	*/
 		if (token != NULL)
 		{
+			print_error(token);
 			free_treenode(ast);
 			ast = NULL;
 		}

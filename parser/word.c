@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:19:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 17:31:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ t_treenode *parse_word_node(t_token **tokens)
 
 	if (parse_error(-1) == 1)
 		return (NULL);
-	//printf("je passe ici\n");
-	//printf("%p\n", (*tokens)->str);
 	while (tmp != NULL
 		&& (tmp->type == WORD
 	|| tmp->type == EXPANSION

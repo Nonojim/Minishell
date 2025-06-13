@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 11:19:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 17:46:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_treenode	*parse_simple_command_node(t_token **tokens)
 		return (NULL);
 	if ((simple_cmd_node = parse_simple_command1(tokens)))
 	{
-		if (parse_error(-1))
+		if (parse_error(-1) == 1)
 			return (NULL);
 		return (simple_cmd_node);
 	}
@@ -61,7 +61,10 @@ t_treenode	*parse_simple_command1(t_token **tokens)
 	t_treenode	*left = NULL;
 
 	if ((left = parse_word_node(tokens)) == NULL)
+	{
+		//print_error(*tokens);
 		return (NULL);
+	}
 	while ((redir_node = parse_redirection_node(tokens)) != NULL)
 	{
 		redir_node->left = left;
