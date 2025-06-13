@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/12 21:12:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:18:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,19 @@ t_treenode	*parse_pipeline_node(t_token **tokens)
 
 	tmp = *tokens;
 	pipe_node = NULL;
+	if (parse_error(-1) == 1)
+		return (NULL);
 	pipe_node = parse_pipeline1(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+
 	if (pipe_node != NULL)
 		return (pipe_node);
 	*tokens = tmp;
 	pipe_node = parse_pipeline2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+
 	if (pipe_node != NULL)
 		return (pipe_node);
 	*tokens = tmp;
@@ -45,7 +53,7 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	if (*tokens == NULL || 
 	   ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
 	{
-		printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str);
+		print_error(*tokens);
 		return (NULL);
 	}
 	left = parse_command_node(tokens);
@@ -59,10 +67,11 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	//appel récursif qui remplace le while pour gérer si il y a plusieurs pipe
 	if (*tokens == NULL || !is_word_type((*tokens)->type))
 	{
-		if (is_redirection((*tokens)->type))
+		print_error(*tokens);
+		/*if (is_redirection((*tokens)->type))
 			printf("minishelm: syntax error near unexpected token `newline'\n");
 		else
-			printf("minishell: syntax error near unexpected token `%s'\n", (*tokens)->str);
+			printf("minishell: syntax error near unexpected token `%s'\n", (*tokens)->str);*/
 		free_treenode(left);
 		return(NULL);
 	}

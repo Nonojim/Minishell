@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/12 19:40:55 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:11:31 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,6 @@
 # include "../includes/tokenizer.h"
 
 /*
-Minishell$ echo hello & test
-[0 : echo] -> [0 : hello] -> [0 : &] -> [0 : test] -> NULL
-[Type: 0, data: "echo", argv: ["echo", "hello", "&", "test"]]
-Left:
-  [Type: 0, data: "hello"]
-  Left:
-    [Type: 0, data: "&"]
-    Left:
-      [Type: 0, data: "test"]
-Minishell$ 
  * Grammaire LL : va definir la structure syntaxique d'une ligne de commande Shell.
  * Begin rule line.
  * Structure adapte a un parseur descendant recursif. 
@@ -95,6 +85,8 @@ t_treenode	*create_branch_words(t_token **tokens);
 t_treenode	*create_treenode(int type, char *str);
 int	is_redirection(int type);
 int    is_word_type(int type);
+int	is_op_logique(int type);
+int	is_bracket(int type);
 
 //Parse
 t_treenode	*create_tree(t_token *tokens);
@@ -142,10 +134,8 @@ t_treenode	*parse_redirection2(t_token **tokens);
 t_treenode	*parse_word_node(t_token **tokens);
 t_treenode	*parse_word1(t_token **tokens);
 
-
-
-void synchronize(t_token **tokens);
-void print_error(t_token **tokens);
+int	parse_error(int state);
+void print_error(t_token *tokens);
 
 #endif
 

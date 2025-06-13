@@ -25,6 +25,7 @@ FILES = tokenizer/tokenizer.c \
 				parser/logical_or.c \
 				parser/pipeline.c \
 				parser/command.c \
+				parser/error.c \
 				parser/simple_command.c \
 				parser/redirection.c \
 				parser/word.c \

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/12 20:40:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:29:58 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,17 @@ t_treenode	*parse_command_node(t_token **tokens)
 
 	tmp = *tokens;
 	node = NULL;
+	if (parse_error(-1) == 1)
+			return (NULL);
 	node = parse_command_node1(tokens);
+	if (parse_error(-1))
+			return (NULL);
 	if (node)
 		return (node);
 	*tokens = tmp;
 	node = parse_command_node2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
 	if (node)
 		return (node);
 	*tokens = tmp;
@@ -55,6 +61,7 @@ t_treenode	*parse_command_node1(t_token **tokens)
 	line_node = parse_line_node(tokens); // parse int subshell
 	if (line_node == NULL || *tokens == NULL || (*tokens)->type != BRACKETS_R)
 	{
+		print_error(*tokens); // PB ON ENVOIE PAS BRACKET_R IL FAUT TROUVER UNE ALTERNATIVE !!
 		free_treenode(line_node);
 		*tokens = tmp;
 		return (NULL);
@@ -66,9 +73,9 @@ t_treenode	*parse_command_node1(t_token **tokens)
 //	printf("%p\n", (*tokens)->str);
 	if (line_node->type == SUBSHELL && line_node->left && line_node->left->argv[1] == NULL /*&& node->left->left && node->left->left->argv[1] == NULL*/)
   {
+		print_error(*tokens); // MEME ERREUR QUE EN HAUT 
   	free_treenode(subshell_node);
-		if (*tokens == NULL || (*tokens)->next == NULL) // Ne fonctionne pas affiche plusieurs fois le print, variable statique à mettre en place pe ?
-			printf("minishell: syntax error near unexpected token ')'\n");
+			//printf("minishell: syntax error near unexpected token ')'\n");
      //*tokens = NULL;
     return (NULL);
   }

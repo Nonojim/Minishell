@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/12 21:14:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:17:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,6 @@ t_treenode	*parse_line1(t_token **tokens);
 t_treenode	*parse_line2(t_token **tokens);
 t_treenode	*parse_line3(t_token **tokens);
 
-
-void	print_error(t_token **tokens)
-{
-	if ((*tokens)->type == LOGICAL_OR || (*tokens)->type == LOGICAL_AND || (*tokens)->type == SEMICOLON || (*tokens)->type == PIPE)
-		printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str);
-//	else if ((*tokens)->type == BRACKETS_L || (*tokens)->type == BRACKETS_R )
-//		printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str);
-	//else if ((*tokens)->type == INPUT_REDIRECTION || (*tokens)->type == OUTPUT_REDIRECTION || (*tokens)->type == HERE_DOCUMENT || (*tokens)->type == APPEND_OUTPUT_REDIRECTION)
-		//printf("bash: syntax error near unexpected token `newline'\n");
-}
-
-
 t_treenode	*parse_line_node(t_token **tokens)
 {
 	t_token		*tmp;
@@ -36,31 +24,32 @@ t_treenode	*parse_line_node(t_token **tokens)
 
 	tmp = *tokens;
 	line_node = NULL;
+	parse_error(0);
 	if ((*tokens) == NULL || tokens == NULL)
 		return (NULL);
+	
 	line_node = parse_line1(tokens);
+	if (parse_error(-1) == 1)
+			return (NULL);
 	if (line_node != NULL)
 		return (line_node);
-//	if (*tokens != NULL)
-		//print_error(tokens);
+
 	*tokens = tmp;
+	
 	line_node = parse_line2(tokens);
+	if (parse_error(-1) == 1)
+			return (NULL);
 	if (line_node != NULL)
 		return (line_node);
-	//if (*tokens != NULL)
-		//print_error(tokens);
+	
 	*tokens = tmp;
+	
 	line_node = parse_line3(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
 	if (line_node != NULL)
 		return (line_node);
-	/*if (line_node != NULL)
-	{
-		if (*tokens != NULL)
-			print_error(tokens);
-		return (line_node);
-		*tokens = tmp;
-	}*/
-	//print_error(tokens);
+	
 	return (NULL);
 }
 
@@ -78,8 +67,8 @@ t_treenode	*parse_line1(t_token **tokens)
 	left = parse_logical_or_node(tokens);
 	if (left == NULL && (*tokens)->type == SEMICOLON)
 	{
-		printf("minishell: syntax error near unexpected token ';'\n");
-		return (NULL);	
+		print_error(*tokens);
+		return (NULL);
 	}
 	if (left == NULL)
 		return (NULL);

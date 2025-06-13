@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/12 20:54:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:19:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ t_treenode	*parse_redirection_node(t_token **tokens)
 
 	redir_node = NULL;
 	tmp = *tokens;
+	if (parse_error(-1) == 1)
+		return (NULL);
 	redir_node = parse_redirection1(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
 	if (redir_node != NULL)
 		return (redir_node);
 	*tokens = tmp;
@@ -48,10 +52,11 @@ t_treenode	*parse_redirection1(t_token **tokens)
 	*tokens = (*tokens)->next;
 	if (*tokens == NULL || !is_word_type((*tokens)->type))
 	{
-		if (*tokens == NULL)
-			printf("minishell: syntax error near unexpected token `newline'\n"); // l'affiche trop de fois
-		else //str est autre chose qu'un word
-			printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str); // l'affiche trop de fois
+		print_error(*tokens);
+		//if (*tokens == NULL)
+			//printf("minishell: syntax error near unexpected token `newline'\n"); // l'affiche trop de fois
+		//else //str est autre chose qu'un word
+			//printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str); // l'affiche trop de fois
 		//print_error(tokens);
 		//if (*tokens)
 			//*tokens = (*tokens)->next;

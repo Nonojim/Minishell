@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/12 21:11:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:18:36 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,19 @@ t_treenode	*parse_logical_and_node(t_token **tokens)
 
 	tmp = *tokens;
 	and_node = NULL;
+	if (parse_error(-1) == 1)
+		return (NULL);
 	and_node = parse_logical_and1(tokens);
+		if (parse_error(-1))
+		return (NULL);
+
 	if (and_node != NULL)
 		return (and_node);
 	*tokens = tmp;
 	and_node = parse_logical_and2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+
 	if (and_node != NULL)
 		return (and_node);
 	*tokens = tmp;
@@ -49,7 +57,7 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 	if (*tokens == NULL || 
    ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L))
 	{
-		printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str);
+		print_error(*tokens);
 		return (NULL);
 	}
 	left = parse_pipeline_node(tokens);
