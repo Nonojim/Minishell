@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 18:35:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/16 19:50:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,17 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 	if (*tokens == NULL
 		|| ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L
 			&& !is_redirection((*tokens)->type)))
-	{
-		print_error(*tokens);
-		return (NULL);
-	}
+		return (printerror_then_return_null(tokens));
 	left = parse_logical_and_node(tokens);
 	if (left == NULL)
 		return (NULL);
 	if (*tokens == NULL || (*tokens)->type != LOGICAL_OR)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
+		return (free_then_return_null(left));
 	or_token = *tokens;
 	*tokens = (*tokens)->next;
 	right = parse_logical_or_node(tokens);
 	if (right == NULL)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
+		return (free_then_return_null(left));
 	or_node = create_treenode(or_token->type, or_token->str);
 	or_node->left = left;
 	if (right->type == or_token->type)

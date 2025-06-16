@@ -29,14 +29,14 @@ void	command_exit_for_testing(char *line, t_token *token)
 	}
 }
 
-int g_node_count = 0;
+//int	g_node_count = 0;
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
 int	main(void)
 {
-	char	*line;
-	t_token	*token;
-	t_token	*tmp;
-	t_treenode *ast;
+	char		*line;
+	t_token		*token;
+	t_token		*tmp;
+	t_treenode	*ast;
 
 	while (1)
 	{

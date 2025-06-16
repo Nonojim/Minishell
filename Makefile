@@ -20,6 +20,7 @@ FILES = tokenizer/tokenizer.c \
 				tokenizer/token_operator_incomplete.c \
 				parser/ast.c \
 				parser/ast_utils.c \
+				parser/ast_utils_bool.c \
 				parser/line.c \
 				parser/logical_and.c \
 				parser/logical_or.c \

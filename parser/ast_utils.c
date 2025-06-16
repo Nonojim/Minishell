@@ -6,51 +6,23 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/13 11:11:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/16 18:49:17 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-int	is_redirection(int type)
-{
-	return (type == INPUT_REDIRECTION
-		|| type == OUTPUT_REDIRECTION
-		|| type == HERE_DOCUMENT
-		|| type == APPEND_OUTPUT_REDIRECTION);
-}
-
-int	is_op_logique(int type)
-{
-	return (type == LOGICAL_OR
-		|| type == LOGICAL_AND
-		|| type == SEMICOLON
-		|| type == PIPE);
-}
-
-int	is_word_type(int type)
-{
-  return (type == WORD
-    || type == SIMPLE_QUOTE
-		|| type == DOUBLE_QUOTE
-  	|| type == EXPANSION);
-}
-
-int	is_bracket(int type)
-{
-    return (type == BRACKETS_R
-            || type == BRACKETS_L);
-}
-
 
 void	print_indent(int depth)
 {
 	while (depth-- > 0)
 		printf("  ");
 }
+
 void	astreeprint(t_treenode *node, int depth)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!node)
 		return ;
 	print_indent(depth);
@@ -85,7 +57,7 @@ void	astreeprint(t_treenode *node, int depth)
 	}
 }
 
-extern int g_node_count;
+//extern int g_node_count;
 // INIT NODE - ADD NODE - FREE NODE 
 t_treenode	*create_treenode(int type, char *str)
 {
@@ -94,11 +66,12 @@ t_treenode	*create_treenode(int type, char *str)
 	new_node = ft_calloc(1, sizeof(t_treenode));
 	if (new_node == NULL)
 		return (NULL);
-	g_node_count++;
+	//g_node_count++;
 	//printf("CREATE NODE: %d (%s)\n", g_node_count, str ? str : "NULL");
 	new_node->type = type;
 	if (str)
-		new_node->str = ft_strdup(str); //evite le partage de memoire; les doubles free etc
+		new_node->str = ft_strdup(str);
+	//evite le partage de memoire; les doubles free etc
 	new_node->argv = NULL;
 	new_node->left = NULL;
 	new_node->right = NULL;
@@ -107,7 +80,9 @@ t_treenode	*create_treenode(int type, char *str)
 
 void	free_treenode(t_treenode *node)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (node == NULL)
 		return ;
 	free_treenode(node->left);
@@ -116,24 +91,26 @@ void	free_treenode(t_treenode *node)
 	node->right = NULL;
 	if (node->str != NULL)
 	{
-		//printf("free str: %s\n", node->str);
 		free(node->str);
 		node->str = NULL;
 	}
 	if (node->argv != NULL)
 	{
 		while (node->argv[i] != NULL)
-		{
-			free(node->argv[i]);
-			i++;
-		}
+			free(node->argv[i++]);
 		free(node->argv);
 		node->argv = NULL;
 	}
 	//printf("FREE NODE: %d\n", g_node_count);
-		g_node_count--;
+		//g_node_count--;
 	free(node);
 	node = NULL;
+}
+
+t_treenode	*free_then_return_null(t_treenode *node)
+{
+	free_treenode(node);
+	return (NULL);
 }
 
 void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
@@ -149,35 +126,35 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 	}
 }
 
-t_treenode	*create_branch_words(t_token **tokens)
-{
-	t_treenode	*root = NULL;
-	t_treenode	*current = NULL;
-	t_treenode	*new_node = NULL;
-
-	while (*tokens != NULL
-		&& ((*tokens)->type == WORD
-	|| (*tokens)->type == EXPANSION
-	|| (*tokens)->type == SIMPLE_QUOTE
-	|| (*tokens)->type == DOUBLE_QUOTE ))
-	{
-		new_node = create_treenode((*tokens)->type, (*tokens)->str);
-		if (!new_node || !new_node->str)
-		{
-			free_treenode(root);
-			return (NULL);
-		}
-		if (!root)
-		{
-			root = new_node;
-			current = root;
-		}
-		else
-		{
-			add_node(current, new_node, LEFT);
-			current = new_node;
-		}
-		*tokens = (*tokens)->next;
-	}
-	return (root);
-}
+//t_treenode	*create_branch_words(t_token **tokens)
+//{
+//	t_treenode	*root = NULL;
+//	t_treenode	*current = NULL;
+//	t_treenode	*new_node = NULL;
+//
+//	while (*tokens != NULL
+//		&& ((*tokens)->type == WORD
+//	|| (*tokens)->type == EXPANSION
+//	|| (*tokens)->type == SIMPLE_QUOTE
+//	|| (*tokens)->type == DOUBLE_QUOTE ))
+//	{
+//		new_node = create_treenode((*tokens)->type, (*tokens)->str);
+//		if (!new_node || !new_node->str)
+//		{
+//			free_treenode(root);
+//			return (NULL);
+//		}
+//		if (!root)
+//		{
+//			root = new_node;
+//			current = root;
+//		}
+//		else
+//		{
+//			add_node(current, new_node, LEFT);
+//			current = new_node;
+//		}
+//		*tokens = (*tokens)->next;
+//	}
+//	return (root);
+//}

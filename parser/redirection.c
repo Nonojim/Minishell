@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 17:55:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/16 19:47:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,7 @@ t_treenode	*parse_redirection1(t_token **tokens)
 	redir_node = create_treenode(redir_token->type, redir_token->str);
 	redir_token = *tokens;
 	if (redir_node == NULL)
-	{
-		free_treenode(right);
-		return (NULL);
-	}
+		return (free_then_return_null(right));
 	redir_node->right = right;
 	return (redir_node);
 }

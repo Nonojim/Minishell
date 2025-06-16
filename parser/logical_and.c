@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 18:43:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/16 19:50:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,17 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 		|| ((*tokens)->type != WORD
 			&& !is_bracket((*tokens)->type)
 			&& !is_redirection((*tokens)->type)))
-	{
-		print_error(*tokens);
-		return (NULL);
-	}
+		return (printerror_then_return_null(tokens));
 	left = parse_pipeline_node(tokens);
 	if (left == NULL)
 		return (NULL);
 	if (*tokens == NULL || (*tokens)->type != LOGICAL_AND)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
+		return (free_then_return_null(left));
 	and_token = *tokens;
 	*tokens = (*tokens)->next;
 	right = parse_logical_and_node(tokens);
 	if (right == NULL)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
+		return (free_then_return_null(left));
 	and_node = create_treenode(and_token->type, and_token->str);
 	and_node->left = left;
 	if (right->type == and_token->type)

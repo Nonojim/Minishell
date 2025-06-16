@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:36:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/13 18:48:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/16 17:01:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,29 @@ void	print_error(t_token *tokens)
 		return ;
 	parse_error(1);
 	if (is_op_logique(tokens->type))
-		printf("minishell: syntax error near unexpected token '%s'\n", tokens->str);
+		printf("minishell: syntax error near unexpected token '%s'\n",
+			tokens->str);
 	if (is_word_type(tokens->type))
-		printf("minishell: syntax error near unexpected token '%s'\n", tokens->str);
-	if (is_redirection(tokens->type) && tokens->next != NULL && is_redirection(tokens->next->type))
+		printf("minishell: syntax error near unexpected token '%s'\n",
+			tokens->str);
+	if (is_redirection(tokens->type) && tokens->next != NULL
+		&& is_redirection(tokens->next->type))
 	{
-		printf("minishell: syntax error near unexpected token '%s'\n", tokens->next->str);
+		printf("minishell: syntax error near unexpected token '%s'\n",
+			tokens->next->str);
 		return ;
 	}
 	if (is_redirection(tokens->type))
 		printf("minishell: syntax error near unexpected token `newline'\n");
 	if (is_bracket(tokens->type))
-		printf("minishell: syntax error near unexpected token '%s'\n", tokens->str);
+		printf("minishell: syntax error near unexpected token '%s'\n",
+			tokens->str);
+}
+
+t_treenode	*printerror_then_return_null(t_token **tokens)
+{
+	print_error(*tokens);
+	return (NULL);
 }
 
 int	parse_cmd(char *cmd, int *error)
