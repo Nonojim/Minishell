@@ -6,82 +6,89 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 20:44:29 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:46:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_logical_and_node(t_token **token_list);
-t_treenode	*parse_logical_and1(t_token **token_list);
-t_treenode	*parse_logical_and2(t_token **token_list);
+t_treenode	*parse_logical_and_node(t_token **tokens);
+t_treenode	*parse_logical_and1(t_token **tokens);
+t_treenode	*parse_logical_and2(t_token **tokens);
+t_treenode	*create_node_logicaland(t_token *and_token,
+				t_treenode *left, t_treenode *right);
 
-t_treenode	*parse_logical_and_node(t_token **token_list)
+t_treenode	*parse_logical_and_node(t_token **tokens)
 {
 	t_token		*tmp;
-	t_treenode	*node;
+	t_treenode	*and_node;
 
-	tmp = *token_list;
-	node = NULL;
-	node = parse_logical_and1(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
-	node = parse_logical_and2(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
+	tmp = *tokens;
+	and_node = NULL;
+	if (parse_error(-1) == 1)
+		return (NULL);
+	and_node = parse_logical_and1(tokens);
+	if (parse_error(-1))
+		return (NULL);
+	if (and_node != NULL)
+		return (and_node);
+	*tokens = tmp;
+	and_node = parse_logical_and2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	if (and_node != NULL)
+		return (and_node);
+	*tokens = tmp;
 	return (NULL);
 }
 
-//create_node = avant d'avancer dans la liste afin de créer le bon node (et pas le noeud suivant).
 //<pipeline> ("||"  <pipeline> )* 
-t_treenode	*parse_logical_and1(t_token **token_list)
+t_treenode	*parse_logical_and1(t_token **tokens)
 {
 	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*node;
-	t_token		*create_node;
+	t_token		*and_token;
 
 	left = NULL;
 	right = NULL;
-	node = NULL;
-	left = parse_pipeline_node(token_list);
+	if (*tokens == NULL || (!is_redirection((*tokens)->type)
+			&& !is_bracket((*tokens)->type) && !is_word_type((*tokens)->type)))
+		return (printerror_then_return_null(tokens));
+	left = parse_pipeline_node(tokens);
 	if (left == NULL)
 		return (NULL);
-	if (*token_list == NULL || (*token_list)->type != LOGICAL_AND)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
-	create_node = *token_list;
-	*token_list = (*token_list)->next;
-	right = parse_logical_and_node(token_list);
+	if (*tokens == NULL || (*tokens)->type != LOGICAL_AND)
+		return (free_then_return_null(left));
+	and_token = *tokens;
+	*tokens = (*tokens)->next;
+	right = parse_logical_and_node(tokens);
 	if (right == NULL)
+		return (free_then_return_null(left));
+	return (create_node_logicaland(and_token, left, right));
+}
+
+t_treenode	*create_node_logicaland(t_token *and_token,
+				t_treenode *left, t_treenode *right)
+{
+	t_treenode	*and_node;
+
+	and_node = create_treenode(and_token->type, and_token->str);
+	and_node->left = left;
+	if (right->type == and_token->type)
 	{
-		free_treenode(left);
-		return (NULL);
-	}
-	node = create_treenode(create_node->type, create_node->str);
-	node->left = left;
-	if (right->type == create_node->type) // si a droite se trouve un autre &&
-	{
-		node->right = right->left;
-		right->left = node;
+		and_node->right = right->left;
+		right->left = and_node;
 		return (right);
 	}
-	else
-	{
-		node->right = right;
-		return (node);
-	}
+	and_node->right = right;
+	return (and_node);
 }
 
 //	<pipeline>
-t_treenode	*parse_logical_and2(t_token **token_list)
+t_treenode	*parse_logical_and2(t_token **tokens)
 {
-	t_treenode	*node;
-	
-	node = NULL;
-	return (node = parse_pipeline_node(token_list));
+	t_treenode	*pipe_node;
+
+	pipe_node = NULL;
+	return (pipe_node = parse_pipeline_node(tokens));
 }

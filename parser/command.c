@@ -6,107 +6,144 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 20:10:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:25:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_command_node(t_token **token_list);
-t_treenode	*parse_command_node1(t_token **token_list);
-t_treenode	*parse_command_node2(t_token **token_list);
+t_treenode	*parse_command_node(t_token **tokens);
+t_treenode	*parse_command_node1(t_token **tokens);
+t_treenode	*parse_command_node2(t_token **tokens);
 
 /*
 <command>     ::= "(" <line> ")" | <simple_command>
-							|	"(" <line> ")" 
+							|	"(" <line> ")"
 							| "(" <line> ")" redirection
 							|	<simple_command>
 */
 
-t_treenode	*parse_command_node(t_token **token_list)
+t_treenode	*parse_command_node(t_token **tokens)
 {
 	t_token		*tmp;
 	t_treenode	*node;
 
-	tmp = *token_list;
+	tmp = *tokens;
 	node = NULL;
-	node = parse_command_node1(token_list);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	node = parse_command_node1(tokens);
+	if (parse_error(-1))
+		return (NULL);
 	if (node)
 		return (node);
-	*token_list = tmp;
-	node = parse_command_node2(token_list);
+	*tokens = tmp;
+	node = parse_command_node2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
 	if (node)
 		return (node);
-	*token_list = tmp;
-
-	return(NULL);
+	*tokens = tmp;
+	return (NULL);
 }
 
-int	operator_or_nothing_before_subshell(int type)
-{
-	return(type == LOGICAL_AND
-		|| type == LOGICAL_OR
-		|| type == PIPE
-		|| type == SEMICOLON);
-}
-
+// KC = ((test && test)) segfault
+// A GERER : ((test)) (((test))) etc ne renvoie pas d'erreur envoie newline
+// (pour l'instant renvoie erreur)
 // "(" <line> ")" redirection
-t_treenode	*parse_command_node1(t_token **token_list)
+// t_treenode	*parse_command_node1(t_token **tokens)
+//{
+//	t_token		*tmp;
+//	t_treenode	*line_node; //contenu du sous_shell
+//	t_treenode	*subshell_node;
+//	t_treenode	*redir_node; //stock redirection trouver aprés parenthese
+//	//t_token	*bracket_token;
+//	/*if (*tokens == NULL || (*tokens)->type == BRACKETS_R)
+//	{
+//		//print_error(*tokens);
+//		return(NULL);
+//	}*/
+//	tmp = *tokens;
+//	if (*tokens == NULL || (*tokens)->type != BRACKETS_L)
+//		return (NULL);
+//	//bracket_token = *tokens;
+//	*tokens = (*tokens)->next; // on mange la bracket_L
+//	line_node = parse_line_node(tokens); // parse int subshell
+//	if (line_node == NULL || *tokens == NULL || (*tokens)->type != BRACKETS_R)
+//	{
+//		//print_error(bracket_token);
+//		free_treenode(line_node);
+//		*tokens = tmp;
+//		return (NULL);
+//	}
+//	*tokens = (*tokens)->next; // on mange bracket_R
+//	subshell_node = create_treenode(SUBSHELL, "()");
+//	subshell_node->left = line_node; //contient commande subshell
+//	tmp = *tokens;
+////	printf("%p\n", (*tokens)->str);
+//	if (line_node->type == SUBSHELL && line_node->left
+//		&& line_node->left->argv[1] == NULL)
+//	{
+//		//print_error(*tokens); // MEME ERREUR QUE EN HAUT
+//		free_treenode(subshell_node);
+//		//printf("minishell: syntax error near unexpected token ')'\n");
+//		*tokens = NULL;
+//		return (NULL);
+//	}
+//	while ((redir_node = parse_redirection_node(tokens)) != NULL)
+//	{
+//		redir_node->left = subshell_node;
+//		subshell_node = redir_node;
+//	}
+//	return (subshell_node);
+//}
+
+/*
+ * Boucle while = redir_node, voir si subshell 
+ * est suivie d'une redirection.
+ */
+t_treenode	*parse_command_node1(t_token **tokens)
 {
-	t_treenode	*node;
 	t_token		*tmp;
-	
-	node = NULL;
-	tmp = *token_list;
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_L)
+	t_treenode	*line_node;
+	t_treenode	*subshell_node;
+
+	tmp = *tokens;
+	if (*tokens == NULL || (*tokens)->type != BRACKETS_L)
 		return (NULL);
-	tmp = *token_list;
-	while ((*token_list)->type != BRACKETS_R && *token_list != NULL)
-		*token_list = (*token_list)->next;
-	if (*token_list == NULL || (*token_list)->type != BRACKETS_R)
+	*tokens = (*tokens)->next;
+	line_node = parse_line_node(tokens);
+	if (line_node == NULL || *tokens == NULL || (*tokens)->type != BRACKETS_R)
+		return (free_settoken_thenreturn(line_node, tokens, tmp));
+	*tokens = (*tokens)->next;
+	subshell_node = create_treenode(SUBSHELL, "()");
+	subshell_node->left = line_node;
+	if (line_node && line_node->type == SUBSHELL && line_node->left
+		&& line_node->left->argv && line_node->left->argv[1] == NULL)
+		return (free_settoken_thenreturn(subshell_node, tokens, NULL));
+	line_node = parse_redirection_node(tokens);
+	while (line_node != NULL)
 	{
-		*token_list = tmp;
-		return (NULL);
+		line_node->left = subshell_node;
+		subshell_node = line_node;
+		line_node = parse_redirection_node(tokens);
 	}
-	*token_list = tmp;
-	node = create_treenode(SUBSHELL, "()");
-	if (!node)
-		return (NULL);
-	*token_list = (*token_list)->next;
-	node->left = parse_line_node(token_list);
-	if (node->left == NULL || *token_list == NULL)
-	{
-		free_treenode(node);
-		return (NULL);
-  }
-	*token_list = (*token_list)->next;
-	t_token	*tmp2 = *token_list;
-	t_treenode *node_redir;
-	//FAIT DISPARAITRE LES TOKEN
-	while((node_redir = parse_redirection_node(token_list)) != NULL)
-	{
-		node_redir->left = node;
-		node = node_redir;
-	}
-	if (*token_list != NULL && !operator_or_nothing_before_subshell((*token_list)->type) && !is_redirection((*token_list)->type))
-	{
-		free_treenode(node);
-		*token_list = tmp2;
-		return (NULL);
-	}
-	if (node_redir != NULL)
-	{
-		free_treenode(node_redir);
-	}
-	return (node);
+	return (subshell_node);
 }
 
-//simple_command
-t_treenode	*parse_command_node2(t_token **token_list)
+t_treenode	*free_settoken_thenreturn(t_treenode *nodetofree,
+	t_token **tokenstoset, t_token *setting)
 {
-	t_treenode	*node;
+	free_treenode(nodetofree);
+	*tokenstoset = setting;
+	return (NULL);
+}
 
-	node  = parse_simple_command_node(token_list);
-	return (node);
+// simple_command
+t_treenode	*parse_command_node2(t_token **tokens)
+{
+	t_treenode	*simple_cmd_node;
 
+	simple_cmd_node = parse_simple_command_node(tokens);
+	return (simple_cmd_node);
 }

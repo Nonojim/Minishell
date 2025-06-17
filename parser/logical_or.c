@@ -6,82 +6,90 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 17:34:07 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:44:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_logical_or_node(t_token **token_list);
-t_treenode	*parse_logical_or1(t_token **token_list);
-t_treenode	*parse_logical_or2(t_token **token_list);
+t_treenode	*parse_logical_or_node(t_token **tokens);
+t_treenode	*parse_logical_or1(t_token **tokens);
+t_treenode	*parse_logical_or2(t_token **tokens);
+t_treenode	*create_node_logicalor(t_token *or_token,
+				t_treenode *left, t_treenode *right);
 
-
-t_treenode	*parse_logical_or_node(t_token **token_list)
+t_treenode	*parse_logical_or_node(t_token **tokens)
 {
 	t_token		*tmp;
-	t_treenode	*node;
+	t_treenode	*or_node;
 
-	tmp = *token_list;
-	node = NULL;
-	node = parse_logical_or1(token_list);
-	if (node != NULL)
-		return (node);
-	(*token_list) = tmp;
-	node = parse_logical_or2(token_list);
-	if (node != NULL)
-		return (node);
-	(*token_list) = tmp;
+	tmp = *tokens;
+	or_node = NULL;
+	if (parse_error(-1) == 1)
+		return (NULL);
+	or_node = parse_logical_or1(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	if (or_node != NULL)
+		return (or_node);
+	(*tokens) = tmp;
+	or_node = parse_logical_or2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	if (or_node != NULL)
+		return (or_node);
+	(*tokens) = tmp;
 	return (NULL);
 }
 
 //<logical_and> ("&&" <logical_and> )*
-t_treenode	*parse_logical_or1(t_token **token_list)
+t_treenode	*parse_logical_or1(t_token **tokens)
 {
 	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*node;
-	t_token		*create_node;
+	t_token		*or_token;
 
 	left = NULL;
 	right = NULL;
-	node = NULL;
-	left = parse_logical_and_node(token_list);
+	if (*tokens == NULL
+		|| (!is_word_type((*tokens)->type) && (*tokens)->type != BRACKETS_L
+			&& !is_redirection((*tokens)->type)))
+		return (printerror_then_return_null(tokens));
+	left = parse_logical_and_node(tokens);
 	if (left == NULL)
 		return (NULL);
-	if (*token_list == NULL || (*token_list)->type != LOGICAL_OR)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
-	create_node = *token_list;
-	*token_list = (*token_list)->next;
-	right = parse_logical_or_node(token_list);
+	if (*tokens == NULL || (*tokens)->type != LOGICAL_OR)
+		return (free_then_return_null(left));
+	or_token = *tokens;
+	*tokens = (*tokens)->next;
+	right = parse_logical_or_node(tokens);
 	if (right == NULL)
+		return (free_then_return_null(left));
+	return (create_node_logicalor(or_token, left, right));
+}
+
+t_treenode	*create_node_logicalor(t_token *or_token,
+				t_treenode *left, t_treenode *right)
+{
+	t_treenode	*or_node;
+
+	or_node = create_treenode(or_token->type, or_token->str);
+	or_node->left = left;
+	if (right->type == or_token->type)
 	{
-		//free_treenode(left);
-		return (NULL);
-	}
-	node = create_treenode(create_node->type, create_node->str);
-	node->left = left;
-	if (right->type == create_node->type) // si a droite se trouve un autre ||
-	{
-		node->right = right->left;
-		right->left = node;
+		or_node->right = right->left;
+		right->left = or_node;
 		return (right);
 	}
-	else
-	{
-		node->right = right;
-		return (node);
-	}
+	or_node->right = right;
+	return (or_node);
 }
 
 //<logical_and>
-t_treenode	*parse_logical_or2(t_token **token_list)
+t_treenode	*parse_logical_or2(t_token **tokens)
 {
-	t_treenode	*node;
+	t_treenode	*and_node;
 
-	node = NULL;
-	return (node = parse_logical_and_node(token_list));
+	and_node = NULL;
+	return (and_node = parse_logical_and_node(tokens));
 }

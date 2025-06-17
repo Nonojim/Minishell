@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 21:06:15 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/16 20:03:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ les ";"
 dans l'historique mais présence encore de l'ancienne ligne..... 
 donc necessité de faire 2 fois fleches du haut....
 */
+
 char	*token_bracket_unclose(char *line)
 {
 	char	*next_line;

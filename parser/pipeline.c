@@ -6,80 +6,77 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/05 18:05:55 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:08:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_pipeline_node(t_token **token_list);
-t_treenode	*parse_pipeline1(t_token **token_list);
-t_treenode	*parse_pipeline2(t_token **token_list);
+t_treenode	*parse_pipeline_node(t_token **tokens);
+t_treenode	*parse_pipeline1(t_token **tokens);
+t_treenode	*parse_pipeline2(t_token **tokens);
 
-t_treenode	*parse_pipeline_node(t_token **token_list)
+t_treenode	*parse_pipeline_node(t_token **tokens)
 {
 	t_token		*tmp;
-	t_treenode	*node;
+	t_treenode	*pipe_node;
 
-	tmp = *token_list;
-	node = NULL;
-	node = parse_pipeline1(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
-	node = parse_pipeline2(token_list);
-	if (node != NULL)
-		return (node);
-	*token_list = tmp;
+	tmp = *tokens;
+	pipe_node = NULL;
+	if (parse_error(-1) == 1)
+		return (NULL);
+	pipe_node = parse_pipeline1(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	if (pipe_node != NULL)
+		return (pipe_node);
+	*tokens = tmp;
+	pipe_node = parse_pipeline2(tokens);
+	if (parse_error(-1) == 1)
+		return (NULL);
+	if (pipe_node != NULL)
+		return (pipe_node);
+	*tokens = tmp;
 	return (NULL);
 }
 
 //<command> "|" <command>
-t_treenode	*parse_pipeline1(t_token **token_list)
+//Conservation du noeuf left (word) même si pas de pipeline,
+//evite de reparser.
+t_treenode	*parse_pipeline1(t_token **tokens)
 {
-t_treenode	*left;
+	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*node;
-	t_token		*create_node;
+	t_treenode	*pipe_node;
+	t_token		*pipe_token;
 
-	left = parse_command_node(token_list);
+	pipe_node = NULL;
+	if (*tokens == NULL || (!is_redirection((*tokens)->type)
+			&& (*tokens)->type != BRACKETS_L && !is_word_type((*tokens)->type)))
+		return (printerror_then_return_null(tokens));
+	left = parse_command_node(tokens);
 	if (left == NULL)
 		return (NULL);
-
-	if (*token_list == NULL || (*token_list)->type != PIPE)
-	{
-		free_treenode(left);
-		return (NULL);
-	}
-	while (*token_list != NULL && (*token_list)->type == PIPE)
-	{
-		create_node = *token_list;
-		*token_list = (*token_list)->next;
-		right = parse_command_node(token_list);
-		if (right == NULL)
-		{
-			//free_treenode(left);
-			return (NULL);
-		}
-		node = create_treenode(create_node->type, create_node->str);
-		if (!node)
-		{
-			//free_treenode(left);
-			//free_treenode(right);
-			return (NULL);
-		}
-		node->left = left;
-		node->right = right;
-		left = node;
-	}
-	return (left);
+	if (*tokens == NULL || (*tokens)->type != PIPE)
+		return (left);
+	pipe_token = *tokens;
+	*tokens = (*tokens)->next;
+	if (*tokens == NULL || (*tokens != NULL && !is_word_type((*tokens)->type)))
+		return (printerror_free_return_null(tokens, left));
+	right = parse_pipeline1(tokens);
+	if (right == NULL)
+		return (free_then_return_null(left));
+	pipe_node = create_treenode(pipe_token->type, pipe_token->str);
+	pipe_node->left = left;
+	pipe_node->right = right;
+	return (pipe_node);
 }
 
 //<command>
-t_treenode	*parse_pipeline2(t_token **token_list)
+t_treenode	*parse_pipeline2(t_token **tokens)
 {
-	t_treenode	*node;
+	t_treenode	*command_node;
 
-	node = NULL;
-	return (node = parse_command_node(token_list));
+	command_node = NULL;
+	return (command_node = parse_command_node(tokens));
 }

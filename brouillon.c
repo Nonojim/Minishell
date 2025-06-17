@@ -6,9 +6,42 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:02:29 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/22 21:20:53 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:38:01 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//t_treenode	*create_branch_words(t_token **tokens)
+//{
+//	t_treenode	*root = NULL;
+//	t_treenode	*current = NULL;
+//	t_treenode	*new_node = NULL;
+//
+//	while (*tokens != NULL
+//		&& ((*tokens)->type == WORD
+//	|| (*tokens)->type == EXPANSION
+//	|| (*tokens)->type == SIMPLE_QUOTE
+//	|| (*tokens)->type == DOUBLE_QUOTE ))
+//	{
+//		new_node = create_treenode((*tokens)->type, (*tokens)->str);
+//		if (!new_node || !new_node->str)
+//		{
+//			free_treenode(root);
+//			return (NULL);
+//		}
+//		if (!root)
+//		{
+//			root = new_node;
+//			current = root;
+//		}
+//		else
+//		{
+//			add_node(current, new_node, LEFT);
+//			current = new_node;
+//		}
+//		*tokens = (*tokens)->next;
+//	}
+//	return (root);
+//}
 
 //Ajout traitement des tokens variable $
 		/*	if (line[i] == '$')

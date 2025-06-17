@@ -6,46 +6,55 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/06 21:35:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:52:22 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-t_treenode	*parse_word_node(t_token **token_list);
-t_treenode	*parse_word1(t_token **token_list);
+t_treenode	*parse_word_node(t_token **tokens);
+t_treenode	*create_word_node(int *argc, t_token *tmp, t_token **tokens);
 
-t_treenode *parse_word_node(t_token **tokens)
+t_treenode	*parse_word_node(t_token **tokens)
 {
-	int	argc = 0;
-	int	i = 0;
-	t_token *tmp = *tokens;
+	int			argc;
+	t_token		*tmp;
 
-	while (tmp != NULL
-		&& (tmp->type == WORD
-	|| tmp->type == EXPANSION
-	|| tmp->type == SIMPLE_QUOTE
-	|| tmp->type == DOUBLE_QUOTE))
+	argc = 0;
+	tmp = *tokens;
+	if (parse_error(-1) == 1)
+		return (NULL);
+	while (tmp != NULL && is_word_type(tmp->type))
 	{
 		argc++;
 		tmp = tmp->next;
 	}
 	if (argc == 0)
-		return NULL;
+		return (NULL);
+	return (create_word_node(&argc, tmp, tokens));
+}
 
-	char **argv = malloc(sizeof(char *) * (argc + 1));
+t_treenode	*create_word_node(int *argc, t_token *tmp, t_token **tokens)
+{
+	int			i;
+	char		**argv;
+	t_treenode	*cmd_node;
+
+	i = 0;
+	cmd_node = NULL;
+	argv = malloc(sizeof(char *) * (*argc + 1));
 	if (!argv)
-		return NULL;
-
-	while (i < argc)
+		return (NULL);
+	tmp = *tokens;
+	while (i < *argc)
 	{
-		argv[i] = ft_strdup((*tokens)->str);
-		*tokens = (*tokens)->next;
+		argv[i] = ft_strdup((tmp)->str);
+		tmp = tmp->next;
 		i++;
 	}
-	argv[argc] = NULL;
-
-	t_treenode *cmd = create_treenode(0, argv[0]);
-	cmd->argv = argv;
-	return cmd;
+	argv[*argc] = NULL;
+	cmd_node = create_treenode(0, argv[0]);
+	cmd_node->argv = argv;
+	*tokens = tmp;
+	return (cmd_node);
 }
