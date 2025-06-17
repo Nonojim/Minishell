@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:59 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 18:44:39 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:25:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_treenode	*parse_command_node(t_token **tokens)
 }
 
 // KC = ((test && test)) segfault
-// A GERER : ((test)) (((test))) etc ne renvoie pas d'erreur envoie une newline  (pour l'instant renvoie erreur)
+// A GERER : ((test)) (((test))) etc ne renvoie pas d'erreur envoie newline
+// (pour l'instant renvoie erreur)
 // "(" <line> ")" redirection
 // t_treenode	*parse_command_node1(t_token **tokens)
 //{
@@ -97,12 +98,15 @@ t_treenode	*parse_command_node(t_token **tokens)
 //	return (subshell_node);
 //}
 
+/*
+ * Boucle while = redir_node, voir si subshell 
+ * est suivie d'une redirection.
+ */
 t_treenode	*parse_command_node1(t_token **tokens)
 {
 	t_token		*tmp;
 	t_treenode	*line_node;
 	t_treenode	*subshell_node;
-	t_treenode	*redir_node;
 
 	tmp = *tokens;
 	if (*tokens == NULL || (*tokens)->type != BRACKETS_L)
@@ -117,12 +121,12 @@ t_treenode	*parse_command_node1(t_token **tokens)
 	if (line_node && line_node->type == SUBSHELL && line_node->left
 		&& line_node->left->argv && line_node->left->argv[1] == NULL)
 		return (free_settoken_thenreturn(subshell_node, tokens, NULL));
-	redir_node = parse_redirection_node(tokens);
-	while (redir_node != NULL)
+	line_node = parse_redirection_node(tokens);
+	while (line_node != NULL)
 	{
-		redir_node->left = subshell_node;
-		subshell_node = redir_node;
-		redir_node = parse_redirection_node(tokens);
+		line_node->left = subshell_node;
+		subshell_node = line_node;
+		line_node = parse_redirection_node(tokens);
 	}
 	return (subshell_node);
 }

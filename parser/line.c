@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 19:51:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:42:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_treenode	*parse_line3(t_token **tokens);
 //		if (parse_error(-1) == 1)
 //			return (NULL);
 //	}
-//	/*	if (line_node != NULL && *tokens != NULL) ->mis dans mains car pour subshell faisait tout planter ici
+//	/*	if (line_node != NULL && *tokens != NULL)
+//	->mis dans mains car pour subshell faisait tout planter ici
 //		{
 //			print_error(*tokens);
 //			free_treenode(line_node);

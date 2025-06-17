@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/16 18:48:42 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:03:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,17 @@
 # include "../includes/tokenizer.h"
 
 /*
- * Grammaire LL : va definir la structure syntaxique d'une ligne de commande Shell.
+ * Grammaire LL : definit la structure syntaxique d'une ligne de commande Shell
  * Begin rule line.
  * Structure adapte a un parseur descendant recursif.
- * L'AST va être construit à partir de la grammaire, chaque regle de grammaire correspond a un type de noeud AST.
  ** Symbole dans la grammaire (notation EBNF)
  ::= == opérateur d'affectation de règle, "est définit comme"
  | (ou alternatif) == l'élement peut être l'un ou l'autre
  * == peut apparaitre plusieurs fois ou zéro fois
  + == plusieurs fois ou 1 fois minimum
  ? == zéro ou 1 fois
- **  exemple = echo "Hello" && ls -l ; echo test
- * echo = WORD, "Hello" = WORD, && = logical_and, ls = WORD, -l = WORD ; = SEMICOLON, echo = WORD test = WORD
 
- Grammaire LL - Symbole token
+ Grammaire LL:
 
 //<line>                ::= 	<logical_or> (";" <logical_or>)* 1
 //							|	<logical_or> ";" 2
@@ -140,5 +137,6 @@ t_treenode	*parse_word1(t_token **tokens);
 
 int			parse_error(int state);
 void		print_error(t_token *tokens);
+t_treenode	*printerror_free_return_null(t_token **tokens, t_treenode *node);
 
 #endif

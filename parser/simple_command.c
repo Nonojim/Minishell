@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 20:05:51 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:21:26 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,21 @@ t_treenode	*parse_simple_command_node(t_token **tokens)
 	t_treenode	*simple_cmd_node;
 	t_token		*tmp;
 
+	simple_cmd_node = NULL;
 	tmp = *tokens;
 	if (parse_error(-1) == 1)
 		return (NULL);
-	if ((simple_cmd_node = parse_simple_command1(tokens)))
-	{
-		if (parse_error(-1) == 1)
-			return (NULL);
+	simple_cmd_node = parse_simple_command1(tokens);
+	if (simple_cmd_node != NULL && parse_error(-1) == 0)
 		return (simple_cmd_node);
-	}
 	*tokens = tmp;
-	if ((simple_cmd_node = parse_simple_command2(tokens)))
-	{
-		if (parse_error(-1) == 1)
-			return (NULL);
+	simple_cmd_node = parse_simple_command2(tokens);
+	if (simple_cmd_node != NULL && parse_error(-1) == 0)
 		return (simple_cmd_node);
-	}
 	*tokens = tmp;
-	if ((simple_cmd_node = parse_simple_command3(tokens)))
-	{
-		if (parse_error(-1) == 1)
-			return (NULL);
+	simple_cmd_node = parse_simple_command3(tokens);
+	if (simple_cmd_node != NULL && parse_error(-1) == 0)
 		return (simple_cmd_node);
-	}
 	*tokens = tmp;
 	return (NULL);
 }
@@ -61,13 +53,18 @@ t_treenode	*parse_simple_command1(t_token **tokens)
 	t_treenode	*redir_node;
 	t_treenode	*left;
 
-	if ((left = parse_word_node(tokens)) == NULL)
+	word_node = NULL;
+	redir_node = NULL;
+	left = parse_word_node(tokens);
+	if (left == NULL)
 		return (NULL);
-	while ((redir_node = parse_redirection_node(tokens)) != NULL)
+	redir_node = parse_redirection_node(tokens);
+	while (redir_node != NULL)
 	{
 		redir_node->left = left;
 		word_node = redir_node;
 		left = word_node;
+		redir_node = parse_redirection_node(tokens);
 	}
 	if (word_node == NULL)
 		return (free_then_return_null(left));
@@ -77,17 +74,23 @@ t_treenode	*parse_simple_command1(t_token **tokens)
 //redirection _ word
 t_treenode	*parse_simple_command2(t_token **tokens)
 {
-	t_treenode	*word_node = NULL;
-	t_treenode	*redir_node = NULL;
-	t_treenode	*left = NULL;
+	t_treenode	*word_node;
+	t_treenode	*redir_node;
+	t_treenode	*left;
+	t_token		*tmp;
 
-	if ((left = parse_word_node(tokens)) != NULL)
+	word_node = NULL;
+	redir_node = NULL;
+	left = parse_word_node(tokens);
+	if (left != NULL)
 		return (free_then_return_null(left));
-	t_token *tmp = *tokens;
-	while((redir_node = parse_redirection_node(tokens)) != NULL)
+	tmp = *tokens;
+	redir_node = parse_redirection_node(tokens);
+	while (redir_node != NULL)
 	{
-		redir_node->left = NULL;
+		redir_node->left = word_node;
 		word_node = redir_node;
+		redir_node = parse_redirection_node(tokens);
 	}
 	if (word_node == NULL)
 		return (free_settoken_thenreturn(left, tokens, tmp));
@@ -97,8 +100,9 @@ t_treenode	*parse_simple_command2(t_token **tokens)
 //word
 t_treenode	*parse_simple_command3(t_token **tokens)
 {
-	t_treenode	*word_node = NULL;
+	t_treenode	*word_node;
 
+	word_node = NULL;
 	word_node = parse_word_node(tokens);
 	return (word_node);
 }

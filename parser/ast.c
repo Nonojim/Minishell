@@ -6,21 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/13 10:43:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 12:31:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-/*
-A FAIRE !!!! 
-Gérer dans le tokenizer (a(b)c) = ouvre une readline = incorrect;
-Modifier la priorité des pipe sur les redirection dans le code (mais grammaire bonne)
-Gerer les leaks
-Normer (good luck)
-*/
-
-// Manque dans la grammaire = token simple_quote et double_quote ; token_expansion
 
 //<line>                ::= 	<logical_or> (";" <logical_or>)* 1 
 //							|	<logical_or> ";" 2 

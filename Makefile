@@ -30,6 +30,7 @@ FILES = tokenizer/tokenizer.c \
 				parser/simple_command.c \
 				parser/redirection.c \
 				parser/word.c \
+				parser/print_ast.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)

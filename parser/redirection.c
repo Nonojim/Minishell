@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 19:47:13 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:29:22 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 t_treenode	*parse_redirection_node(t_token **tokens);
 t_treenode	*parse_redirection1(t_token **tokens);
+t_treenode	*settoken_thenreturn(t_token **tokenstoset, t_token *setting);
 
 /*
 <redirection>				::= ( "<" | "<<" | ">" | ">>" ) <word>
@@ -50,31 +51,23 @@ t_treenode	*parse_redirection1(t_token **tokens)
 		return (NULL);
 	redir_token = *tokens;
 	*tokens = (*tokens)->next;
-	if (*tokens == NULL || !is_word_type((*tokens)->type))
-	{
-		//if (*tokens == NULL)
-			//print_error(*tokens);
-	//	else
-		//	print_error(*tokens);
-			//printf("minishell: syntax error near unexpected token `newline'\n"); // l'affiche trop de fois
-		//else //str est autre chose qu'un word
-			//printf("minishell: syntax error near unexpected token '%s'\n", (*tokens)->str); // l'affiche trop de fois
-		//print_error(tokens);
-		//if (*tokens)
-			//*tokens = (*tokens)->next;
-		//*tokens = redir_token;
-			return (NULL);
-	}
+	if (*tokens == NULL)
+		return (printerror_then_return_null(tokens));
+	if (!is_word_type((*tokens)->type))
+		return (printerror_then_return_null(&redir_token));
 	right = parse_word_node(tokens);
 	if (right == NULL)
-	{
-		*tokens = redir_token;
-		return (NULL);
-	}
+		return (settoken_thenreturn(tokens, redir_token));
 	redir_node = create_treenode(redir_token->type, redir_token->str);
 	redir_token = *tokens;
 	if (redir_node == NULL)
 		return (free_then_return_null(right));
 	redir_node->right = right;
 	return (redir_node);
+}
+
+t_treenode	*settoken_thenreturn(t_token **tokenstoset, t_token *setting)
+{
+	*tokenstoset = setting;
+	return (NULL);
 }

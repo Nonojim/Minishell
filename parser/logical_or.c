@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 19:50:12 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:44:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 t_treenode	*parse_logical_or_node(t_token **tokens);
 t_treenode	*parse_logical_or1(t_token **tokens);
 t_treenode	*parse_logical_or2(t_token **tokens);
+t_treenode	*create_node_logicalor(t_token *or_token,
+				t_treenode *left, t_treenode *right);
 
 t_treenode	*parse_logical_or_node(t_token **tokens)
 {
@@ -45,14 +47,12 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 {
 	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*or_node;
 	t_token		*or_token;
 
 	left = NULL;
 	right = NULL;
-	or_node = NULL;
 	if (*tokens == NULL
-		|| ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L
+		|| (!is_word_type((*tokens)->type) && (*tokens)->type != BRACKETS_L
 			&& !is_redirection((*tokens)->type)))
 		return (printerror_then_return_null(tokens));
 	left = parse_logical_and_node(tokens);
@@ -65,6 +65,14 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 	right = parse_logical_or_node(tokens);
 	if (right == NULL)
 		return (free_then_return_null(left));
+	return (create_node_logicalor(or_token, left, right));
+}
+
+t_treenode	*create_node_logicalor(t_token *or_token,
+				t_treenode *left, t_treenode *right)
+{
+	t_treenode	*or_node;
+
 	or_node = create_treenode(or_token->type, or_token->str);
 	or_node->left = left;
 	if (right->type == or_token->type)
@@ -73,11 +81,8 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 		right->left = or_node;
 		return (right);
 	}
-	else
-	{
-		or_node->right = right;
-		return (or_node);
-	}
+	or_node->right = right;
+	return (or_node);
 }
 
 //<logical_and>

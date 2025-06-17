@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 19:50:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:46:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 t_treenode	*parse_logical_and_node(t_token **tokens);
 t_treenode	*parse_logical_and1(t_token **tokens);
 t_treenode	*parse_logical_and2(t_token **tokens);
+t_treenode	*create_node_logicaland(t_token *and_token,
+				t_treenode *left, t_treenode *right);
 
 t_treenode	*parse_logical_and_node(t_token **tokens)
 {
@@ -45,16 +47,12 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 {
 	t_treenode	*left;
 	t_treenode	*right;
-	t_treenode	*and_node;
 	t_token		*and_token;
 
 	left = NULL;
 	right = NULL;
-	and_node = NULL;
-	if (*tokens == NULL
-		|| ((*tokens)->type != WORD
-			&& !is_bracket((*tokens)->type)
-			&& !is_redirection((*tokens)->type)))
+	if (*tokens == NULL || (!is_redirection((*tokens)->type)
+			&& !is_bracket((*tokens)->type) && !is_word_type((*tokens)->type)))
 		return (printerror_then_return_null(tokens));
 	left = parse_pipeline_node(tokens);
 	if (left == NULL)
@@ -66,6 +64,14 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 	right = parse_logical_and_node(tokens);
 	if (right == NULL)
 		return (free_then_return_null(left));
+	return (create_node_logicaland(and_token, left, right));
+}
+
+t_treenode	*create_node_logicaland(t_token *and_token,
+				t_treenode *left, t_treenode *right)
+{
+	t_treenode	*and_node;
+
 	and_node = create_treenode(and_token->type, and_token->str);
 	and_node->left = left;
 	if (right->type == and_token->type)
@@ -74,11 +80,8 @@ t_treenode	*parse_logical_and1(t_token **tokens)
 		right->left = and_node;
 		return (right);
 	}
-	else
-	{
-		and_node->right = right;
-		return (and_node);
-	}
+	and_node->right = right;
+	return (and_node);
 }
 
 //	<pipeline>

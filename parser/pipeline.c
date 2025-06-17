@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 20:01:56 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:08:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ t_treenode	*parse_pipeline_node(t_token **tokens)
 }
 
 //<command> "|" <command>
+//Conservation du noeuf left (word) même si pas de pipeline,
+//evite de reparser.
 t_treenode	*parse_pipeline1(t_token **tokens)
 {
 	t_treenode	*left;
@@ -48,25 +50,19 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	t_treenode	*pipe_node;
 	t_token		*pipe_token;
 
-	if (*tokens == NULL
-		|| ((*tokens)->type != WORD && (*tokens)->type != BRACKETS_L
-			&& !is_redirection((*tokens)->type)))
+	pipe_node = NULL;
+	if (*tokens == NULL || (!is_redirection((*tokens)->type)
+			&& (*tokens)->type != BRACKETS_L && !is_word_type((*tokens)->type)))
 		return (printerror_then_return_null(tokens));
 	left = parse_command_node(tokens);
 	if (left == NULL)
 		return (NULL);
-	//Si pas de pipe on return le node left pour éviter de reparser left 
 	if (*tokens == NULL || (*tokens)->type != PIPE)
 		return (left);
 	pipe_token = *tokens;
 	*tokens = (*tokens)->next;
-	//appel récursif qui remplace le while pour gérer si il y a plusieurs pipe
-	if (*tokens == NULL || !is_word_type((*tokens)->type))
-	{
-		print_error(*tokens);
-		free_treenode(left);
-		return (NULL);
-	}
+	if (*tokens == NULL || (*tokens != NULL && !is_word_type((*tokens)->type)))
+		return (printerror_free_return_null(tokens, left));
 	right = parse_pipeline1(tokens);
 	if (right == NULL)
 		return (free_then_return_null(left));
