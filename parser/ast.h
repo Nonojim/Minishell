@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 15:00:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:59:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ t_treenode	*free_settoken_thenreturn(t_treenode *nodetofree,
 				t_token **tokenstoset, t_token *setting);
 t_treenode	*printerror_then_return_null(t_token **tokens);
 t_treenode	*free_then_return_null(t_treenode *left);
+int			parse_error(int state);
+void		print_error(t_token *tokens);
+t_treenode	*printerror_free_return_null(t_token **tokens, t_treenode *node);
 
 // Parse
 t_treenode	*create_tree(t_token *tokens);
@@ -134,8 +137,5 @@ t_treenode	*parse_redirection2(t_token **tokens);
 t_treenode	*parse_word_node(t_token **tokens);
 t_treenode	*parse_word1(t_token **tokens);
 
-int			parse_error(int state);
-void		print_error(t_token *tokens);
-t_treenode	*printerror_free_return_null(t_token **tokens, t_treenode *node);
 
 #endif

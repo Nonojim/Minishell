@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 12:25:33 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 18:57:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@
 # include "libft/libft.h"
 # include "parser/ast.h"
 # include "includes/tokenizer.h"
+# include "expansion/expansion.h"
 
 #endif

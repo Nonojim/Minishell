@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 15:02:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 18:58:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,10 @@ int	main(void)
 			free_treenode(ast);
 			ast = NULL;
 		}
-		//printf("node_count before free = %d\n", g_node_count);
-		//execve(ast->argv[0], ast->argv,);
 		if (ast != NULL)
-		{
 			astreeprint(ast, 0);
-			free_treenode(ast);
-		}
-		//printf("node_count after free = %d\n", g_node_count);
+		expanse_ast();
+		free_treenode(ast);
 		free_token(tmp);
 		free(line);
 	}

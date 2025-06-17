@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 15:06:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 18:58:27 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "../includes/tokenizer.h"
 # include "../parser/ast.h"
 
-
+void	expanse_ast();
 
 
 
