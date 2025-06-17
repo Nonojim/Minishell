@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 13:12:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:02:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,6 @@ int	main(void)
 		parse_error(0); //remise à zéro de la static int error;
 		ast = parse_line_node(&token);
 		//si des tokens subsistent l'ast sera delete
-		/*if (line_node != NULL && token != NULL)
-		{
-			print_error(token);
-			free_treenode(line_node);
-		}	*/
 		if (token != NULL)
 		{
 			print_error(token);

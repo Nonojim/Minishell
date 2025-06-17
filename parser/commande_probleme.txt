@@ -7,14 +7,15 @@ segfault
 [OK]quand entrée = segfault
 [OK]quand espace = segfault
 
-[X] $ a && ;
+[OK] $ a && ;
 [0 : a] -> [3 : &&] -> [4 : ;] -> NULL
 [Type: 0, data: "a"]
 Minishell$ 
 
 [X] (a(b)c) > )
-ouvre une readline (ne devrait pas)
-double historique des parenthese toujours à regler 
+minishell : minishell: syntax error near unexpected token '('
+bash: syntax error near unexpected token `test'
 
 
 wtf
+kesta toi?

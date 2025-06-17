@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 13:03:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:00:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 /*
  * Grammaire LL : definit la structure syntaxique d'une ligne de commande Shell
- * Begin rule line.
  * Structure adapte a un parseur descendant recursif.
  ** Symbole dans la grammaire (notation EBNF)
  ::= == opérateur d'affectation de règle, "est définit comme"
@@ -29,29 +28,29 @@
 
  Grammaire LL:
 
-//<line>                ::= 	<logical_or> (";" <logical_or>)* 1
-//							|	<logical_or> ";" 2
-//							|	<logical_or> 3
-//<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )*
-//							|	<logical_and>
-//<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )*
-//							|	<pipeline>
-//<pipeline>            ::= <command> ( "|" <command> )*
-//							|	<command> "|" <command>
-//							|	<commandet
-//<command>             ::= "(" <line> ")" | <simple_command>
-//							|	"(" <line> ")"
-//							|	<simple_command>
-//<simple_command>      ::= <word> ( <word> | <redirection> )*
-//							|	<word> <redirection> word
-//							|	<word>
-//<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
-//							|	">" <word>
-//							|	">>" <word>
-//							|	"<" <word>
-//							|	"<<" <word>
-//<word>          ::= [WORD token]
-//							| NULL*/
+<line>                ::= 	<logical_or> (";" <logical_or>)* 1
+							|	<logical_or> ";" 2
+							|	<logical_or> 3
+<logical_or>              ::= 	<logical_and> ("&&" <logical_and> )*
+							|	<logical_and>
+<logical_and>              ::= 	<pipeline> ("||"  <pipeline> )*
+							|	<pipeline>
+<pipeline>            ::= <command> ( "|" <command> )*
+							|	<command> "|" <command>
+							|	<commandet
+<command>             ::= "(" <line> ")" | <simple_command>
+							|	"(" <line> ")"
+							|	<simple_command>
+<simple_command>      ::= <word> ( <word> | <redirection> )*
+							|	<word> <redirection> word
+							|	<word>
+<redirection>         ::= ( "<" | "<<" | ">" | ">>" ) <word>
+							|	">" <word>
+							|	">>" <word>
+							|	"<" <word>
+							|	"<<" <word>
+<word>          ::= [WORD token]
+							| NULL*/
 
 typedef struct s_treenode
 {
