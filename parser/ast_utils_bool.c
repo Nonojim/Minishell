@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:34:40 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/16 14:34:40 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:50:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int	is_op_logique(int type)
 int	is_word_type(int type)
 {
 	return (type == WORD
-		|| type == SIMPLE_QUOTE
-		|| type == DOUBLE_QUOTE
 		|| type == EXPANSION);
 }
 
