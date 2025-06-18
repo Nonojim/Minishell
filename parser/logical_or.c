@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 14:44:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/17 20:48:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_treenode	*parse_logical_or1(t_token **tokens)
 	right = NULL;
 	if (*tokens == NULL
 		|| (!is_word_type((*tokens)->type) && (*tokens)->type != BRACKETS_L
-			&& !is_redirection((*tokens)->type)))
+			&& !is_redirection((*tokens)->type) /*&& is_op_logique((*tokens)->type)*/))
 		return (printerror_then_return_null(tokens));
 	left = parse_logical_and_node(tokens);
 	if (left == NULL)
