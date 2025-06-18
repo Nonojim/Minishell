@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 21:32:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/19 00:51:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ enum e_TOKEN_TYPE
 	HERE_DOCUMENT, //> 6 ASCII = 60,60
 	OUTPUT_REDIRECTION, //>> 7 ASCII = 62
 	APPEND_OUTPUT_REDIRECTION, //<< 8 ASCII = 62,62
+	HERE_DOC_DELETE_TAB, //<<-
 	//SIMPLE_QUOTE, //' 9 ASCII = 39
 	//DOUBLE_QUOTE, //" 10 ASCII = 34
 	BRACKETS_L, //( 11 ASCII = 40

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/18 22:19:38 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/19 01:04:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,19 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token)
 	return (token);
 }*/
 
-
+/*
+A rajouter . ( token <<- )
+$ bash << EOF = exe dans un sous shell
+> echo ok && echo yes 
+> EOF
+ok
+yes
+$ << EOF
+> echo ok && echo yes
+> EOF
+Historique  Ne pas afficher Heredocument dans l historique afin d eviter de save des donnees comprometante
+Dans n imrpote quelle cas expqnsion des vqriqble. SAUF: si <<'DELIMITATEUR' 
+*/
 char	*open_heredoc(int *i, int start, char *line, t_token **token)
 {
 //	char	doc;
@@ -87,8 +99,19 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 
 //	doc = line[*i];
 	(*i) += 2;
-	str = ft_substr(line, start, *i - start);
-	add_token_end(token, create_token(HERE_DOCUMENT, str));
+	if (line[*i] == '-') // = <<- = delete tab
+	{
+		(*i)++;
+		str = ft_substr(line, start, *i - start);
+		add_token_end(token, create_token(HERE_DOC_DELETE_TAB, str));
+		(*i)++;
+	}
+	else
+	{
+		str = ft_substr(line, start, *i - start);
+		add_token_end(token, create_token(HERE_DOCUMENT, str));
+	}
+	//printf("line = %c\n", line[*i]);
 	while (line[*i] == ' ')
 		(*i)++;
 	start = *i;
