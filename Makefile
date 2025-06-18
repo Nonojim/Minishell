@@ -13,6 +13,7 @@ LIBFT = libft/libft.a
 
 FILES = tokenizer/tokenizer.c \
 				tokenizer/token_operator.c \
+				tokenizer/token_bracket.c \
 				tokenizer/token_quote.c \
 				tokenizer/token_utils.c \
 				tokenizer/token_word.c \
