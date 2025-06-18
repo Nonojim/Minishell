@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 20:03:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/18 21:10:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,28 +156,68 @@ void	bracket_unclosed(char **line, char **history_line, char*next_line)
 	*line = tmp;
 }
 
+int	count_matching_bracket(char *str)
+{
+	int	left_bracket;
+	int	right_bracket;
+
+	left_bracket = 0;
+	right_bracket = 0;
+	while (*str)
+	{
+		if (*str == '(' || *str == ')')
+		{
+			while (*str == '(')
+			{
+				left_bracket++;
+				str++;
+			}
+			while (*str == ')')
+			{
+				right_bracket++;
+				str++;
+			}
+		}
+		else
+			str++;
+	}
+	if (left_bracket <= right_bracket)
+		return (0);
+	else
+		return (1);
+}
+
 char	*token_bracket(int *i, int start, char *line, t_token **token)
 {
 	char	*str;
 	int		ix_start_bracket;
 	int		ix_end_bracket;
+	int		ix = 0;
+	int		match;
 
+	while ((match = count_matching_bracket(line)) == 1)
+		line = token_bracket_unclose(line);
 	str = ft_substr(line, start, 1);
 	add_token_end(token, create_token(BRACKETS_L, str));
 	(*i)++;
-	if (!ft_strchr(line + *i, ')'))
-		line = token_bracket_unclose(line);
 	ix_start_bracket = *i;
-	while (line[*i] && line[*i] != ')')
+	while (line[*i] && line [*i + 1] == ')')
+	{
 		(*i)++;
+		while ((line[ix] == '(' || line[*i] != ')') && line[*i])
+		{
+			(*i)++;
+			ix++;
+		}
+	}	
 	ix_end_bracket = *i;
 	str = ft_substr(line, ix_start_bracket, ix_end_bracket - ix_start_bracket);
 	tokenize(*token, &str);
 	free(str);
-	if (!line[*i])
-	{
-		line = token_bracket_unclose(line);
-		ft_strchr(line + start, ')');
-	}
+	//if (!line[*i])
+	//{
+	//	line = token_bracket_unclose(line);
+	//	ft_strchr(line + start, ')');
+	//}
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/16 14:19:01 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:59:28 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	token_expansion(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
+int		count_matching_bracket(char *str);
 
 #endif
