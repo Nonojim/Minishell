@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 21:41:42 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:44:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * Utils for token_logical_incomplete
  * When the prompt finish by && or || with multiple space
  */
-int	only_spaces_after_operator_logical(char *line, int i)
+int	only_space_after_op(char *line, int i)
 {
 	i += 2;
 	while (line[i])
@@ -24,6 +24,17 @@ int	only_spaces_after_operator_logical(char *line, int i)
 		if (line[i] != ' ')
 			return (0);
 		i++;
+	}
+	return (1);
+}
+
+int	only_space_before(char *line, int i)
+{
+	while (i > 0)
+	{
+		i--;
+		if (line[i] != ' ')
+			return (0);
 	}
 	return (1);
 }
@@ -37,7 +48,7 @@ char	*token_logical_unclose(int *i, int start, char *line, t_token **token)
 	char	*tmp;
 	char	*tmp_newline;
 
-	if (only_spaces_after_operator_logical(line, *i))
+	if (only_space_after_op(line, *i) && !only_space_before(line, *i))
 	{
 		while (1)
 		{
@@ -78,7 +89,7 @@ char	*token_pipe_unclose(int *i, int start, char *line, t_token **token)
 	char	*tmp;
 	char	*tmp_newline;
 
-	if (only_spaces_after_pipe(line, *i))
+	if (only_spaces_after_pipe(line, *i) && !only_space_before(line, *i))
 	{
 		while (1)
 		{

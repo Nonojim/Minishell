@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/28 10:05:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/18 14:39:38 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,9 @@ char	*token_quote(int *i, int start, char *line, t_token **token)
 {
 	char	quote;
 	char	*str;
-	int		type;
 
 	quote = line[*i];
 	start = *i;
-	if (quote == '\'')
-		type = SIMPLE_QUOTE;
-	else
-		type = DOUBLE_QUOTE;
 	(*i)++;
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
@@ -70,6 +65,6 @@ char	*token_quote(int *i, int start, char *line, t_token **token)
 	}
 	(*i)++;
 	str = ft_substr(line, start, *i - start);
-	add_token_end(token, create_token(type, str));
+	add_token_end(token, create_token(WORD, str));
 	return (line);
 }
