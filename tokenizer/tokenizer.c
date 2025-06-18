@@ -42,7 +42,7 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token)
 		line = token_logical_unclose(i, start, line, token);
 	else if (line[*i] == '|')
 		line = token_pipe_unclose(i, start, line, token);
-	else if ((line[*i] == '(') && line[*i])
+	else if (line[*i] == '(' && line[*i])
 		line = token_bracket(i, start, line, token);
 	else if (line[*i] == '$')
 		token_expansion(i, start, line, token);

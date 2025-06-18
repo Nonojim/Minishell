@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 14:19:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/18 21:32:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int		only_spaces_after_operator_logical(char *line, int i);
 char	*token_bracket_unclose(char *line);
 void	bracket_unclosed(char **line, char **history_line, char*next_line);
 char	*token_bracket(int *i, int start, char *line, t_token **token);
+int		count_matching_bracket(char *str);
 void	token_expansion(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);

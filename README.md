@@ -78,13 +78,7 @@
 
     - Shell parsing & tokenization – YouTube
     https://www.youtube.com/watch?v=ZjzMdsTWF0U
-
-- **Gros manuels, livres et docu**
-
-    - Manuel officiel de Bash (GNU)
-    https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
-
-    - Man bash en français
+ratio = count_matching_bracket(line)
     http://manpagesfr.free.fr/man/man1/bash.1.html
 
     - Advanced Bash Scripting Guide – Chapitre 20 (fr)
