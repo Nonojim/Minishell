@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/19 01:04:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/19 13:18:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,22 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token)
 	return (line);
 }
 
-/*t_token	*tokenize_after_here_doc(t_token *token, char **line_ptr, int *i)
+t_token	*tokenize_after_here_doc(t_token *token, char *line)
 {
-	char	*line;
+	int	i = 0;
 	int		start;
 
-	line = *line_ptr;
-	start = 0;
 	while (line[i] != '\0')
 	{
 		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '\t'
 				|| line[i] == '\n'))
 			i++;
 		start = i;
-		line = tokenize2(&i, start, line, &token);
+		tokenize2(&i, start, line, &token);
 	}
-	*line_ptr = line;
+	//*line_ptr = line;
 	return (token);
-}*/
+}
 
 /*
 A rajouter . ( token <<- )
@@ -96,7 +94,7 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 	char	*next_line;
 	char	*token_doc = NULL;
 	char *tmp;
-
+	char	*heredoc_line = NULL;
 //	doc = line[*i];
 	(*i) += 2;
 	if (line[*i] == '-') // = <<- = delete tab
@@ -104,7 +102,8 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 		(*i)++;
 		str = ft_substr(line, start, *i - start);
 		add_token_end(token, create_token(HERE_DOC_DELETE_TAB, str));
-		(*i)++;
+		//if (line[*i + 1] != '\0')
+			//(*i)++;
 	}
 	else
 	{
@@ -112,9 +111,13 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 		add_token_end(token, create_token(HERE_DOCUMENT, str));
 	}
 	//printf("line = %c\n", line[*i]);
-	while (line[*i] == ' ')
+		
+	while (line[*i] && line[*i] == ' ')
 		(*i)++;
 	start = *i;
+	//si here doc sans mot aprés = non ouverture de la readline, mais on conserve le reste de la ligne
+	if (line[*i] == '\0'|| is_word(line[*i]) == 0)
+		return(line);
 	//printf("%s\n", line);
 	//printf("str = %s\n", str);
 	//(*i++);
@@ -125,7 +128,8 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 		return (NULL);
 //	printf("token_doc1 : %s", token_doc);
 	//printf("token_doc %s", token_doc);
-	add_token_end(token, create_token(WORD, token_doc));
+	//met en token les delimitateurs
+	//add_token_end(token, create_token(WORD, token_doc));
 	int size_line = ft_strlen(token_doc) + 1;
 
 	while (1)
@@ -135,17 +139,22 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 			break ;
 		//printf("line : %s, token_doc %s \n", line, token_doc);
 		if (ft_strncmp(next_line, token_doc, size_line) == 0)
+		{
+			free(next_line);
 			break ;
-		tmp = ft_strjoin(line, "\n");
+		}
+		tmp = ft_strjoin(heredoc_line, next_line);
 		//printf("tmp = %s, line = %s", tmp, line);
-		free(line);
-		line = tmp;
-		tmp = ft_strjoin(line, next_line);
-		free(line);
-		line = tmp;
+		free(heredoc_line);
+		heredoc_line = tmp;
+		tmp = ft_strjoin(heredoc_line, "\n");
+		free(heredoc_line);
+		heredoc_line = tmp;
 		free(next_line);
-		(*i)++;
 	}
+	tokenize_after_here_doc(*token, line);
+	free(token_doc); //1H A TROUVER CE FREE POUR 1 LEAK 
+	free(heredoc_line);
 	//*tokenize_after_here_doc(&token, &line, i);
 	return (line);
 }
