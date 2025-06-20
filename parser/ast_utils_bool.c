@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:34:40 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/18 14:50:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 13:20:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	is_redirection(int type)
 	return (type == INPUT_REDIRECTION
 		|| type == OUTPUT_REDIRECTION
 		|| type == HERE_DOCUMENT
-		|| type == APPEND_OUTPUT_REDIRECTION);
+		|| type == APPEND_OUTPUT_REDIRECTION
+		|| type == HERE_DOC_DELETE_TAB);
 }
 
 int	is_op_logique(int type)
@@ -31,7 +32,9 @@ int	is_op_logique(int type)
 int	is_word_type(int type)
 {
 	return (type == WORD
-		|| type == EXPANSION);
+		|| type == EXPANSION
+		|| type == INSIDE_HERE_DOC
+		|| type == QUOTE_HERE_DOC);
 }
 
 int	is_bracket(int type)

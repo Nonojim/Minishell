@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 20:13:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 01:35:31 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token)
 		line = token_logical_unclose(i, start, line, token);
 	else if (line[*i] == '|')
 		line = token_pipe_unclose(i, start, line, token);
+	else if (line[*i] == '<' && line[*i + 1] == '<')
+		line = open_heredoc(i, start, line, token);
 	else if (line[*i] == '(' && line[*i])
 		line = token_bracket(i, start, line, token);
 	else if (line[*i] == '$')
