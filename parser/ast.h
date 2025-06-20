@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 15:59:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 19:47:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ typedef struct s_treenode
 	struct s_treenode	*right;
 	struct s_treenode	*left;
 }	t_treenode;
-
-enum e_NODE
-{
-	SUBSHELL
-};
 
 enum e_DIRECTION
 {

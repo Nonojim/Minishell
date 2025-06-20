@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:48 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/09 18:52:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 19:44:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	type_token(char *str)
 		return (BRACKETS_L);
 	else if (str[0] == ')')
 		return (BRACKETS_R);
-	else if (str[0] == '$')
-		return (EXPANSION);
 	else
 		return (WORD);
 }
