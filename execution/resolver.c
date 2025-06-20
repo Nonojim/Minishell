@@ -6,17 +6,16 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:43:16 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 17:28:35 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/20 18:47:18 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
 int	execute_node(t_treenode *node)
 {
 	if (!node)
-		return (0);
+		return (1);
 	if (node->type == WORD)
 		return(execute_simple_command(node));
 	else if (node->type == PIPE)
@@ -40,6 +39,12 @@ int	execute_node(t_treenode *node)
 	}
 	else if (node->type == HERE_DOCUMENT)
 		return (execute_heredoc_node(node));
+	else if (node->type == APPEND_OUTPUT_REDIRECTION)
+		return (execute_append_node(node));
+	else if (node->type == INPUT_REDIRECTION)
+		return (execute_input_node(node));
+	else if (node->type == OUTPUT_REDIRECTION)
+		return (execute_output_node(node));
 	else if (node->type == SUBSHELL)
 		return (execute_subshell_node(node));
 	else
