@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/20 14:20:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 17:26:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ enum e_TOKEN_TYPE
 	BRACKETS_L, //( 11 ASCII = 40
 	BRACKETS_R, //) 12 ASCII = 41
 	EXPANSION, //$ 13 ASCII = 36
+	SUBSHELL, //() 14
 };
 
 typedef struct s_token
