@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/20 01:36:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 14:20:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ enum e_TOKEN_TYPE
 	START_DELIMITATEUR,
 	END_DELIMITATEUR,
 	INSIDE_HERE_DOC,
+	QUOTE_HERE_DOC,
 	//SIMPLE_QUOTE, //' 9 ASCII = 39
 	//DOUBLE_QUOTE, //" 10 ASCII = 34
 	BRACKETS_L, //( 11 ASCII = 40
@@ -78,5 +79,10 @@ char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
 //Token_HereDoc
 char	*open_heredoc(int *i, int start, char *line, t_token **token);
+char	*newline_heredoc(char *token_doc, int j);
+int		create_token_op_heredoc(char *line, int *i, int start, t_token **token);
+char	*delete_tab_or_ad_return_line(char *next_line, int j);
+void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
+char	*delete_quote(char *str);
 
 #endif

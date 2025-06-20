@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:34:40 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 01:30:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 13:20:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	is_word_type(int type)
 {
 	return (type == WORD
 		|| type == EXPANSION
-		|| type == INSIDE_HERE_DOC);
+		|| type == INSIDE_HERE_DOC
+		|| type == QUOTE_HERE_DOC);
 }
 
 int	is_bracket(int type)
