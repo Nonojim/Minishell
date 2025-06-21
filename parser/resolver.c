@@ -6,12 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:43:16 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 23:35:41 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/20 23:22:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "execution.h"
+/*#include "ast.h"
 
 //try to combine all redirection
 int execute_redirection_chain(t_treenode *node)
@@ -257,4 +256,4 @@ void	execute_tree(t_treenode *tree)
 //	dup2(saved_stdout, STDOUT_FILENO);
 //	close(saved_stdout);
 //	return status;
-//}
+//}*/
