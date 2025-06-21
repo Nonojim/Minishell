@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:43:16 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 23:35:41 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:41:28 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,8 @@ int execute_redirection_chain(t_treenode *node)
 		status = execute_redirection_chain(node->left);
 	}
 	else
-	{
-		// Point d'arrêt : on exécute la commande
 		status = execute_node(node);
-	}
-
+		// Point d'arrêt : on exécute la commande
 	// Restaurer les entrées/sorties
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
