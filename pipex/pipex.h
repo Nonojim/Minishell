@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:18:22 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/15 16:27:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/20 23:19:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
+/*#ifndef PIPEX_H
 # define PIPEX_H
 
 # include "../minishell.h"
@@ -31,7 +31,7 @@ typedef struct s_pipe
 {
 	char **argv;
 	struct s_pipe *next;
-}			t_pipe;
+}			t_pipe;*/
 
 /* urlographie
 https://www.geeksforgeeks.org/fork-system-call/

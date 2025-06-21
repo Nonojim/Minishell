@@ -14,7 +14,6 @@
 # define AST_H
 
 # include "../minishell.h"
-# include "../includes/tokenizer.h"
 
 /*
  * Grammaire LL : definit la structure syntaxique d'une ligne de commande Shell
@@ -131,6 +130,14 @@ t_treenode	*parse_redirection2(t_token **tokens);
 // WORD
 t_treenode	*parse_word_node(t_token **tokens);
 t_treenode	*parse_word1(t_token **tokens);
+//EXE
 
+//int		execute_redirection_chain(t_treenode *node);
+//int		execute_heredoc_node(t_treenode *node);
+//int		execute_pipeline(t_treenode *node);
+//int		execute_subshell_node(t_treenode *node);
+//int		execute_simple_command(t_treenode *node);
+//int		execute_node(t_treenode *node);
+//void	execute_tree(t_treenode *tree);
 
 #endif

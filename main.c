@@ -61,6 +61,7 @@ int	main(void)
 		if (ast != NULL)
 			astreeprint(ast, 0);
 		//expanse_ast();
+		execute_tree(ast);
 		free_treenode(ast);
 		free_token(tmp);
 		free(line);
