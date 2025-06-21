@@ -26,13 +26,7 @@ enum e_TOKEN_TYPE
 	HERE_DOCUMENT, //> 6 ASCII = 60,60
 	OUTPUT_REDIRECTION, //>> 7 ASCII = 62
 	APPEND_OUTPUT_REDIRECTION, //<< 8 ASCII = 62,62
-	HERE_DOC_DELETE_TAB, //<<-
-	START_DELIMITATEUR,
-	END_DELIMITATEUR,
 	INSIDE_HERE_DOC,
-	QUOTE_HERE_DOC,
-	//SIMPLE_QUOTE, //' 9 ASCII = 39
-	//DOUBLE_QUOTE, //" 10 ASCII = 34
 	BRACKETS_L, //( 11 ASCII = 40
 	BRACKETS_R, //) 12 ASCII = 41
 	EXPANSION, //$ 13 ASCII = 36
@@ -81,9 +75,9 @@ char	*token_quote(int *i, int start, char *line, t_token **token);
 //Token_HereDoc
 char	*open_heredoc(int *i, int start, char *line, t_token **token);
 char	*newline_heredoc(char *token_doc, int j);
-int		create_token_op_heredoc(char *line, int *i, int start, t_token **token);
+int		create_token_op_heredoc(char *line, int *i, t_token **token);
 char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
-char	*delete_quote(char *str);
+char	*delete_quote(char *str, t_token **token);
 
 #endif
