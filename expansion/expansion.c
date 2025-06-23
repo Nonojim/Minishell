@@ -6,49 +6,138 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 19:18:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/23 20:44:45 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-/*
-Cas gerer dans l expansion:
-$EXPANSION
-Simple et double quote 
-*
-*/
-void	expanse_ast()
+// on parcours l'ast récursivement, et on expanse avec expand_string
+void	expanse_ast(t_treenode *node)
 {
-	const char	*home = "HOME";
-	const char	*var = "PATH";
-	const char	*date = "(DATE)";
-	const	char	*user = "USER";
-	const char	*env_p = getenv(home);
-	
-	const char	*env_p1 = getenv(var);
-	const char	*env_p2 = getenv(date);
-	const char	*env_p3 = getenv(user);
-	if (env_p)
-  	printf("HOME: %s\n", env_p);
-	if (env_p)
-  	printf("PATH: %s\n", env_p1);
-	if (env_p)
-  	printf("DATE: %s\n", env_p2);
-	if (env_p)
-  	printf("USER: %s\n", env_p3);
+	int		i;
+	char	*new_arg;
 
+	if (!node)
+		return ;
+	if (node->argv)
+	{
+		i = 0;
+		while (node->argv[i])
+		{
+			new_arg = expand_string(node->argv[i]); //expanse var
+			free(node->argv[i]);
+			node->argv[i] = new_arg; //remplacement
+			i++;
+		}
+	}
+	//récursivité pour allo tous les nodes
+	expanse_ast(node->left);
+	expanse_ast(node->right);
 }
-// Si expansion mis sans commande associe erreur :
-/*HOME = bash: /home/lduflot: Is a directory
-PATH = bash: /home/lduflot/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lduflot/.local/bin:/home/zephyre/.local/bin:/home/zephyre/.venv/bin: No such file or directory
-USER = lduflot: command not found
+
+//Remplace input par les valeurs des var
+char	*expand_string(char *str)
+{
+	char	*result;
+	int		i;
+	int		in_single_quote;
+	int		in_double_quote;
+	char	*new_str;
+	char	*tmp;
+
+	result = ft_strdup(""); //initialisation chaine result
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	
+	while (str[i])
+	{
+		if (toggle_quote(str, &i, &in_single_quote, &in_double_quote, &result))
+			continue ;
+		if (!in_single_quote && str[i] == '$' && ft_isalpha(str[i + 1]))
+		{
+			i = expand_variable(str, i, &result);
+			continue ;
+		}
+		//else //si pas de var d'environnement
+		else
+		{
+			new_str = ft_substr(str, i, 1);
+			tmp = result;
+			result = ft_strjoin(tmp, new_str);
+			free(tmp);
+			free(new_str);
+			i++;
+		}
+	}
+	return (result);
+}
+
+/* Les deux premiers blocs if = TOGGLE QUOTES
+			* Deux flags : double, single
+			* Si on lit un ' et qu'on est pas déjà dans un double alors on ouvre ou ferme un bloc de quote simple.
+			*/
+int	toggle_quote(char *str, int *i, int *in_single_quote, int *in_double_quote, char **result)
+{
+	char	*new_str;
+	char	*tmp;
+
+	if (str[*i] == '\'' && !(*in_double_quote))
+	{
+		*in_single_quote = !(*in_single_quote);
+		new_str = ft_substr(str, *i, 1);
+		tmp = *result;
+		*result = ft_strjoin(tmp, new_str);
+		free(tmp);
+		free(new_str);
+		(*i)++;
+		return (1);
+	}
+	if (str[*i] == '"' && !(*in_single_quote))
+	{
+		*in_double_quote = !(*in_double_quote);
+		new_str = ft_substr(str, *i, 1);
+		tmp = *result;
+		*result = ft_strjoin(tmp, new_str);
+		free(tmp);
+		free(new_str);
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+int	expand_variable(char *str, int i, char **result)
+{
+	int		j;
+	char	*new_str;
+	char	*expanse;
+	char	*tmp;
+
+	j = i + 1;
+	while (str[j] != '\0' && ft_isalpha(str[j])) //on récupére toute la chaine 
+		j++;
+	new_str = ft_substr(str, i + 1, j - (i + 1)); //extrait nom var sans le $
+	expanse = get_env_var(new_str); //récup de la value (si elle existe sinon on renvoie une chaine alloué vide, pour éviter le double free par la suite)
+	free(new_str);
+	tmp = *result;
+	*result = ft_strjoin(tmp, expanse);
+	free(tmp);
+	free(expanse);
+	return (j);
+	//return j, pour mettre à jour y dans expanse string et pas perdre l'index
+}
+
+/*
+Getenv = retourne un pointeur vers la valeur de la variable d'env name 
 */
+char	*get_env_var(char *name)
+{
+	char	*value;
 
-/*char	*getcwd(char *buf, size_t size)
-->recupere chemin absolu du rep courant 
-
-char *getenv(const char *name)
-->recupere la valeur d une var d env
-*/
-
+	value = getenv(name);
+	if (!value)
+		return (ft_strdup(""));
+	return (ft_strdup(value));
+}

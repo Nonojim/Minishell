@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/17 20:13:50 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/23 20:29:22 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,12 @@ int	main(void)
 			ast = NULL;
 		}
 		if (ast != NULL)
+		{
+		//	astreeprint(ast, 0);
+			expanse_ast(ast);
 			astreeprint(ast, 0);
-		//expanse_ast();
-		execute_tree(ast);
+			execute_tree(ast);
+		}
 		free_treenode(ast);
 		free_token(tmp);
 		free(line);
