@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/23 20:30:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:00:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../minishell.h"
 
 typedef struct s_treenode t_treenode;
-
 void	expanse_ast(t_treenode *node);
 char	*expand_string(char *str);
 char	*get_env_var(char *name);

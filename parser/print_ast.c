@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:48:03 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 14:49:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:43:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	astreeprint(t_treenode *node, int depth)
 		i = 0;
 		while (node->argv[i])
 		{
-			printf("\"%s\"", node->argv[i]);
+			printf("%s", node->argv[i]);
 			if (node->argv[i + 1])
 				printf(", ");
 			i++;

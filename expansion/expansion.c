@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/23 20:44:45 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:03:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,27 @@ void	expanse_ast(t_treenode *node)
 			i++;
 		}
 	}
+	if (node->type == HERE_DOCUMENT)
+	{
+		i = 0;
+		if (node->str[i] == '\'' || node->str[i] == '"') // Si delimitateur entouré de quotes on expanse par l'intérieur.
+			return ;
+		else
+		{
+			while (node->argv && node->argv[i])
+			{
+				new_arg = expand_string(node->argv[i]);
+				free(node->argv[i]);
+				node->argv[i] = new_arg;
+				i++;
+			}
+		}
+	}
+	if (node->type == WORD && node->argv && node->argv[0]) // Delete la data orginal et remplace par l'expansion/ounon.
+	{
+		free(node->str);
+		node->str = ft_strdup(node->argv[0]);
+	}
 	//récursivité pour allo tous les nodes
 	expanse_ast(node->left);
 	expanse_ast(node->right);
@@ -45,16 +66,28 @@ char	*expand_string(char *str)
 	int		in_double_quote;
 	char	*new_str;
 	char	*tmp;
+	char	*home;
 
 	result = ft_strdup(""); //initialisation chaine result
 	i = 0;
 	in_single_quote = 0;
 	in_double_quote = 0;
-	
 	while (str[i])
 	{
+	//i = 0;
 		if (toggle_quote(str, &i, &in_single_quote, &in_double_quote, &result))
 			continue ;
+		if (!in_single_quote && !in_double_quote && str[i] == '~') //pas d'expansion si simple/double quote !
+		{
+			home = getenv("HOME");
+			if (home)
+			{
+				new_str = ft_strdup(str + 1);
+				tmp = ft_strjoin(home, new_str);
+				free(new_str);
+				return (tmp);
+			}
+		}
 		if (!in_single_quote && str[i] == '$' && ft_isalpha(str[i + 1]))
 		{
 			i = expand_variable(str, i, &result);
