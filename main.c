@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/23 20:29:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/24 18:51:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,58 @@ Add command exit for quit programm properly during the test ./minishell
 */
 void	command_exit_for_testing(char *line, t_token *token)
 {
-	int	size_line;
+	//int	size_line;
 
-	size_line = ft_strlen(line) + 1;
-	if (line && ft_strncmp(line, "exit", size_line) == 0)
+	//size_line = ft_strlen(line) + 1;
+	if (ft_strcmp(line, "exit") == 0)
 	{
 		free_token(token);
 		free(line);
 		rl_clear_history();
 		exit(0);
 	}
+}
+
+void	*ft_pwd(t_treenode *node)
+{
+//	int	i = 0;
+	char *pwd;
+
+	if (ft_strcmp(node->argv[0], "pwd") != 0)
+	{
+		printf("%s: command not found\n", node->argv[0]);
+		return (NULL);
+	}
+	else
+	{
+	  pwd = getenv("PWD");
+		printf("%s\n", pwd);
+	}
+	return (NULL);
+}
+
+void	*ft_echo(t_treenode *node)
+{
+	int	i = 0;
+
+	if (ft_strcmp(node->argv[0], "echo") != 0)
+	{
+		printf("%s: command not found\n", node->argv[0]);
+		return (NULL);
+	}
+	else
+	{
+		i++;
+		if (node->argv[i] == NULL)
+			printf("\n");
+		while(node->argv[i])
+		{
+			printf("%s\n", node->argv[i]);
+			printf(" ");
+			i++;
+		}
+	}
+	return (NULL);
 }
 
 //int	g_node_count = 0;
@@ -63,7 +105,9 @@ int	main(void)
 		//	astreeprint(ast, 0);
 			expanse_ast(ast);
 			astreeprint(ast, 0);
-			execute_tree(ast);
+			ft_echo(ast);
+			ft_pwd(ast);
+			//execute_tree(ast);
 		}
 		free_treenode(ast);
 		free_token(tmp);
