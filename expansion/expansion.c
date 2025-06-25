@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 22:19:58 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 23:00:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ void	expanse_ast(t_treenode *node)
 
 	if (!node)
 		return ;
+	//propage l'env à tous les noeuds de l'AST 
+	//sinon (echo $USER && echo hello = n'affiche que hello)
+	if (node->left)
+		node->left->env = node->env;
+	if (node->right)
+		node->right->env = node->env;
 	if (node->argv)
 	{
 		i = 0;

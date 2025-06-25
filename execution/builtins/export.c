@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 22:31:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 23:01:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_export(t_treenode *node)
 			char	*key = ft_substr(node->argv[i], 0, key_len);
 			char	*value = ft_strdup(egal + 1);
 			node->env = export_to_env(node->env, key, value);
-			printf("%s=%s\n", key, value);
+			//printf("%s=%s\n", key, value);
 			free(key);
 			free(value);
 		}
