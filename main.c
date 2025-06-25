@@ -6,72 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/24 18:51:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 13:38:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-Add command exit for quit programm properly during the test ./minishell
-*/
-void	command_exit_for_testing(char *line, t_token *token)
-{
-	//int	size_line;
-
-	//size_line = ft_strlen(line) + 1;
-	if (ft_strcmp(line, "exit") == 0)
-	{
-		free_token(token);
-		free(line);
-		rl_clear_history();
-		exit(0);
-	}
-}
-
-void	*ft_pwd(t_treenode *node)
-{
-//	int	i = 0;
-	char *pwd;
-
-	if (ft_strcmp(node->argv[0], "pwd") != 0)
-	{
-		printf("%s: command not found\n", node->argv[0]);
-		return (NULL);
-	}
-	else
-	{
-	  pwd = getenv("PWD");
-		printf("%s\n", pwd);
-	}
-	return (NULL);
-}
-
-void	*ft_echo(t_treenode *node)
-{
-	int	i = 0;
-
-	if (ft_strcmp(node->argv[0], "echo") != 0)
-	{
-		printf("%s: command not found\n", node->argv[0]);
-		return (NULL);
-	}
-	else
-	{
-		i++;
-		if (node->argv[i] == NULL)
-			printf("\n");
-		while(node->argv[i])
-		{
-			printf("%s\n", node->argv[i]);
-			printf(" ");
-			i++;
-		}
-	}
-	return (NULL);
-}
-
-//int	g_node_count = 0;
 //Readline leak ==296785==    still reachable: 214,430 bytes in 259 blocks
 int	main(void)
 {
@@ -79,6 +19,7 @@ int	main(void)
 	t_token		*token;
 	t_token		*tmp;
 	t_treenode	*ast;
+	t_env	*env_list = init_env_list();
 
 	while (1)
 	{
@@ -88,9 +29,8 @@ int	main(void)
 			break ;
 		token = tokenize(token, &line);
 		tmp = token;
-		command_exit_for_testing(line, token);
 		add_history(line);
-		print_token_list(token);
+		//print_token_list(token);
 		parse_error(0); //remise à zéro de la static int error;
 		ast = parse_line_node(&token);
 		//si des tokens subsistent l'ast sera delete
@@ -102,17 +42,16 @@ int	main(void)
 		}
 		if (ast != NULL)
 		{
-		//	astreeprint(ast, 0);
+			ast->env = env_list;
 			expanse_ast(ast);
-			astreeprint(ast, 0);
-			ft_echo(ast);
-			ft_pwd(ast);
-			//execute_tree(ast);
+			//astreeprint(ast, 0);
+			execute_tree(ast);
 		}
 		free_treenode(ast);
 		free_token(tmp);
 		free(line);
 	}
+	free_env_list(env_list);
 	rl_clear_history();
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/20 23:24:43 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:15:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "includes/tokenizer.h"
 # include "parser/ast.h"
 # include "expansion/expansion.h"
+# include "execution/builtins/builtins.h"
 # include "execution/execution.h"
 
 #endif

@@ -33,7 +33,19 @@ FILES = tokenizer/tokenizer.c \
 				parser/word.c \
 				parser/print_ast.c \
 				expansion/expansion.c \
-				execution/resolver.c \
+				execution/execution.c \
+				execution/execute_heredoc.c \
+				execution/execute_pipe.c \
+				execution/execute_subshell.c \
+				execution/execute_redirection.c \
+				execution/execute_simple_command.c \
+				execution/env.c \
+				execution/builtins/cd.c \
+				execution/builtins/echo.c \
+				execution/builtins/env.c \
+				execution/builtins/exit.c \
+				execution/builtins/export.c \
+				execution/builtins/pwd.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)

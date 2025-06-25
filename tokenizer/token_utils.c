@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/23 20:18:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 11:53:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	print_token_list(t_token *token_list)
 		printf("] -> ");
 		token_list = token_list->next;
 	}
-	printf("NULL\n");
 }
 
 void	free_token(t_token *token_list)

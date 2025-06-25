@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   execute_subshell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 19:04:30 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 12:21:23 by lduflot          ###   ########.fr       */
+/*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
+/*   Updated: 2025/06/25 10:58:56 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "execution.h"
 
-int	ft_pwd(t_treenode *node)
+int execute_subshell_node(t_treenode *node)
 {
-	char	*pwd;
-	(void)node;
-	/*if (ft_strcmp(node->argv[0], "pwd") != 0)
-	{
-		printf("%s: command not found\n", node->argv[0]);
-		return (NULL);
-	}
-	else
-	{*/
-		pwd = getenv("PWD");
-		printf("%s\n", pwd);
-	//}
-	return (0);
+	pid_t pid = fork();
+	int status;
+
+	if (pid == 0)
+		exit(execute_node(node->left)); // on exécute le sous-arbre
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }
