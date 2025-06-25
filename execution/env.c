@@ -6,14 +6,13 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 12:45:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 22:20:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern char **environ;
-
 
 // Trouve un node existant avec cette clé
 t_env *find_node(t_env *env, const char *key)

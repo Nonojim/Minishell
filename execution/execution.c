@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 10:55:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 17:26:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ int	execute_node(t_treenode *node)
 {
 	if (!node)
 		return (1);
-	if (node->type == WORD)
+	//printf("type node: %d, str: %s\n", node->type, node->str);
+	if (node->type == WORD) //OK
 		return(execute_simple_command(node));
-	else if (node->type == PIPE)
+	else if (node->type == PIPE) // OK
 		return (execute_pipeline(node));
 	else if (node->type == LOGICAL_AND)
 	{
@@ -26,13 +27,13 @@ int	execute_node(t_treenode *node)
 			return (execute_node(node->right));
 		return (1);
 	}
-	else if (node->type == LOGICAL_OR)
+	else if (node->type == LOGICAL_OR) //OK
 	{
 		if  (execute_node(node->left) == 0)
 			return (0);
 		return (execute_node(node->right));
 	}
-	else if (node->type == SEMICOLON)
+	else if (node->type == SEMICOLON) //OK
 	{
 		execute_node(node->left);
 		return (execute_node(node->right));

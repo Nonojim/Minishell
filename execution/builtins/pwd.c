@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:04:30 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 12:21:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 22:20:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_pwd(t_treenode *node)
 	}
 	else
 	{*/
-		pwd = getenv("PWD");
+		pwd = ft_getenv("PWD", node);
 		printf("%s\n", pwd);
 	//}
 	return (0);

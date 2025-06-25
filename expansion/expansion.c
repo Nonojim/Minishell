@@ -6,12 +6,25 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/24 17:03:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 22:19:58 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
+
+/*
+Refactor fonction getenv, car getenv ne check que dans levrai shell pas dans l'env de mon minishell qui manipule une copie interne !
+Quand je faisais export et echo par la suite renvoyé $var global et pas celle de mon t_env.
+
+*/
+char	*ft_getenv(char *name, t_treenode *node)
+{
+	t_env	*node_env = find_node(node->env, name); //on cherche si la variable d'env existe dans t_env
+	if (!node_env)
+		return (ft_strdup("")); //return(NULL); ->segfault
+	return (ft_strdup(node_env->value));
+}
 // on parcours l'ast récursivement, et on expanse avec expand_string
 void	expanse_ast(t_treenode *node)
 {
@@ -25,7 +38,7 @@ void	expanse_ast(t_treenode *node)
 		i = 0;
 		while (node->argv[i])
 		{
-			new_arg = expand_string(node->argv[i]); //expanse var
+			new_arg = expand_string(node->argv[i], node); //expanse var
 			free(node->argv[i]);
 			node->argv[i] = new_arg; //remplacement
 			i++;
@@ -40,7 +53,7 @@ void	expanse_ast(t_treenode *node)
 		{
 			while (node->argv && node->argv[i])
 			{
-				new_arg = expand_string(node->argv[i]);
+				new_arg = expand_string(node->argv[i], node);
 				free(node->argv[i]);
 				node->argv[i] = new_arg;
 				i++;
@@ -58,7 +71,7 @@ void	expanse_ast(t_treenode *node)
 }
 
 //Remplace input par les valeurs des var
-char	*expand_string(char *str)
+char	*expand_string(char *str, t_treenode *node)
 {
 	char	*result;
 	int		i;
@@ -79,7 +92,7 @@ char	*expand_string(char *str)
 			continue ;
 		if (!in_single_quote && !in_double_quote && str[i] == '~') //pas d'expansion si simple/double quote !
 		{
-			home = getenv("HOME");
+			home = ft_getenv("HOME", node);
 			if (home)
 			{
 				new_str = ft_strdup(str + 1);
@@ -90,7 +103,7 @@ char	*expand_string(char *str)
 		}
 		if (!in_single_quote && str[i] == '$' && ft_isalpha(str[i + 1]))
 		{
-			i = expand_variable(str, i, &result);
+			i = expand_variable(str, i, &result, node);
 			continue ;
 		}
 		//else //si pas de var d'environnement
@@ -141,7 +154,7 @@ int	toggle_quote(char *str, int *i, int *in_single_quote, int *in_double_quote, 
 	return (0);
 }
 
-int	expand_variable(char *str, int i, char **result)
+int	expand_variable(char *str, int i, char **result, t_treenode *node)
 {
 	int		j;
 	char	*new_str;
@@ -152,7 +165,7 @@ int	expand_variable(char *str, int i, char **result)
 	while (str[j] != '\0' && ft_isalpha(str[j])) //on récupére toute la chaine 
 		j++;
 	new_str = ft_substr(str, i + 1, j - (i + 1)); //extrait nom var sans le $
-	expanse = get_env_var(new_str); //récup de la value (si elle existe sinon on renvoie une chaine alloué vide, pour éviter le double free par la suite)
+	expanse = ft_getenv(new_str, node); //récup de la value (si elle existe sinon on renvoie une chaine alloué vide, pour éviter le double free par la suite)
 	free(new_str);
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);
@@ -160,17 +173,4 @@ int	expand_variable(char *str, int i, char **result)
 	free(expanse);
 	return (j);
 	//return j, pour mettre à jour y dans expanse string et pas perdre l'index
-}
-
-/*
-Getenv = retourne un pointeur vers la valeur de la variable d'env name 
-*/
-char	*get_env_var(char *name)
-{
-	char	*value;
-
-	value = getenv(name);
-	if (!value)
-		return (ft_strdup(""));
-	return (ft_strdup(value));
 }
