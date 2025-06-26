@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/25 23:01:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 09:36:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ int	main(void)
 	t_token		*token;
 	t_token		*tmp;
 	t_treenode	*ast;
-	t_env	*env_list = init_env_list();
+	t_env	*env_list;
 
+	env_list = init_env_list();
 	while (1)
 	{
 		token = NULL;
@@ -46,6 +47,7 @@ int	main(void)
 			expanse_ast(ast);
 		//	astreeprint(ast, 0);
 			execute_tree(ast);
+			env_list = ast->env;
 		}
 		free_treenode(ast);
 		free_token(tmp);

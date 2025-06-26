@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 08:02:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 08:51:48 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ int	ft_echo(t_treenode *node);
 int	ft_echo_n(char *argv);
 
 // env
-//
 int	ft_env(t_env *env_list);
+//unset
 
+int	ft_unset(t_treenode *node);
 // exit
 void	ft_exit(char *line, t_token *token, t_treenode *ast);
 // export

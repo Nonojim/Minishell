@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:24:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 08:43:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_echo(t_treenode *node)
 	return (0);
 }
 
-//If there are "-nnnnnnnnnnnnnnnnnnnnnnnnnnn"
+//If there are "-nnnnnnnnnnnnnnnnnnnnnnnnnnn or -n -n -n"
 int	ft_echo_n(char	*argv)
 {
 	int	i;

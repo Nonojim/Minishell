@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:46:55 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 08:53:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	execute_simple_command(t_treenode *node)
 		return (ft_pwd(node));
 	else if (ft_strcmp(cmd, "export") == 0)
 		return (ft_export(node));
-	//else if (ft_strcmp(cmd, "unset") == 0)
-		//return (ft_unset(node->argv));
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return (ft_unset(node));
 	else if (ft_strcmp(cmd, "env") == 0)
 		return (ft_env(node->env));
 	//else if (ft_strcmp(cmd, "exit") == 0)
