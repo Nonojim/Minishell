@@ -6,11 +6,11 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/20 19:56:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:58:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 char	*open_heredoc(int *i, int start, char *line, t_token **token);
 char	*newline_heredoc(char *token_doc, int j);

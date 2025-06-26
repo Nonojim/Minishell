@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 19:47:32 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/25 12:39:39 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@
 <word>          ::= [WORD token]
 							| NULL*/
 
+typedef struct s_env t_env;
+
 typedef struct s_treenode
 {
 	int					type;
@@ -58,6 +60,7 @@ typedef struct s_treenode
 	char				*str;
 	struct s_treenode	*right;
 	struct s_treenode	*left;
+	t_env	*env;
 }	t_treenode;
 
 enum e_DIRECTION

@@ -6,11 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 14:44:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:58:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 /*
  * Utils for token_logical_incomplete

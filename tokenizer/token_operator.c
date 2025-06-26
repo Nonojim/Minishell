@@ -6,11 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:41:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 20:36:45 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/26 07:58:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 /*
 * Check if the character is considered like logical operator

@@ -6,11 +6,11 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 14:39:55 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:59:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 /*
 * Check if the character is valid a part of a token word

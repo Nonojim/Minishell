@@ -6,11 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/05/30 13:39:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:59:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 t_token	*create_token(int type, char *str)
 {
@@ -63,7 +63,6 @@ void	print_token_list(t_token *token_list)
 		printf("] -> ");
 		token_list = token_list->next;
 	}
-	printf("NULL\n");
 }
 
 void	free_token(t_token *token_list)

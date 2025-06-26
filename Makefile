@@ -33,7 +33,21 @@ FILES = tokenizer/tokenizer.c \
 				parser/word.c \
 				parser/print_ast.c \
 				expansion/expansion.c \
-				execution/resolver.c \
+				execution/execution.c \
+				execution/execute_heredoc.c \
+				execution/execute_pipe.c \
+				execution/execute_subshell.c \
+				execution/execute_redirection.c \
+				execution/execute_simple_command.c \
+				signal/signal.c \
+				execution/env.c \
+				execution/builtins/cd.c \
+				execution/builtins/echo.c \
+				execution/builtins/env.c \
+				execution/builtins/exit.c \
+				execution/builtins/export.c \
+				execution/builtins/pwd.c \
+				execution/builtins/unset.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
@@ -44,20 +58,28 @@ OBJS = $(FILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "Compilation of $(NAME)"
+
+	@echo "\033[1;32m"
+	@echo " 🐚 Welcome to																	"
+	@echo "▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▖ ▗▖▗▄▄▄▖▗▖   ▗▖   "
+	@echo "▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █  ▐▌   ▐▌ ▐▌▐▌   ▐▌   ▐▌   "
+	@echo "▐▌  ▐▌  █  ▐▌ ▝▜▌  █   ▝▀▚▖▐▛▀▜▌▐▛▀▀▘▐▌   ▐▌   "
+	@echo "▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖▗▄▄▞▘▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▄▖"
+	@echo "                                               "
+	@echo " Run with : ./minishell 🪼🐙										"
+	@echo "                                               "
 	@make -C libft/
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
-
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@echo "Cleaning .o"
+	@echo "\033[1;32m" "Cleaning .o"
 	@rm -f $(OBJS)
 	@make -C libft/ clean
 
 fclean: clean
-	@echo "Cleaning program"
+	@echo "\033[1;32m" "Cleaning program"
 	@rm -f $(NAME)
 	@make -C libft/ fclean
 
