@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 21:20:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:15:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct s_env t_env;
 // cd
 // echo
 int	ft_echo(t_treenode *node);
-int	ft_echo_n(t_treenode *node);
+int	ft_echo_n(char *argv);
 
 // env
 //

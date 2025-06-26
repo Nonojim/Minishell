@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 23:01:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:42:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ void	print_export(t_env *env);
 
 int	ft_export(t_treenode *node)
 {
-	int	i;
+	int		i;
+	int		j;
+	int		value_len;
+	char	*key;
+	char	*value;
+	
 
 	i = 0;
 	//si prompt = export
@@ -27,13 +32,14 @@ int	ft_export(t_treenode *node)
 	}
 	while(node->argv[i])
 	{
-		char	*egal = ft_strchr(node->argv[i], '=');
-		if (egal)
+		j = 0;
+		while (node->argv[i][j] && node->argv[i][j] != '=')
+			j++;
+		if (node->argv[i][j] == '=')
 		{
-			//egal = '\0';
-			int	key_len = egal - node->argv[i];
-			char	*key = ft_substr(node->argv[i], 0, key_len);
-			char	*value = ft_strdup(egal + 1);
+			key = ft_substr(node->argv[i], 0, j);
+			value_len = ft_strlen(node->argv[i]) - j - 1;
+			value = ft_substr(node->argv[i], j + 1, value_len);
 			node->env = export_to_env(node->env, key, value);
 			//printf("%s=%s\n", key, value);
 			free(key);

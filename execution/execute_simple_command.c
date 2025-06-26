@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 21:20:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:46:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ int	execute_simple_command(t_treenode *node)
 		//return (ft_unset(node->argv));
 	else if (ft_strcmp(cmd, "env") == 0)
 		return (ft_env(node->env));
-//	else if (ft_strcmp(cmd, "exit") == 0)
-	//	ft_exit();
-	//	else if (ft_strcmp(cmd, "test") == 0)
-	//	return (ft_test(node->argv));
+	//else if (ft_strcmp(cmd, "exit") == 0)
+//		ft_exit();
 	pid = fork(); // crée processus enfant 
 	if (pid == 0) //enfant
 	{

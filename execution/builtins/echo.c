@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 23:12:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:24:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@ int	ft_echo(t_treenode *node)
 	int	n;
 
 	i = 0;
-	//if (ft_strcmp(node->argv[0], "echo") != 0)
-		//printf("%s: command not found\n", node->argv[0]);
+	n = 0;
 	if (node->argv[i + 1] == NULL)
 	{
 		printf("\n");
 		return (0);
 	}
-	n = ft_echo_n(node);
-	if (n == 1)
-		i += 2;
-	else
-		i = 1;
+	i++;
+	while (node->argv[i] && ft_echo_n(node->argv[i]) == 1)
+	{
+		n = 1;
+		i++;
+	}
 	while (node->argv[i])
 	{
 		printf("%s", node->argv[i]);
@@ -42,22 +42,18 @@ int	ft_echo(t_treenode *node)
 }
 
 //If there are "-nnnnnnnnnnnnnnnnnnnnnnnnnnn"
-int	ft_echo_n(t_treenode *node)
+int	ft_echo_n(char	*argv)
 {
 	int	i;
-	int	j;
 
 	i = 1;
-	j = 0;
-	if (node->argv[i][j] != '-')
+	if (argv[0] != '-' || argv[1] != 'n')
 		return (0);
-	j++;
-	while (node->argv[i][j])
+	while (argv[i])
 	{
-		if (node->argv[i][j] != 'n')
-			return (0);
-		j++;
+			if (argv[i] != 'n')
+				return (0);
+		i++;
 	}
-	i++;
 	return (1);
 }
