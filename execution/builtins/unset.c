@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 23:06:58 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 09:16:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 09:38:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	ft_unset(t_treenode *node)
 
 	while(node->argv[i])
 	{
-		if (node->env && ft_strcmp(tmp->key, node->argv[i]) == 0)
+		tmp = node->env;
+		if (tmp && ft_strcmp(tmp->key, node->argv[i]) == 0)
 		{
-			tmp = node->env;
 			node->env = node->env->next;
 			free(tmp->key);
 			free(tmp->value);

@@ -6,13 +6,21 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 22:20:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:59:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern char **environ;
+
+t_env	*add_code_error(t_env	*env, int code_error)
+{
+	char	*value = ft_itoa(code_error);
+	env = export_to_env(env, "?", value);
+	free(value);
+	return (env);
+}
 
 // Trouve un node existant avec cette clé
 t_env *find_node(t_env *env, const char *key)

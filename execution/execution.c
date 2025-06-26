@@ -6,11 +6,25 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:47:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:59:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+/*
+	* Code erreur pour la var $? 
+	* (Convention Posix & Bash)
+	* Valeur comprise entre 0 et 255.
+	* 0 = Succés 
+	* 1 = Erreur général
+	* 2 = Mauvais usage commande, erreur syntaxe
+	* 126 = Command trouvé mais non exe
+	* 127 = Command not found
+	* 128 = Mauvais usage de exit (ex: exit -1, exit avec trop d'arguments)
+	* 130 = Arret avec Ctrl+C
+	* 131 = Arret avec Ctrl+\
+	*/
 
 int	execute_node(t_treenode *node)
 {
@@ -53,5 +67,8 @@ int	execute_node(t_treenode *node)
 
 void	execute_tree(t_treenode *tree)
 {
-	execute_node(tree);
+	int	code_error;
+
+	code_error = execute_node(tree);
+	tree->env = add_code_error(tree->env, code_error);
 }

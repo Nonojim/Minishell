@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/25 11:19:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 12:04:01 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int execute_redirection_chain(t_treenode *node)
 {
+	//save les descripteurs standard entrée/sortie pour les restaurer aprés
 	int saved_stdin = dup(STDIN_FILENO);
 	int saved_stdout = dup(STDOUT_FILENO);
 	int status;
@@ -21,26 +22,32 @@ int execute_redirection_chain(t_treenode *node)
 	if (!node)
 		return (1);
 
+	// <
 	if (node->type == INPUT_REDIRECTION)
 	{
+		//ouverture fichier, lecture
 		int fd = open(node->right->str, O_RDONLY);
 		if (fd < 0)
-			return (perror("open <"), 1);
-		dup2(fd, STDIN_FILENO);
+			return (perror("open <"), 1); //erreur open
+		dup2(fd, STDIN_FILENO); //redirige entrée standard vers le file
 		close(fd);
-		status = execute_redirection_chain(node->left);
+		status = execute_redirection_chain(node->left); //exe recursive de la chaine restantes
 	}
+	// >
 	else if (node->type == OUTPUT_REDIRECTION)
 	{
+		//O_TRUNC = écrase, O_CREAT = crée si non existant 0644 = done les droits lecture et écriture au file lors de sa création
 		int fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 			return (perror("open >"), 1);
-		dup2(fd, STDOUT_FILENO);
+		dup2(fd, STDOUT_FILENO); //sortie redirigée vers fin du file
 		close(fd);
 		status = execute_redirection_chain(node->left);
 	}
+	// >>
 	else if (node->type == APPEND_OUTPUT_REDIRECTION)
 	{
+		//O_APPEND = txt sera automatiquement add à la fin
 		int fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
 			return (perror("open >>"), 1);
@@ -56,6 +63,7 @@ int execute_redirection_chain(t_treenode *node)
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
+	node->env = add_code_error(node->env, status);
 	return (status);
 }
 

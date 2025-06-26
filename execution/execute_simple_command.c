@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 08:53:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:57:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,44 @@ int	execute_simple_command(t_treenode *node)
 	char	*cmd;
 	int		status;
 	char	*cmd_path;
+	int	code_error;
 
 	if (!node || !node->str || !node->argv)
+	{
+		node->env = add_code_error(node->env, 1);
 		return (1);
+	}
 	cmd = node->argv[0];
 	if (ft_strcmp(cmd, "echo") == 0)
-		return (ft_echo(node));
-	//else if (ft_strcmp(cmd, "cd") == 0)
-		//return (ft_cd(node->argv));
+	{
+		code_error = ft_echo(node);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
 	else if (ft_strcmp(cmd, "pwd") == 0)
-		return (ft_pwd(node));
+	{
+		code_error = ft_pwd(node);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
 	else if (ft_strcmp(cmd, "export") == 0)
-		return (ft_export(node));
+	{
+		code_error = ft_export(node);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
 	else if (ft_strcmp(cmd, "unset") == 0)
-		return (ft_unset(node));
+	{
+		code_error = ft_unset(node);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
 	else if (ft_strcmp(cmd, "env") == 0)
-		return (ft_env(node->env));
+	{
+		code_error = ft_env(node->env);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
 	//else if (ft_strcmp(cmd, "exit") == 0)
 //		ft_exit();
 	pid = fork(); // crée processus enfant 
@@ -52,24 +74,28 @@ int	execute_simple_command(t_treenode *node)
 		if (!cmd_path) //pas de cmd trouvé 
 		{
 			printf("%s: command not found\n", node->argv[0]);
-			exit(1); //on quitte l'enfant
+			exit(127); //on quitte l'enfant//code erreur command not found
 		}
 		// Enfant : on exécute la commande
 	//	printf("path: %s\n", cmd_path);
 		execve(cmd_path, node->argv, environ); //commande est trouvé donc on l'exe
 		free(cmd_path);
-		exit(1); //si exe echou on quitte le processus enfant 
+		exit(126); //cmd trouve mais non executable code 126 //si exe echou on quitte le processus enfant 
 	}
 	else if (pid > 0) //le daron
 	{
 		waitpid(pid, &status, 0); //on attend la fin du processus enfant
 		if (WIFEXITED(status)) //si l'enfant c'est normalement terminé 
-			return (WEXITSTATUS(status)); //on retourne son code de retour
-		return (1); //sinon erreur 
+			code_error = (WEXITSTATUS(status)); //on retourne son code de retour
+		else
+			code_error = 1;
+		node->env = add_code_error(node->env, code_error);
+		return (code_error); //sinon erreur 
 	}
 	else
 	{
 		perror("fork"); //affiche strerror(errno) = message d'erreur
+		node->env = add_code_error(node->env, 1);
 		return (1);
 	}
 	return (0);

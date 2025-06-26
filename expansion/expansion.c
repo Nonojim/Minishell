@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 09:15:58 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:41:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	*expand_string(char *str, t_treenode *node)
 				return (tmp);
 			}
 		}
-		if (!in_single_quote && str[i] == '$' && ft_isalpha(str[i + 1]))
+	if (!in_single_quote && str[i] == '$' && (ft_isalpha(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
 		{
 			i = expand_variable(str, i, &result, node);
 			continue ;
@@ -167,8 +167,19 @@ int	expand_variable(char *str, int i, char **result, t_treenode *node)
 	char	*expanse;
 	char	*tmp;
 
+	if (str[i + 1] == '?')
+	{
+		expanse = ft_getenv("?", node);
+		if (!expanse)
+			expanse = ft_strdup("0");
+		tmp = *result;
+		*result = ft_strjoin(tmp, expanse);
+		free(tmp);
+		free(expanse);
+		return (i + 2); // saute $ et ? 
+	}
 	j = i + 1;
-	while (str[j] != '\0' && ft_isalpha(str[j])) //on récupére toute la chaine 
+	while (str[j] != '\0' && (ft_isalpha(str[j]) || str[j] == '_')) //on récupére toute la chaine 
 		j++;
 	new_str = ft_substr(str, i + 1, j - (i + 1)); //extrait nom var sans le $
 	expanse = ft_getenv(new_str, node); //récup de la value (si elle existe sinon on renvoie une chaine alloué vide, pour éviter le double free par la suite)

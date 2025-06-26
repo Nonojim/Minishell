@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/26 09:36:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:44:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(void)
 	t_env	*env_list;
 
 	env_list = init_env_list();
+	env_list = add_code_error(env_list, 0);
 	while (1)
 	{
 		token = NULL;
