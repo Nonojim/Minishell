@@ -39,6 +39,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/execute_subshell.c \
 				execution/execute_redirection.c \
 				execution/execute_simple_command.c \
+				signal/signal.c \
 				execution/env.c \
 				execution/builtins/cd.c \
 				execution/builtins/echo.c \

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/25 11:04:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 08:02:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ typedef struct s_env
 }	t_env;
 
 
-typedef struct s_treenode t_treenode;
  
 int		execute_redirection_chain(t_treenode *node);
 int		execute_heredoc_node(t_treenode *node);

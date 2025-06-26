@@ -6,11 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/20 01:35:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 07:59:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
 t_token	*tokenize(t_token *token, char **line_ptr)
 {

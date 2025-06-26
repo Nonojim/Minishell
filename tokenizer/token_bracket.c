@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:30:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/18 21:40:56 by npederen         ###   ########.fr       */
+/*   Updated: 2025/06/26 08:05:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "tokenizer.h"
 
-void	bracket_unclosed(char **line, char **history_line, char*next_line)
+void	bracket_unclosed(char **line, char **history_line, char *next_line)
 {
 	char	*tmp;
 

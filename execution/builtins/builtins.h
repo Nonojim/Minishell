@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:15:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 08:02:31 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../../minishell.h"
 
-typedef struct s_env t_env;
 // cd
 // echo
 int	ft_echo(t_treenode *node);
