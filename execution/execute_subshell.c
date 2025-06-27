@@ -6,13 +6,13 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 13:04:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:01:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int execute_subshell_node(t_treenode *node)
+int execute_subshell_node(t_treenode *node, t_token *token, char *line)
 {
 	pid_t pid = fork(); //on crée un nouveau process (enfant)
 	int status; //stock code retour du process file
@@ -24,7 +24,7 @@ int execute_subshell_node(t_treenode *node)
 		code_error = 1;
 	}
 	else if (pid == 0)
-		exit(execute_node(node->left)); // on exécute le sous-arbre récursivement
+		exit(execute_node(node->left, token, line)); // on exécute le sous-arbre récursivement
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		code_error = WEXITSTATUS(status);

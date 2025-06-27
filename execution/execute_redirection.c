@@ -6,19 +6,18 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 12:04:01 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:14:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int execute_redirection_chain(t_treenode *node)
+int execute_redirection_chain(t_treenode *node, t_token *token, char *line)
 {
 	//save les descripteurs standard entrée/sortie pour les restaurer aprés
 	int saved_stdin = dup(STDIN_FILENO);
 	int saved_stdout = dup(STDOUT_FILENO);
 	int status;
-
 	if (!node)
 		return (1);
 
@@ -31,7 +30,7 @@ int execute_redirection_chain(t_treenode *node)
 			return (perror("open <"), 1); //erreur open
 		dup2(fd, STDIN_FILENO); //redirige entrée standard vers le file
 		close(fd);
-		status = execute_redirection_chain(node->left); //exe recursive de la chaine restantes
+		status = execute_redirection_chain(node->left, token, line); //exe recursive de la chaine restantes
 	}
 	// >
 	else if (node->type == OUTPUT_REDIRECTION)
@@ -42,7 +41,7 @@ int execute_redirection_chain(t_treenode *node)
 			return (perror("open >"), 1);
 		dup2(fd, STDOUT_FILENO); //sortie redirigée vers fin du file
 		close(fd);
-		status = execute_redirection_chain(node->left);
+		status = execute_redirection_chain(node->left, token, line);
 	}
 	// >>
 	else if (node->type == APPEND_OUTPUT_REDIRECTION)
@@ -53,10 +52,10 @@ int execute_redirection_chain(t_treenode *node)
 			return (perror("open >>"), 1);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		status = execute_redirection_chain(node->left);
+		status = execute_redirection_chain(node->left, token, line);
 	}
 	else
-		status = execute_node(node);
+		status = execute_node(node, token, line);
 		// Point d'arrêt : on exécute la commande
 	// Restaurer les entrées/sorties
 	dup2(saved_stdin, STDIN_FILENO);

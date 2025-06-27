@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/25 12:39:39 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:12:37 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,14 +133,6 @@ t_treenode	*parse_redirection2(t_token **tokens);
 // WORD
 t_treenode	*parse_word_node(t_token **tokens);
 t_treenode	*parse_word1(t_token **tokens);
-//EXE
 
-//int		execute_redirection_chain(t_treenode *node);
-//int		execute_heredoc_node(t_treenode *node);
-//int		execute_pipeline(t_treenode *node);
-//int		execute_subshell_node(t_treenode *node);
-//int		execute_simple_command(t_treenode *node);
-//int		execute_node(t_treenode *node);
-//void	execute_tree(t_treenode *tree);
 
 #endif

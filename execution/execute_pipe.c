@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 12:27:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:01:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@
 	*/
 
 
-int execute_pipeline(t_treenode *node)
+int execute_pipeline(t_treenode *node, t_token *token, char *line)
 {
 	int pipefd[2]; //stock les deux extrémités du pipe [0] = read [1] = write 
 	pid_t pid1, pid2; //PID process enfant
 	int status1, status2; //code de retour des 2 process 
-
 	//on crée le pipe
 	if (pipe(pipefd) == -1) //pipe non cré
 		return (perror("pipe"), 1); 
@@ -45,7 +44,7 @@ int execute_pipeline(t_treenode *node)
 		dup2(pipefd[1], STDOUT_FILENO); //redirige STDOUT vers entrée du pipe
 		close(pipefd[0]); //fermeture de l'extrémité non utilisé 
 		close(pipefd[1]); //ferme descripteur aprés redirection 
-		exit(execute_node(node->left));
+		exit(execute_node(node->left, token, line));
 	}
 
 	//deuxieme fork pour commande de droite
@@ -58,7 +57,7 @@ int execute_pipeline(t_treenode *node)
 		dup2(pipefd[0], STDIN_FILENO); //redirige stdin vers la  sortie du pipe
 		close(pipefd[0]);
 		close(pipefd[1]);
-		exit(execute_node(node->right)); 
+		exit(execute_node(node->right, token, line)); 
 	}
 
 	// Parent ferme les deux extrémité du pipe (plus besoin maintenant)

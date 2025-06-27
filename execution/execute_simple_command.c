@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 11:57:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:30:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,16 @@
 extern char	**environ;
 //Accede à une variable globale déclarée ailleur dans une lib, celle-ci contiens toutes les variables d'env. Même chose que faire : int maint(int argc, char **argv, char **envp).
 
-char	*find_cmd_path(char *cmd, t_env *env_list);
-void	free_split(char	**split);
-int		execute_simple_command(t_treenode *node);
 
-int	execute_simple_command(t_treenode *node)
+int	execute_simple_command(t_treenode *node, t_token *token, char *line)
 {
 	pid_t	pid;
 	char	*cmd;
 	int		status;
 	char	*cmd_path;
 	int	code_error;
+	(void)token;
+	(void)line;
 
 	if (!node || !node->str || !node->argv)
 	{
@@ -42,6 +41,12 @@ int	execute_simple_command(t_treenode *node)
 	else if (ft_strcmp(cmd, "pwd") == 0)
 	{
 		code_error = ft_pwd(node);
+		node->env = add_code_error(node->env, code_error);
+		return (code_error);
+	}
+	else if (ft_strcmp(cmd, "cd") == 0)
+	{
+		code_error = ft_cd(node);
 		node->env = add_code_error(node->env, code_error);
 		return (code_error);
 	}
@@ -63,8 +68,12 @@ int	execute_simple_command(t_treenode *node)
 		node->env = add_code_error(node->env, code_error);
 		return (code_error);
 	}
-	//else if (ft_strcmp(cmd, "exit") == 0)
-//		ft_exit();
+	else if (ft_strcmp(cmd, "exit") == 0)
+	{
+		code_error = ft_exit(line, token, node);
+		node->env = add_code_error(node->env, code_error);
+		return(code_error);
+	}
 	pid = fork(); // crée processus enfant 
 	if (pid == 0) //enfant
 	{

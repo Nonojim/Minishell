@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/26 11:44:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:04:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(void)
 			ast->env = env_list;
 			expanse_ast(ast);
 		//	astreeprint(ast, 0);
-			execute_tree(ast);
+			execute_tree(ast, token, line);
 			env_list = ast->env;
 		}
 		free_treenode(ast);
