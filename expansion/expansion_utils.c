@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 14:10:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 20:27:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,33 @@ int	toggle_quote(char *str, int *i, t_quote_state *q, char **result)
 		return (1);
 	}
 	return (0);
+}
+
+char	*remove_quotes_after_expansion(const char *str)
+{
+	char	*new;
+	int		i;
+	int		j;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	quote = 0;
+	if (!str)
+		return (NULL);
+	new = malloc(ft_strlen(str) + 1);
+	if (!new)
+		return (NULL);
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"') && quote == 0)
+			quote = str[i];
+		else if (str[i] == quote)
+			quote = 0;
+		else
+			new[j++] = str[i];
+		i++;
+	}
+	new[j] = '\0';
+	return (new);
 }

@@ -6,22 +6,16 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 14:22:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 21:49:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-char	*expand_tilde(char *str, t_treenode *node);
-void	add_char_to_string(char **result, char c);
 
-/*
-On parcours l'ast récursivement et on expanse les arg
-*/
 void	expanse_ast(t_treenode *node)
 {
 	int		i;
-	char	*new_arg;
 
 	if (!node)
 		return ;
@@ -34,9 +28,11 @@ void	expanse_ast(t_treenode *node)
 		i = 0;
 		while (node->argv[i])
 		{
-			new_arg = expand_string(node->argv[i], node);
+			char	*expanded = expand_string(node->argv[i], node);
+			char	*clean = remove_quotes_after_expansion(expanded);
+			free(expanded);
 			free(node->argv[i]);
-			node->argv[i] = new_arg;
+			node->argv[i] = clean;
 			i++;
 		}
 	}
@@ -49,9 +45,11 @@ void	expanse_ast(t_treenode *node)
 		{
 			while (node->argv && node->argv[i])
 			{
-				new_arg = expand_string(node->argv[i], node);
+				char *expanded = expand_string(node->argv[i], node);
+				char *clean = remove_quotes_after_expansion(expanded);
+				free(expanded);
 				free(node->argv[i]);
-				node->argv[i] = new_arg;
+				node->argv[i] = clean;
 				i++;
 			}
 		}
@@ -89,7 +87,10 @@ char	*expand_string(char *str, t_treenode *node)
 		{
 			tmp = expand_tilde(str, node);
 			if (tmp)
+			{
+				free(result);
 				return (tmp);
+			}
 		}
 		if (!q.in_single_quote && str[i] == '$'
 			&& (ft_isalpha(str[i + 1])
@@ -107,14 +108,21 @@ char	*expand_string(char *str, t_treenode *node)
 void	add_char_to_string(char **result, char c)
 {
 	char	*tmp;
-	char	*to_add;
+	size_t	len;
 
-	to_add = ft_substr(&c, 0, 1);
-	tmp = *result;
-	*result = ft_strjoin(tmp, to_add);
-	free(tmp);
-	free(to_add);
+	if (!result)
+		return ;
+	len = ft_strlen(*result);
+	tmp = malloc(len + 2); // +1 pour le char, +1 pour le \0
+	if (!tmp)
+		return ;
+	ft_memcpy(tmp, *result, len);
+	tmp[len] = c;
+	tmp[len + 1] = '\0';
+	free(*result);
+	*result = tmp;
 }
+
 
 char	*expand_tilde(char *str, t_treenode *node)
 {

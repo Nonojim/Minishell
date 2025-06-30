@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/30 13:52:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 20:18:01 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(void)
 	env_list = add_code_error(env_list, 0);
 	while (1)
 	{
+		setup_signals();
 		token = NULL;
 		line = readline("Minishell$ ");
 		if (line == NULL)

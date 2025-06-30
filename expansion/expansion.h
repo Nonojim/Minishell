@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 14:08:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 20:27:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ typedef struct s_quote_state
 	int	in_double_quote;
 }	t_quote_state;
 
+char	*expand_tilde(char *str, t_treenode *node);
+void	add_char_to_string(char **result, char c);
+char	*remove_quotes_after_expansion(const char *str);
 int		toggle_quote(char *str, int *i, t_quote_state *q, char **result);
 char	*expand_string(char *str, t_treenode *node);
 int		expand_variable(char *str, int i, char **result, t_treenode *node);
