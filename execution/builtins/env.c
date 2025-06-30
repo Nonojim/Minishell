@@ -6,12 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:49:03 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/25 17:10:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:57:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
 
 int	ft_env(t_env *env_list)
 {

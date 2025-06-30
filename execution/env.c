@@ -6,38 +6,43 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 10:59:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 12:17:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-extern char **environ;
+extern char	**environ;
 
 t_env	*add_code_error(t_env	*env, int code_error)
 {
-	char	*value = ft_itoa(code_error);
+	char	*value;
+
+	value = ft_itoa(code_error);
 	env = export_to_env(env, "?", value);
 	free(value);
 	return (env);
 }
 
 // Trouve un node existant avec cette clé
-t_env *find_node(t_env *env, const char *key)
+t_env	*find_node(t_env *env, const char *key)
 {
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
-			return env;
+			return (env);
 		env = env->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
 // Ajoute ou modifie une variable
-t_env *export_to_env(t_env *env_list, char *key, char *value)
+t_env	*export_to_env(t_env *env_list, char *key, char *value)
 {
-	t_env *node = find_node(env_list, key);
+	t_env	*node;
+	t_env	*new;
+
+	node = find_node(env_list, key);
 	if (node)
 	{
 		free(node->value);
@@ -45,39 +50,49 @@ t_env *export_to_env(t_env *env_list, char *key, char *value)
 	}
 	else
 	{
-		t_env *new = malloc(sizeof(t_env));
+		new = malloc(sizeof(t_env));
 		if (!new)
-			return env_list;
+			return (env_list);
 		new->key = ft_strdup(key);
 		new->value = ft_strdup(value);
 		new->next = env_list;
 		env_list = new;
 	}
-	return env_list;
+	return (env_list);
 }
+
 // Initialise depuis environ[]
-t_env *init_env_list(void)
+t_env	*init_env_list(void)
 {
-	t_env *env_list = NULL;
-	for (int i = 0; environ[i]; i++)
+	t_env	*env_list;
+	char	*key;
+	char	*value;
+	char	*equal;
+	int		i;
+
+	i = 0;
+	env_list = NULL;
+	while (environ[i])
 	{
-		char *equal = ft_strchr(environ[i], '=');
+		equal = ft_strchr(environ[i], '=');
 		if (equal)
 		{
-			char *key = ft_substr(environ[i], 0, equal - environ[i]);
-			char *value = ft_strdup(equal + 1);
+			key = ft_substr(environ[i], 0, equal - environ[i]);
+			value = ft_strdup(equal + 1);
 			env_list = export_to_env(env_list, key, value);
 			free(key);
 			free(value);
 		}
+		i++;
 	}
-	return env_list;
+	return (env_list);
 }
 
 // Libère la liste
-void free_env_list(t_env *env)
+void	free_env_list(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
+
 	while (env)
 	{
 		tmp = env;

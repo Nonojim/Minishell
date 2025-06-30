@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:41:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:58:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 19:20:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,6 @@ int	is_ok_double(char c)
 		return (1);
 	else
 		return (0);
-}
-
-void	token_expansion(int *i, int start, char *line, t_token **token)
-{
-	int		type;
-	char	*str;
-
-	if (line[*i] == '$')
-	{
-		start = *i;
-		if (line[*i + 1] && is_word(line[*i + 1]) == 1)
-		{
-			start = *i;
-			while (is_word(line[*i]) && line[*i]
-				&& !is_operator_logical(line[*i]))
-				(*i)++;
-			str = ft_substr(line, start, *i - start);
-			type = type_token(str);
-			add_token_end(token, create_token(type, str));
-		}
-		else
-		{
-			(*i)++;
-			str = ft_substr(line, start, 1);
-			type = type_token(str);
-			add_token_end(token, create_token(type, str));
-		}
-	}
 }
 
 /*

@@ -33,12 +33,15 @@ FILES = tokenizer/tokenizer.c \
 				parser/word.c \
 				parser/print_ast.c \
 				expansion/expansion.c \
+				expansion/expansion_utils.c \
 				execution/execution.c \
 				execution/execute_heredoc.c \
 				execution/execute_pipe.c \
 				execution/execute_subshell.c \
 				execution/execute_redirection.c \
 				execution/execute_simple_command.c \
+				execution/execute_simple_command_builtins.c \
+				execution/execute_simple_command_external.c \
 				signal/signal.c \
 				execution/env.c \
 				execution/builtins/cd.c \

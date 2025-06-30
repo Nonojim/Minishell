@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:02:29 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 12:38:01 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:44:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,12 @@
 				}
 			}*/
 
-			//// Fonction test pour le parsing si c'est une simple command exemple = echo hello
-//// Dans la grammaire simple command peut être couplé au redirection non mis dans la fonction pour l'instant
-//t_treenode	*parse_simple_command_without_redirection(t_token **token, t_treenode *parent_node, int dir)
+			//// Fonction test pour le parsing si c'est une simple 
+///command exemple = echo hello
+//// Dans la grammaire simple command peut être couplé
+///au redirection non mis dans la fonction pour l'instant
+//t_treenode	*parse_simple_command_without_redirection
+//(t_token **token, t_treenode *parent_node, int dir)
 //{
 //	t_treenode *simple_command_node = NULL;
 //	
@@ -113,7 +116,7 @@
 //	//}
 //}
 //				ADAPTATION DU CODE JAVA
-t_ast *parse_command_line(t_token **tokens) {
+/*t_ast *parse_command_line(t_token **tokens) {
     return parse_pipeline(tokens);
 }
 t_ast *parse_pipeline(t_token **tokens) {

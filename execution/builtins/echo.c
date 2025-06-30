@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 08:43:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:58:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	ft_echo_n(char	*argv)
 		return (0);
 	while (argv[i])
 	{
-			if (argv[i] != 'n')
-				return (0);
+		if (argv[i] != 'n')
+			return (0);
 		i++;
 	}
 	return (1);

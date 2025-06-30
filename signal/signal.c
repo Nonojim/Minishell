@@ -3,24 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:56:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 20:24:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signal.h"
 
-/*
-signal 	void (*signal(int sig, void (*handler)(int)))(int); 	Définit un gestionnaire de signal
+volatile sig_atomic_t	g_signum = 0;
 
-sigaction 	int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact); 	Gestion des signaux
+void	signal_handler(int signum)
+{
+	g_signum = signum;
+	if (waitpid(-1, NULL, WNOHANG) == -1)
+	{
+		if (signum == SIGINT)
+		{
+			printf("\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+		}
+	}
+	return ;
+}
 
-sigemptyset 	int sigemptyset(sigset_t *set); 	Initialise un ensemble vide de signaux.
+void	setup_signals(void)
+{
+	struct sigaction	signalusr;
 
-sigaddset 	int sigaddset(sigset_t *set, int signum); 	Ajoute un signal à un ensemble.
-
-kill 	int kill(pid_t pid, int sig); 	Envoie un signal à un processus.
-
-*/
+	ft_memset(&signalusr, 0, sizeof(signalusr));
+	signalusr.sa_handler = signal_handler;
+	signalusr.sa_flags = 0;
+	sigemptyset(&signalusr.sa_mask);
+	signalusr.sa_flags = 0;
+	sigaction(SIGINT, &signalusr, NULL);
+	sigaction(SIGQUIT, &signalusr, NULL);
+}
