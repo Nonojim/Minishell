@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 17:01:53 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:10:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ int execute_pipeline(t_treenode *node, t_token *token, char *line)
 	waitpid(pid2, &status2, 0);
 
 	int code_error;
-	if (WIFEXITED(status2))
+	if (WIFSIGNALED(status2))
+		code_error = 128 + WTERMSIG(status2);
+	else if (WIFEXITED(status2))
 		code_error = WEXITSTATUS(status2);
 	else
 		code_error = 1;

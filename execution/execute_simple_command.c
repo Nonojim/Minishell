@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 17:30:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:12:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,13 @@ int	execute_simple_command(t_treenode *node, t_token *token, char *line)
 	}
 	else if (pid > 0) //le daron
 	{
-		waitpid(pid, &status, 0); //on attend la fin du processus enfant
-		if (WIFEXITED(status)) //si l'enfant c'est normalement terminé 
-			code_error = (WEXITSTATUS(status)); //on retourne son code de retour
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+			code_error = 128 + WTERMSIG(status); // signal reçu (ex: Ctrl+C → 130)
+		else if (WIFEXITED(status))
+			code_error = WEXITSTATUS(status);   // sortie normale
 		else
-			code_error = 1;
+			code_error = 1;                     // cas improbable
 		node->env = add_code_error(node->env, code_error);
 		return (code_error); //sinon erreur 
 	}

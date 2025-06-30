@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 17:09:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:10:09 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ int execute_heredoc_node(t_treenode *node, t_token *token, char *line)
 	close(pipefd[0]);
 	int status;
 	int	code_error;
-	waitpid(pid, &status, 0);
 	if (waitpid(pid, &status, 0) == -1)
 	{
 		perror("waitpid");
 		node->env = add_code_error(node->env, 1);
 		return (1);
 	}
-	if (WIFEXITED(status))
+	if (WIFSIGNALED(status))
+		code_error = 128 + WTERMSIG(status);
+	else if (WIFEXITED(status))
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;

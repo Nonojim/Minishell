@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 17:01:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 11:12:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int execute_subshell_node(t_treenode *node, t_token *token, char *line)
 	else if (pid == 0)
 		exit(execute_node(node->left, token, line)); // on exécute le sous-arbre récursivement
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
+	if (WIFSIGNALED(status))
+		code_error = 128 + WTERMSIG(status);
+	else if (WIFEXITED(status))
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;
