@@ -6,58 +6,31 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 17:14:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:21:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int execute_redirection_chain(t_treenode *node, t_token *token, char *line)
+int	execute_redirection_chain(t_treenode *node, t_token *token, char *line)
 {
-	//save les descripteurs standard entrée/sortie pour les restaurer aprés
-	int saved_stdin = dup(STDIN_FILENO);
-	int saved_stdout = dup(STDOUT_FILENO);
-	int status;
+	int	saved_stdin;
+	int	saved_stdout;
+	int	status;
+
+	status = 1;
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
 	if (!node)
 		return (1);
-
-	// <
 	if (node->type == INPUT_REDIRECTION)
-	{
-		//ouverture fichier, lecture
-		int fd = open(node->right->str, O_RDONLY);
-		if (fd < 0)
-			return (perror("open <"), 1); //erreur open
-		dup2(fd, STDIN_FILENO); //redirige entrée standard vers le file
-		close(fd);
-		status = execute_redirection_chain(node->left, token, line); //exe recursive de la chaine restantes
-	}
-	// >
+		status = redir_input(node, token, line);
 	else if (node->type == OUTPUT_REDIRECTION)
-	{
-		//O_TRUNC = écrase, O_CREAT = crée si non existant 0644 = done les droits lecture et écriture au file lors de sa création
-		int fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
-			return (perror("open >"), 1);
-		dup2(fd, STDOUT_FILENO); //sortie redirigée vers fin du file
-		close(fd);
-		status = execute_redirection_chain(node->left, token, line);
-	}
-	// >>
+		status = redir_output(node, token, line);
 	else if (node->type == APPEND_OUTPUT_REDIRECTION)
-	{
-		//O_APPEND = txt sera automatiquement add à la fin
-		int fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
-			return (perror("open >>"), 1);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		status = execute_redirection_chain(node->left, token, line);
-	}
+		status = redir_append(node, token, line);
 	else
 		status = execute_node(node, token, line);
-		// Point d'arrêt : on exécute la commande
-	// Restaurer les entrées/sorties
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
@@ -66,55 +39,38 @@ int execute_redirection_chain(t_treenode *node, t_token *token, char *line)
 	return (status);
 }
 
-//REDIRECTION
+int	redir_input(t_treenode *node, t_token *token, char *line)
+{
+	int	fd;
 
-//int execute_redirection_in_node(t_treenode *node)
-//{
-//	int fd = open(node->right->str, O_RDONLY);
-//	if (fd < 0)
-//		return perror("open <"), 1;
-//
-//	int saved_stdin = dup(STDIN_FILENO);
-//	dup2(fd, STDIN_FILENO);
-//	close(fd);
-//
-//	int status = execute_node(node->left);
-//
-//	dup2(saved_stdin, STDIN_FILENO);
-//	close(saved_stdin);
-//	return status;
-//}
-//
-//int execute_redirection_out_node(t_treenode *node)
-//{
-//	int fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-//	if (fd < 0)
-//		return perror("open >"), 1;
-//
-//	int saved_stdout = dup(STDOUT_FILENO);
-//	dup2(fd, STDOUT_FILENO);
-//	close(fd);
-//
-//	int status = execute_node(node->left);
-//
-//	dup2(saved_stdout, STDOUT_FILENO);
-//	close(saved_stdout);
-//	return status;
-//}
-//
-//int execute_redirection_append_node(t_treenode *node)
-//{
-//	int fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-//	if (fd < 0)
-//		return perror("open >>"), 1;
-//
-//	int saved_stdout = dup(STDOUT_FILENO);
-//	dup2(fd, STDOUT_FILENO);
-//	close(fd);
-//
-//	int status = execute_node(node->left);
-//
-//	dup2(saved_stdout, STDOUT_FILENO);
-//	close(saved_stdout);
-//	return status;
-//}
+	fd = open(node->right->str, O_RDONLY);
+	if (fd < 0)
+		return (perror("open <"), 1);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (execute_redirection_chain(node->left, token, line));
+}
+
+int	redir_output(t_treenode *node, t_token *token, char *line)
+{
+	int	fd;
+
+	fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		return (perror("open >"), 1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (execute_redirection_chain(node->left, token, line));
+}
+
+int	redir_append(t_treenode *node, t_token *token, char *line)
+{
+	int	fd;
+
+	fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		return (perror("open >>"), 1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (execute_redirection_chain(node->left, token, line));
+}

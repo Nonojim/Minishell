@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 16:59:27 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 12:11:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,50 @@
 	* 128 = Mauvais usage de exit (ex: exit -1, exit avec trop d'arguments)
 	* 130 = Arret avec Ctrl+C
 	* 131 = Arret avec Ctrl+\
-	*/
+*/
 
-int execute_node(t_treenode *node, t_token *token, char *line)
+void	execute_tree(t_treenode *tree, t_token *token, char *line)
+{
+	int	code_error;
+
+	code_error = execute_node(tree, token, line);
+	tree->env = add_code_error(tree->env, code_error);
+}
+
+int	execute_node(t_treenode *node, t_token *token, char *line)
 {
 	if (!node)
 		return (1);
+	if (node->type == WORD || node->type == PIPE)
+		return (execute_node_simple(node, token, line));
+	else if (node->type == LOGICAL_AND || node->type == LOGICAL_OR
+		|| node->type == SEMICOLON)
+		return (execute_node_logical(node, token, line));
+	else if (node->type == HERE_DOCUMENT
+		|| node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+		|| node->type == APPEND_OUTPUT_REDIRECTION
+		|| node->type == SUBSHELL)
+		return (execute_node_redir(node, token, line));
+	else
+	{
+		printf("unknown node type %d\n", node->type);
+		return (1);
+	}
+}
+
+int	execute_node_simple(t_treenode *node, t_token *token, char *line)
+{
 	if (node->type == WORD)
 		return (execute_simple_command(node, token, line));
 	else if (node->type == PIPE)
 		return (execute_pipeline(node, token, line));
-	else if (node->type == LOGICAL_AND)
+	return (1);
+}
+
+int	execute_node_logical(t_treenode *node, t_token *token, char *line)
+{
+	if (node->type == LOGICAL_AND)
 	{
 		if (execute_node(node->left, token, line) == 0)
 			return (execute_node(node->right, token, line));
@@ -51,23 +84,18 @@ int execute_node(t_treenode *node, t_token *token, char *line)
 		execute_node(node->left, token, line);
 		return (execute_node(node->right, token, line));
 	}
-	else if (node->type == HERE_DOCUMENT)
+	return (1);
+}
+
+int	execute_node_redir(t_treenode *node, t_token *token, char *line)
+{
+	if (node->type == HERE_DOCUMENT)
 		return (execute_heredoc_node(node, token, line));
-	else if (node->type == INPUT_REDIRECTION || node->type == OUTPUT_REDIRECTION || node->type == APPEND_OUTPUT_REDIRECTION)
+	else if (node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+		|| node->type == APPEND_OUTPUT_REDIRECTION)
 		return (execute_redirection_chain(node, token, line));
 	else if (node->type == SUBSHELL)
 		return (execute_subshell_node(node, token, line));
-	else
-	{
-		printf("unknown node type %d", node->type);
-		return(1);
-	}
-}
-
-void execute_tree(t_treenode *tree, t_token *token, char *line)
-{
-	int code_error;
-
-	code_error = execute_node(tree, token, line);
-	tree->env = add_code_error(tree->env, code_error);
+	return (1);
 }

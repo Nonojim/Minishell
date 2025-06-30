@@ -6,16 +6,14 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 08:04:01 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:54:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-typedef struct s_token t_token;
-typedef struct s_treenode t_treenode;
-typedef struct s_env t_env;
+# include "typedef.h"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -31,6 +29,7 @@ typedef struct s_env t_env;
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
+
 # include "libft/libft.h"
 # include "tokenizer/tokenizer.h"
 # include "parser/ast.h"
@@ -38,5 +37,11 @@ typedef struct s_env t_env;
 # include "signal/signal.h"
 # include "execution/builtins/builtins.h"
 # include "execution/execution.h"
+
+//main.c
+void	free_prompt(t_treenode *ast, char *line, t_token *tmp);
+void	ast_is_created(t_treenode *ast, t_token *token,
+			char *line, t_env **env_list);
+void	token_not_empty(t_token **token, t_treenode **ast);
 
 #endif
