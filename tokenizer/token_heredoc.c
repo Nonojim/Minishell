@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:58:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/03 18:53:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,75 @@ int	create_token_op_heredoc(char *line, int *i, t_token **token)
 */
 char	*newline_heredoc(char *token_doc, int j)
 {
+	char	*line;
 	char	*next_line;
 	char	*heredoc_line;
-	char	*tmp;
+	char	*buffer;
+	char	tmp[1024];
 	int		size_line;
+	pid_t		pid;
+	int		fd[2];
+	int		status;
+	ssize_t	bytes;
 
-	heredoc_line = ft_strdup("");
-	size_line = ft_strlen(token_doc) + 1;
-	while (1)
+	pipe(fd);
+	pid = fork();
+	if (pid == -1)
+		return (perror("error fork"), NULL);
+	if (pid == 0)
 	{
-		next_line = readline("> ");
-		if (!next_line)
-			break ;
-		if (ft_strncmp(next_line, token_doc, size_line) == 0)
-			return (free(next_line), heredoc_line);
-		next_line = delete_tab_or_ad_return_line(next_line, j);
-		tmp = ft_strjoin(heredoc_line, next_line);
-		free(heredoc_line);
-		heredoc_line = tmp;
-		free(next_line);
+		line = ft_strdup("");
+		setup_signal_heredoc();
+		close(fd[0]);
+		size_line = ft_strlen(token_doc) + 1;
+		while (1)
+		{
+			next_line = readline("> ");
+			if (!next_line)
+			{
+				//printf("line ctrl+d: [%s]", line);
+				write(fd[1], line, ft_strlen(line));
+				free(line);
+				break ;
+			}
+
+			if (ft_strncmp(next_line, token_doc, size_line) == 0)
+			{
+				free(next_line);
+				//printf("line ctrl+c: [%s]", line);
+				write(fd[1], line, ft_strlen(line));
+				free(line);
+				break;
+				//return (free(next_line), heredoc_line);
+			}
+			if (ft_strncmp(next_line, token_doc, size_line) != 0)
+			{
+				next_line = delete_tab_or_ad_return_line(next_line, j);
+				//printf("next_line: [%s]", next_line);
+				line = ft_strjoin(line, next_line);
+			}
+			free(next_line);
+			//write(fd[1], "\n", 1);
+		}
+		close(fd[1]);
+		exit(EXIT_SUCCESS);
 	}
-	return (heredoc_line);
+	else
+	{
+		setup_signals();
+		close(fd[1]);
+		heredoc_line = ft_strdup("");
+		while ((bytes = read(fd[0], tmp, sizeof(tmp))) > 0)
+		{
+			tmp[bytes] = '\0';
+			buffer = ft_strjoin(heredoc_line, tmp);
+			free(heredoc_line);
+			heredoc_line = buffer;
+		}
+		close(fd[0]);
+		waitpid(pid, &status, 0);
+		return (heredoc_line);
+	}
 }
 
 char	*delete_tab_or_ad_return_line(char *next_line, int j)

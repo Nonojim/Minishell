@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 19:55:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/03 19:00:00 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ char	*token_quote(int *i, int start, char *line, t_token **token)
 		*i = start;
 		return (line);
 	}
-	(*i)++;
+	while(line[*i] && is_word(line[*i]))
+		(*i)++;
 	str = ft_substr(line, start, *i - start);
 	add_token_end(token, create_token(WORD, str));
 	return (line);

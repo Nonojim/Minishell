@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 20:24:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/03 18:32:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,20 @@ void	setup_signals(void)
 	signalusr.sa_handler = signal_handler;
 	signalusr.sa_flags = 0;
 	sigemptyset(&signalusr.sa_mask);
-	signalusr.sa_flags = 0;
 	sigaction(SIGINT, &signalusr, NULL);
-	sigaction(SIGQUIT, &signalusr, NULL);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	signal_heredoc_handler(int signum)
+{
+	g_signum = signum;
+	write(1, "\n", 1);
+	exit(130);
+}
+
+void	setup_signal_heredoc(void)
+{
+	signal(SIGINT, signal_heredoc_handler);
+	signal(SIGQUIT, SIG_IGN);
+	signal(EOF, SIG_IGN);
 }

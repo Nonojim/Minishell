@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/03 12:18:49 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:56:40 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,47 +16,59 @@ extern char	**environ;
 
 int    execute_external_command(t_treenode *node)
 {
-    pid_t    pid;
-    char    *cmd_path;
-    char    *cmd;
+	pid_t	pid;
+	char	*cmd_path;
+	char	*cmd;
 
-    cmd = node->argv[0];
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        node->env = add_code_error(node->env, 1);
-    }
-    if (pid == 0)
-    {
-        if (node->argv[0][0] == '.' && node->argv[0][1] == '/')
-        {
-            if (ft_strcmp(cmd, "./minishell") == 0 && access(node->argv[0], F_OK) == 0 && access(node->argv[0], X_OK) == 0)
-                cmd_path = ft_strdup(node->argv[0]);
-            else
-            {
-                printf("minishell: %s: No such file or directory\n", node->argv[0]);
-                exit(127);
-            }
-        }
-        else
-        {
-            cmd_path = find_cmd_path(cmd, node->env);
-            if (!cmd_path)
-            {
-                printf("%s: command not found\n", node->argv[0]);
-                exit(127);
-            }
-        }
-        execve(cmd_path, node->argv, environ);
-        free(cmd_path);
-        exit(126);
-    }
-    else if (pid > 0)
-        return (external_command_status(node, pid));
-    node->env = add_code_error(node->env, 1);
-    return (1);
-} 
+	cmd = node->argv[0];
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		node->env = add_code_error(node->env, 1);
+	}
+	if (pid == 0)
+	{
+		if (node->argv[0][0] == '.' && node->argv[0][1] == '/')
+		{
+			if (ft_strcmp(cmd, "./minishell") == 0 && access(node->argv[0], F_OK) == 0 && access(node->argv[0], X_OK) == 0)
+				cmd_path = ft_strdup(node->argv[0]);
+			else
+			{
+				printf("minishell: %s: No such file or directory\n", node->argv[0]);
+				exit(127);
+			}
+		}
+		else if (node->argv[0][0] == '/')
+		{
+			cmd_path = ft_strdup(node->argv[0]);
+			execve(cmd_path, node->argv, environ);
+			printf("minishell: %s: %s\n", cmd_path, strerror(errno));
+			if (errno == ENOENT)
+				exit(127);
+			if (errno == EISDIR)
+				exit(126);
+			free(cmd_path);
+			exit(126);
+		}
+		else
+		{
+			cmd_path = find_cmd_path(cmd, node->env);
+			if (!cmd_path)
+			{
+				printf("%s: command not found\n", node->argv[0]);
+				exit(127);
+			}
+		}
+		execve(cmd_path, node->argv, environ);
+		free(cmd_path);
+		exit(126);
+	}
+	else if (pid > 0)
+		return (external_command_status(node, pid));
+	node->env = add_code_error(node->env, 1);
+	return (1);
+}
 
 int	external_command_status(t_treenode *node, pid_t pid)
 {

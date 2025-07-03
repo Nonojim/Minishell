@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:59:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/03 16:17:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_token	*create_token(int type, char *str)
 {
 	t_token	*new_token;
 
+	//if (ft_strcmp(str, "") == 0)
+	//	return (NULL);
 	new_token = ft_calloc(1, sizeof(t_token));
 	if (new_token == NULL)
 		return (NULL);
