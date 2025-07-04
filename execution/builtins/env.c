@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:49:03 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/04 21:35:03 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/04 22:26:43 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	print_env_reverse(t_env *node)
 	if (!node)
 		return;
 	print_env_reverse(node->next);
-	if (node->value)
+	if (node->value && ft_strcmp(node->key, "?") != 0)
 		printf("%s=%s\n", node->key, node->value);
 }
 
 int	ft_env(t_env *env_list)
 {
-	env_list = env_list->next;
+	//env_list = env_list->next;
 	print_env_reverse(env_list);
 	return (0);
 }

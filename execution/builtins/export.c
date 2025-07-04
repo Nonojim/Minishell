@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/04 21:32:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 00:10:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void	print_export(t_env *env)
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
-	tmp = tmp->next;
 	while (tmp->next)
 	{
-		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		if (tmp->value && ft_strcmp(tmp->key, "?") != 0)
+			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 	free_env_list(copy);
