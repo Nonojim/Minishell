@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:49:03 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/04 12:55:37 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/04 21:35:03 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 //	}
 //	return (0);
 //}
-static void	print_env_reverse(t_env *node)
+void	print_env_reverse(t_env *node)
 {
 	if (!node)
 		return;
@@ -36,6 +36,7 @@ static void	print_env_reverse(t_env *node)
 
 int	ft_env(t_env *env_list)
 {
-	print_env_reverse_rec(env_list);
+	env_list = env_list->next;
+	print_env_reverse(env_list);
 	return (0);
 }
