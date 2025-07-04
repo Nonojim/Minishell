@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 21:49:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 00:16:17 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,15 @@ char	*expand_string(char *str, t_treenode *node)
 		if (!q.in_single_quote && !q.in_double_quote && str[i] == '~')
 		{
 			tmp = expand_tilde(str, node);
+			if (tmp)
+			{
+				free(result);
+				return (tmp);
+			}
+		}
+		if (!q.in_single_quote && !q.in_double_quote && ft_strchr(str,'*'))
+		{
+			tmp = expand_wildcard(str);
 			if (tmp)
 			{
 				free(result);

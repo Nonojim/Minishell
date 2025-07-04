@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 11:57:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/03 12:22:14 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast)
 {
 	int	code_error;
 
+	code_error = 0;
 	if (ast->argv[1])
 	{
 		if (!is_numeric_exit(ast->argv[1]))

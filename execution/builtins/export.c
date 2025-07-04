@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 11:40:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 00:10:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,82 @@ void	add_export_variable(t_treenode *node, char *arg)
 void	print_export(t_env *env)
 {
 	t_env	*tmp;
+	t_env	*copy;
+	copy = copy_env(env);
+	ft_sort_env_list(copy);
+	tmp = copy;
+	while (tmp->next)
+	{
+		if (tmp->value && ft_strcmp(tmp->key, "?") != 0)
+			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
+	free_env_list(copy);
+}
 
-	tmp = env;
+t_env	*copy_env(t_env *env)
+{
+	t_env	*new = NULL;
+	t_env	*tmp = env;
+	t_env	*node;
+
 	while (tmp)
 	{
-		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		node = malloc(sizeof(t_env));
+		if (!node)
+			return (free_env_list(new), NULL);
+
+		node->key = strdup(tmp->key);
+		node->value = strdup(tmp->value);
+		node->next = NULL;
+		ft_env_add_back(&new, node);
 		tmp = tmp->next;
+	}
+	return (new);
+}
+
+void	ft_env_add_back(t_env **lst, t_env *new)
+{
+	t_env	*tmp;
+
+	if (!lst || !new)
+		return;
+	if (!*lst)
+	{
+		*lst = new;
+		return;
+	}
+	tmp = *lst;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	ft_sort_env_list(t_env *env)
+{
+	t_env	*tmp;
+	t_env	*start;
+	char	*key_tmp;
+	char	*value_tmp;
+
+	if (!env)
+		return;
+
+	start = env;
+	tmp = env;
+	while (tmp && tmp->next)
+	{
+		if (ft_strcmp(tmp->key, tmp->next->key) > 0)
+		{
+			key_tmp = tmp->key;
+			tmp->key = tmp->next->key;
+			tmp->next->key = key_tmp;
+			value_tmp = tmp->value;
+			tmp->value = tmp->next->value;
+			tmp->next->value = value_tmp;
+			tmp = start;
+		}
+		else
+			tmp = tmp->next;
 	}
 }

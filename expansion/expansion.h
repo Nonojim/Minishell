@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 20:27:59 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 00:17:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,14 @@ char	*ft_getenv(char *name, t_treenode *node);
 
 //a refaire:
 char	*clean_quote_after_expanse(char *str);
+//expanse_wildcard
+char	*expand_wildcard(char *str);
+char	*create_middle(char **middle, char *str);
+void	create_prefix_and_suffix(char **prefix, char **suffix, char *str);
+int		ft_strnstr_for_wildcard(char *str,	char *middle, int len_str);
+int		match_middle(char *str, char *middle);
+int		match_prefix(char *str, char *prefix);
+int		match_suffix(char *str, char *suffix);
+char	*add_string(char *result, char *file);
 
 #endif
