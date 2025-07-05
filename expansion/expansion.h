@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 00:17:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 14:26:14 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		toggle_quote(char *str, int *i, t_quote_state *q, char **result);
 char	*expand_string(char *str, t_treenode *node);
 int		expand_variable(char *str, int i, char **result, t_treenode *node);
 void	expanse_ast(t_treenode *node);
+void	give_env(t_treenode *node);
 char	*ft_getenv(char *name, t_treenode *node);
 
 //a refaire:

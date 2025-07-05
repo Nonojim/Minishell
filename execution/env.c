@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 12:17:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 18:42:30 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 extern char	**environ;
 
-t_env	*add_code_error(t_env	*env, int code_error)
+void	add_code_error(t_env	**env, int code_error)
 {
 	char	*value;
 
 	value = ft_itoa(code_error);
-	env = export_to_env(env, "?", value);
+	export_to_env(env, "?", value);
 	free(value);
-	return (env);
 }
 
 // Trouve un node existant avec cette clé
@@ -37,12 +36,13 @@ t_env	*find_node(t_env *env, const char *key)
 }
 
 // Ajoute ou modifie une variable
-t_env	*export_to_env(t_env *env_list, char *key, char *value)
+void	export_to_env(t_env **env_list, char *key, char *value)
 {
 	t_env	*node;
 	t_env	*new;
+	t_env	*tmp;
 
-	node = find_node(env_list, key);
+	node = find_node(*env_list, key);
 	if (node)
 	{
 		free(node->value);
@@ -52,13 +52,22 @@ t_env	*export_to_env(t_env *env_list, char *key, char *value)
 	{
 		new = malloc(sizeof(t_env));
 		if (!new)
-			return (env_list);
+			return ;
 		new->key = ft_strdup(key);
 		new->value = ft_strdup(value);
-		new->next = env_list;
-		env_list = new;
+			new->next = NULL;
+
+		// Ajout à la fin de la liste
+		if (!*env_list)
+		{
+			*env_list = new;
+			return;
+		}
+		tmp = *env_list;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
 	}
-	return (env_list);
 }
 
 // Initialise depuis environ[]
@@ -79,7 +88,7 @@ t_env	*init_env_list(void)
 		{
 			key = ft_substr(environ[i], 0, equal - environ[i]);
 			value = ft_strdup(equal + 1);
-			env_list = export_to_env(env_list, key, value);
+			export_to_env(&env_list, key, value);
 			free(key);
 			free(value);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 12:32:50 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 19:32:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ int	pipe_status(t_treenode *node, pid_t pid1, pid_t pid2)
 	if (WIFSIGNALED(status2))
 		code_error = 128 + WTERMSIG(status2);
 	else if (WIFEXITED(status2))
-		code_error = WEXITSTATUS(status2);
+		code_error = 130 + WEXITSTATUS(status2);
 	else
 		code_error = 1;
-	node->env = add_code_error(node->env, code_error);
+	add_code_error(&node->env, code_error);
 	return (code_error);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 12:22:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 19:33:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	execute_heredoc_node(t_treenode *node, t_token *token, char *line)
 	if (pid == -1)
 	{
 		perror("fork");
-		node->env = add_code_error(node->env, 1);
+		add_code_error(&node->env, 1);
 		return (1);
 	}
 	if (pid == 0)
@@ -47,15 +47,16 @@ int	heredoc_status(t_treenode *node, pid_t pid)
 	if (waitpid(pid, &status, 0) == -1)
 	{
 		perror("waitpid");
-		node->env = add_code_error(node->env, 1);
+		add_code_error(&node->env, 1);
 		return (1);
 	}
 	if (WIFSIGNALED(status))
-		code_error = 128 + WTERMSIG(status);
+		code_error = 129 + WTERMSIG(status);
 	else if (WIFEXITED(status))
-		code_error = WEXITSTATUS(status);
+		code_error = 130 + WEXITSTATUS(status);
 	else
 		code_error = 1;
-	node->env = add_code_error(node->env, code_error);
+	add_code_error(&node->env, code_error);
+
 	return (code_error);
 }

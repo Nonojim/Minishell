@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_simple_command.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 13:01:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:52:43 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ int	execute_simple_command(t_treenode *node, t_token *token, char *line)
 
 	if (!node || !node->str || !node->argv)
 	{
-		add_code_error(node->env, 1);
+		add_code_error(&node->env, 1);
 		return (1);
 	}
+	expanse_ast(node);
 	if (is_builtin(node->argv[0]))
 		code_error = execute_builtin_command(node, token, line);
 	else
 		code_error = execute_external_command(node);
-	node->env = add_code_error(node->env, code_error);
+	add_code_error(&node->env, code_error);
 	return (code_error);
 }

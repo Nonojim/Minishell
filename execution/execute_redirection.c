@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirection.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 13:21:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:52:01 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	execute_redirection_chain(t_treenode *node, t_token *token, char *line)
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
-	node->env = add_code_error(node->env, status);
+	add_code_error(&node->env, status);
 	return (status);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 12:11:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:55:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	execute_tree(t_treenode *tree, t_token *token, char *line)
 	int	code_error;
 
 	code_error = execute_node(tree, token, line);
-	tree->env = add_code_error(tree->env, code_error);
+	add_code_error(&tree->env, code_error);
 }
 
 int	execute_node(t_treenode *node, t_token *token, char *line)
@@ -90,7 +90,10 @@ int	execute_node_logical(t_treenode *node, t_token *token, char *line)
 int	execute_node_redir(t_treenode *node, t_token *token, char *line)
 {
 	if (node->type == HERE_DOCUMENT)
+	{
+		expanse_ast(node);
 		return (execute_heredoc_node(node, token, line));
+	}
 	else if (node->type == INPUT_REDIRECTION
 		|| node->type == OUTPUT_REDIRECTION
 		|| node->type == APPEND_OUTPUT_REDIRECTION)

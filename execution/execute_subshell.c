@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_subshell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 12:37:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:52:57 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	execute_subshell_node(t_treenode *node, t_token *token, char *line)
 	if (pid == -1)
 	{
 		perror("fork");
-		node->env = add_code_error(node->env, 1);
+		add_code_error(&node->env, 1);
 	}
 	else if (pid == 0)
 		exit(execute_node(node->left, token, line));
@@ -39,6 +39,6 @@ int	subshell_status(t_treenode *node, pid_t pid)
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;
-	node->env = add_code_error(node->env, code_error);
+	add_code_error(&node->env, code_error);
 	return (code_error);
 }

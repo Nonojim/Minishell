@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/30 13:19:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:57:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ int		redir_append(t_treenode *node, t_token *token, char *line);
 
 // Env
 t_env	*init_env_list(void);
-t_env	*export_to_env(t_env *env_list, char *key, char *value);
+void	export_to_env(t_env **env_list, char *key, char *value);
 t_env	*find_node(t_env *env, const char *key);
-t_env	*add_code_error(t_env *env, int code_error);
+void	add_code_error(t_env **env, int code_error);
 void	free_env_list(t_env *env);
 
 #endif
