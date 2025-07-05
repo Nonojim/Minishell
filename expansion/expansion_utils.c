@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 20:27:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/05 14:35:39 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*remove_quotes_after_expansion(const char *str)
 	quote = 0;
 	if (!str)
 		return (NULL);
-	new = malloc(ft_strlen(str) + 1);
+	new = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!new)
 		return (NULL);
 	while (str[i])

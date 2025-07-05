@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/03 12:22:14 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:53:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast)
 		{
 			printf("Minishell: exit: too many arguments\n");
 			code_error = 1;
-			ast->env = add_code_error(ast->env, code_error);
+			add_code_error(&ast->env, code_error);
 			return (code_error);
 		}
 		else

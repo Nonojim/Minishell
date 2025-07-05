@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 00:16:17 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:37:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ void	expanse_ast(t_treenode *node)
 
 	if (!node)
 		return ;
-	if (node->left)
-		node->left->env = node->env;
-	if (node->right)
-		node->right->env = node->env;
+	give_env(node);
 	if (node->argv)
 	{
 		i = 0;
@@ -61,6 +58,18 @@ void	expanse_ast(t_treenode *node)
 	}
 	expanse_ast(node->left);
 	expanse_ast(node->right);
+}
+
+void give_env(t_treenode *node)
+{
+	if (!node)
+		return ;
+	if (node->left)
+		node->left->env = node->env;
+	if (node->right)
+		node->right->env = node->env;
+	give_env(node->left);
+	give_env(node->right);
 }
 
 /*

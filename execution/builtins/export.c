@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 00:10:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:43:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	add_export_variable(t_treenode *node, char *arg)
 		key = ft_substr(arg, 0, j);
 		value_len = ft_strlen(arg) - j - 1;
 		value = ft_substr(arg, j + 1, value_len);
-		node->env = export_to_env(node->env, key, value);
+		export_to_env(&node->env, key, value);
 		free(key);
 		free(value);
 	}

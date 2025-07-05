@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/03 18:56:40 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:52:20 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int    execute_external_command(t_treenode *node)
 	if (pid == -1)
 	{
 		perror("fork");
-		node->env = add_code_error(node->env, 1);
+		add_code_error(&node->env, 1);
 	}
 	if (pid == 0)
 	{
@@ -66,7 +66,7 @@ int    execute_external_command(t_treenode *node)
 	}
 	else if (pid > 0)
 		return (external_command_status(node, pid));
-	node->env = add_code_error(node->env, 1);
+	add_code_error(&node->env, 1);
 	return (1);
 }
 
@@ -82,7 +82,7 @@ int	external_command_status(t_treenode *node, pid_t pid)
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;
-	node->env = add_code_error(node->env, code_error);
+	add_code_error(&node->env, code_error);
 	return (code_error);
 }
 

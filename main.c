@@ -21,7 +21,7 @@ int	main(void)
 	t_env		*env_list;
 
 	env_list = init_env_list();
-	env_list = add_code_error(env_list, 0);
+	add_code_error(&env_list, 0);
 	while (1)
 	{
 		setup_signals();
@@ -57,7 +57,7 @@ void	ast_is_created(t_treenode *ast, t_token *token,
 	if (!ast)
 		return ;
 	ast->env = *env_list;
-	expanse_ast(ast);
+	give_env(ast);
 	execute_tree(ast, token, line);
 	*env_list = ast->env;
 }
