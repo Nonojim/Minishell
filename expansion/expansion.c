@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 16:12:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:37:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			i++;
 		}
 	}
-	else if (node->type == HERE_DOCUMENT)
+	if (node->type == HERE_DOCUMENT)
 	{
 		i = 0;
 		if (node->str[i] == '\'' || node->str[i] == '"')

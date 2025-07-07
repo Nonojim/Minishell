@@ -21,6 +21,7 @@ int	main(void)
 	t_ctx		ctx;
 
 	ctx.env = init_env_list();
+	//ctx.exit_code = 0;
 	add_code_error(&ctx.env, 0);
 	while (1)
 	{
