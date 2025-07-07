@@ -6,26 +6,25 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 19:37:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:12:58 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
 
-void	expanse_ast(t_treenode *node)
+void	expanse_ast(t_treenode *node, t_ctx *ctx)
 {
 	int		i;
 
 	if (!node)
 		return ;
-	give_env(node);
 	if (node->argv)
 	{
 		i = 0;
 		while (node->argv[i])
 		{
-			char	*expanded = expand_string(node->argv[i], node);
+			char	*expanded = expand_string(node->argv[i], ctx);
 			char	*clean = remove_quotes_after_expansion(expanded);
 			free(expanded);
 			free(node->argv[i]);
@@ -33,7 +32,7 @@ void	expanse_ast(t_treenode *node)
 			i++;
 		}
 	}
-	if (node->type == HERE_DOCUMENT)
+	else if (node->type == HERE_DOCUMENT)
 	{
 		i = 0;
 		if (node->str[i] == '\'' || node->str[i] == '"')
@@ -42,7 +41,7 @@ void	expanse_ast(t_treenode *node)
 		{
 			while (node->argv && node->argv[i])
 			{
-				char *expanded = expand_string(node->argv[i], node);
+				char *expanded = expand_string(node->argv[i], ctx);
 				char *clean = remove_quotes_after_expansion(expanded);
 				free(expanded);
 				free(node->argv[i]);
@@ -56,28 +55,28 @@ void	expanse_ast(t_treenode *node)
 		free(node->str);
 		node->str = ft_strdup(node->argv[0]);
 	}
-	expanse_ast(node->left);
-	expanse_ast(node->right);
+	expanse_ast(node->left, ctx);
+	expanse_ast(node->right, ctx);
 }
 
-void give_env(t_treenode *node)
-{
-	if (!node)
-		return ;
-	if (node->left)
-		node->left->env = node->env;
-	if (node->right)
-		node->right->env = node->env;
-	give_env(node->left);
-	give_env(node->right);
-}
+//void give_env(t_treenode *node)
+//{
+//	if (!node)
+//		return ;
+//	if (node->left)
+//		node->left->env = node->env;
+//	if (node->right)
+//		node->right->env = node->env;
+//	give_env(node->left);
+//	give_env(node->right);
+//}
 
 /*
 On traite les strings pour remplacer les vars d'environnement,
 le tilde. On vérifie que les quotes sont ok avec ça.
 On return les expansions appliqués
 */
-char	*expand_string(char *str, t_treenode *node)
+char	*expand_string(char *str, t_ctx *ctx)
 {
 	char			*result;
 	char			*tmp;
@@ -94,7 +93,7 @@ char	*expand_string(char *str, t_treenode *node)
 			continue ;
 		if (!q.in_single_quote && !q.in_double_quote && str[i] == '~')
 		{
-			tmp = expand_tilde(str, node);
+			tmp = expand_tilde(str, ctx);
 			if (tmp)
 			{
 				free(result);
@@ -114,7 +113,7 @@ char	*expand_string(char *str, t_treenode *node)
 			&& (ft_isalpha(str[i + 1])
 				|| str[i + 1] == '_' || str[i + 1] == '?'))
 		{
-			i = expand_variable(str, i, &result, node);
+			i = expand_variable(str, i, &result, ctx);
 			continue ;
 		}
 		add_char_to_string(&result, str[i]);
@@ -142,13 +141,13 @@ void	add_char_to_string(char **result, char c)
 }
 
 
-char	*expand_tilde(char *str, t_treenode *node)
+char	*expand_tilde(char *str, t_ctx *ctx)
 {
 	char	*home;
 	char	*new_str;
 	char	*result;
 
-	home = ft_getenv("HOME", node);
+	home = ft_getenv("HOME", ctx);
 	if (!home)
 		return (NULL);
 	new_str = ft_strdup(str + 1);
@@ -161,7 +160,7 @@ char	*expand_tilde(char *str, t_treenode *node)
 Expanse une var d'environnement, 
 Gere le code retour error $? 
 */
-int	expand_variable(char *str, int i, char **result, t_treenode *node)
+int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 {
 	int		j;
 	char	*new_str;
@@ -170,9 +169,7 @@ int	expand_variable(char *str, int i, char **result, t_treenode *node)
 
 	if (str[i + 1] == '?')
 	{
-		expanse = ft_getenv("?", node);
-		if (!expanse)
-			expanse = ft_strdup("0");
+		expanse = ft_getenv("?", ctx);
 		tmp = *result;
 		*result = ft_strjoin(tmp, expanse);
 		free(tmp);
@@ -183,7 +180,7 @@ int	expand_variable(char *str, int i, char **result, t_treenode *node)
 	while (str[j] != '\0' && (ft_isalpha(str[j]) || str[j] == '_'))
 		j++;
 	new_str = ft_substr(str, i + 1, j - (i + 1));
-	expanse = ft_getenv(new_str, node);
+	expanse = ft_getenv(new_str, ctx);
 	free(new_str);
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);

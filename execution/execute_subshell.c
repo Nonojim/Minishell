@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:52:57 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:35:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	execute_subshell_node(t_treenode *node, t_token *token, char *line)
+int	execute_subshell_node(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -20,14 +20,14 @@ int	execute_subshell_node(t_treenode *node, t_token *token, char *line)
 	if (pid == -1)
 	{
 		perror("fork");
-		add_code_error(&node->env, 1);
+		add_code_error(&ctx->env, 1);
 	}
 	else if (pid == 0)
-		exit(execute_node(node->left, token, line));
-	return (subshell_status(node, pid));
+		exit(execute_node(node->left, token, line, ctx));
+	return (subshell_status(ctx, pid));
 }
 
-int	subshell_status(t_treenode *node, pid_t pid)
+int	subshell_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
 	int	code_error;
@@ -39,6 +39,6 @@ int	subshell_status(t_treenode *node, pid_t pid)
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;
-	add_code_error(&node->env, code_error);
+	add_code_error(&ctx->env, code_error);
 	return (code_error);
 }

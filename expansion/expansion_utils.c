@@ -6,20 +6,20 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 14:35:39 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:11:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-char	*ft_getenv(char *name, t_treenode *node)
+char	*ft_getenv(char *name, t_ctx *ctx)
 {
-	t_env	*node_env;
+	t_env	*usrvar;
 
-	node_env = find_node(node->env, name);
-	if (!node_env)
-		return (ft_strdup(""));
-	return (ft_strdup(node_env->value));
+	usrvar = find_usrvar(ctx->env, name);
+	if (!usrvar)
+		return (NULL);
+	return (usrvar->value);
 }
 
 /* Les deux premiers blocs if = TOGGLE QUOTES

@@ -18,10 +18,10 @@ int	main(void)
 	t_token		*token;
 	t_token		*tmp;
 	t_treenode	*ast;
-	t_env		*env_list;
+	t_ctx		ctx;
 
-	env_list = init_env_list();
-	add_code_error(&env_list, 0);
+	ctx.env = init_env_list();
+	add_code_error(&ctx.env, 0);
 	while (1)
 	{
 		setup_signals();
@@ -35,10 +35,10 @@ int	main(void)
 		parse_error(0);
 		ast = parse_line_node(&token);
 		token_not_empty(&token, &ast);
-		ast_is_created(ast, tmp, line, &env_list);
+		ast_is_created(ast, tmp, line, &ctx);
 		free_prompt(ast, line, tmp);
 	}
-	return (free_env_list(env_list), rl_clear_history(), 0);
+	return (free_env_list(ctx.env), rl_clear_history(), 0);
 }
 
 void	token_not_empty(t_token **token, t_treenode **ast)
@@ -52,14 +52,11 @@ void	token_not_empty(t_token **token, t_treenode **ast)
 }
 
 void	ast_is_created(t_treenode *ast, t_token *token,
-			char *line, t_env **env_list)
+			char *line,	t_ctx	*ctx)
 {
 	if (!ast)
 		return ;
-	ast->env = *env_list;
-	give_env(ast);
-	execute_tree(ast, token, line);
-	*env_list = ast->env;
+	execute_tree(ast, token, line, ctx);
 }
 
 void	free_prompt(t_treenode *ast, char *line, t_token *tmp)

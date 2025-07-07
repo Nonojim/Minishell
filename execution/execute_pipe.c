@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 19:32:29 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 11:53:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 	* WTERMSIG(status) = return num du signal
 	*/
 
-int	execute_pipeline(t_treenode *node, t_token *token, char *line)
+int	execute_pipeline(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 {
 	int		pipefd[2];
 	pid_t	pid1;
@@ -38,34 +38,34 @@ int	execute_pipeline(t_treenode *node, t_token *token, char *line)
 	if (pid1 == -1)
 		return (perror("fork1"), 1);
 	if (pid1 == 0)
-		pipe_left(node, token, line, pipefd);
+		pipe_left(node, token, line, pipefd, ctx);
 	pid2 = fork();
 	if (pid2 == -1)
 		return (perror("fork2"), 1);
 	if (pid2 == 0)
-		pipe_right(node, token, line, pipefd);
+		pipe_right(node, token, line, pipefd, ctx);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	return (pipe_status(node, pid1, pid2));
+	return (pipe_status(pid1, pid2, ctx));
 }
 
-void	pipe_left(t_treenode *node, t_token *token, char *line, int pipefd[2])
+void	pipe_left(t_treenode *node, t_token *token, char *line, int pipefd[2], t_ctx *ctx)
 {
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	exit(execute_node(node->left, token, line));
+	exit(execute_node(node->left, token, line, ctx));
 }
 
-void	pipe_right(t_treenode *node, t_token *token, char *line, int pipefd[2])
+void	pipe_right(t_treenode *node, t_token *token, char *line, int pipefd[2], t_ctx *ctx)
 {
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	exit(execute_node(node->right, token, line));
+	exit(execute_node(node->right, token, line, ctx));
 }
 
-int	pipe_status(t_treenode *node, pid_t pid1, pid_t pid2)
+int	pipe_status(pid_t pid1, pid_t pid2, t_ctx *ctx)
 {
 	int	status1;
 	int	status2;
@@ -79,6 +79,6 @@ int	pipe_status(t_treenode *node, pid_t pid1, pid_t pid2)
 		code_error = 130 + WEXITSTATUS(status2);
 	else
 		code_error = 1;
-	add_code_error(&node->env, code_error);
+	add_code_error(&ctx->env, code_error);
 	return (code_error);
 }

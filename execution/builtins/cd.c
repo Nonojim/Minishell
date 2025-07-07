@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:53:13 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:24:59 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ stat 	int stat(const char *pathname, struct stat *statbuf); 	Récupère des info
 
 closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.*/
 
-int	ft_cd(t_treenode *node)
+int	ft_cd(t_treenode *node, t_ctx *ctx)
 {
 	char		*oldpwd;
 	char		*newpwd;
@@ -29,18 +29,18 @@ int	ft_cd(t_treenode *node)
 
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
-		return (add_code_error(&node->env, 1), 1);
+		return (add_code_error(&ctx->env, 1), 1);
 	if (!node->argv[1])
-		target = ft_getenv("HOME", node);
+		target = ft_getenv("HOME", ctx);
 	else if (ft_strcmp(node->argv[1], "-") == 0)
 	{
-		target = ft_getenv("OLDPWD", node);
+		target = ft_getenv("OLDPWD", ctx);
 		if (!target || target[0] == '\0')
 		{
 			printf("cd: OLDPWD not set\n");
 			free(oldpwd);
 			free(target);
-			return (add_code_error(&node->env, 1), 1);
+			return (add_code_error(&ctx->env, 1), 1);
 		}
 		printf("%s\n", target);
 	}
@@ -54,38 +54,38 @@ int	ft_cd(t_treenode *node)
 			printf("cd: %s: No such file or directory\n", node->argv[1]);
 		free(oldpwd);
 		free(target);
-		return (add_code_error(&node->env, 1), 1);
+		return (add_code_error(&ctx->env, 1), 1);
 	}
 	if (stat(target, &info) != 0)
 	{
 		printf("cd: %s: No such file or directory\n", target);
 		free(oldpwd);
 		free(target);
-		return (add_code_error(&node->env, 1), 1);
+		return (add_code_error(&ctx->env, 1), 1);
 	}
 	if (!S_ISDIR(info.st_mode))
 	{
 		printf("cd: %s: Not a directory\n", target);
 		free(oldpwd);
 		free(target);
-		return (add_code_error(&node->env, 1), 1);
+		return (add_code_error(&ctx->env, 1), 1);
 	}
 	if (chdir(target) != 0)
 	{
 		printf("cd: %s: Permission denied\n", target);
 		free(oldpwd);
 		free(target);
-		return (add_code_error(&node->env, 1), 1);
+		return (add_code_error(&ctx->env, 1), 1);
 	}
-	export_to_env(&node->env, "OLDPWD", oldpwd);
+	export_to_env(&ctx->env, "OLDPWD", oldpwd);
 	free(oldpwd);
 	free(target);
 	newpwd = getcwd(NULL, 0);
 	if (newpwd)
 	{
-		export_to_env(&node->env, "PWD", newpwd);
+		export_to_env(&ctx->env, "PWD", newpwd);
 		free(newpwd);
 	}
-	return (add_code_error(&node->env, 0), 0);
+	return (add_code_error(&ctx->env, 0), 0);
 }
 

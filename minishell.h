@@ -41,7 +41,7 @@
 //main.c
 void	free_prompt(t_treenode *ast, char *line, t_token *tmp);
 void	ast_is_created(t_treenode *ast, t_token *token,
-			char *line, t_env **env_list);
+			char *line, t_ctx *ctx);
 void	token_not_empty(t_token **token, t_treenode **ast);
 
 #endif

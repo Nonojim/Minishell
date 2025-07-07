@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:52:20 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:24:32 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern char	**environ;
 
-int    execute_external_command(t_treenode *node)
+int    execute_external_command(t_treenode *node, t_ctx *ctx)
 {
 	pid_t	pid;
 	char	*cmd_path;
@@ -25,7 +25,7 @@ int    execute_external_command(t_treenode *node)
 	if (pid == -1)
 	{
 		perror("fork");
-		add_code_error(&node->env, 1);
+		add_code_error(&ctx->env, 1);
 	}
 	if (pid == 0)
 	{
@@ -53,7 +53,7 @@ int    execute_external_command(t_treenode *node)
 		}
 		else
 		{
-			cmd_path = find_cmd_path(cmd, node->env);
+			cmd_path = find_cmd_path(cmd, ctx->env);
 			if (!cmd_path)
 			{
 				printf("%s: command not found\n", node->argv[0]);
@@ -65,12 +65,12 @@ int    execute_external_command(t_treenode *node)
 		exit(126);
 	}
 	else if (pid > 0)
-		return (external_command_status(node, pid));
-	add_code_error(&node->env, 1);
+		return (external_command_status(ctx, pid));
+	add_code_error(&ctx->env, 1);
 	return (1);
 }
 
-int	external_command_status(t_treenode *node, pid_t pid)
+int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
 	int	code_error;
@@ -82,7 +82,7 @@ int	external_command_status(t_treenode *node, pid_t pid)
 		code_error = WEXITSTATUS(status);
 	else
 		code_error = 1;
-	add_code_error(&node->env, code_error);
+	add_code_error(&ctx->env, code_error);
 	return (code_error);
 }
 
@@ -94,7 +94,7 @@ char	*find_cmd_path(char *cmd, t_env *env_list)
 	char	*tmp;
 	char	*cmd_path;
 
-	path_node = find_node(env_list, "PATH");
+	path_node = find_usrvar(env_list, "PATH");
 	if (!path_node || !path_node->value)
 		return (NULL);
 	paths = ft_split(path_node->value, ':');

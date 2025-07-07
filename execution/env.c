@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 18:42:30 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:25:40 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	add_code_error(t_env	**env, int code_error)
 }
 
 // Trouve un node existant avec cette clé
-t_env	*find_node(t_env *env, const char *key)
+t_env	*find_usrvar(t_env *env, const char *key)
 {
 	while (env)
 	{
@@ -42,7 +42,7 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 	t_env	*new;
 	t_env	*tmp;
 
-	node = find_node(*env_list, key);
+	node = find_usrvar(*env_list, key);
 	if (node)
 	{
 		free(node->value);
