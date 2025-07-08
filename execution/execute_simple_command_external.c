@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:15:42 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:55:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,45 +26,39 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	{
 		perror("fork");
 		ctx->exit_code = 1;
+		return (1);
 	}
 	if (pid == 0)
 	{
-		if (node->argv[0][0] == '.' && node->argv[0][1] == '/')
+		if (cmd[0] == '.' || cmd[0] == '/')
+			cmd_path = ft_strdup(cmd);
+		else
+			cmd_path = find_cmd_path(cmd, ctx->env);
+		if (!cmd_path)
 		{
-			if (ft_strcmp(cmd, "./minishell") == 0 && access(node->argv[0], F_OK) == 0 && access(node->argv[0], X_OK) == 0)
-				cmd_path = ft_strdup(node->argv[0]);
-			else
-			{
-				printf("minishell: %s: No such file or directory\n", node->argv[0]);
-				exit(127);
-			}
+			fprintf(stderr, "minishell: %s: command not found\n", cmd);
+			exit(127);
 		}
-		else if (node->argv[0][0] == '/')
+		if (access(cmd_path, F_OK) != 0)
 		{
-			cmd_path = ft_strdup(node->argv[0]);
-			execve(cmd_path, node->argv, environ);
-			printf("minishell: %s: %s\n", cmd_path, strerror(errno));
-			if (errno == ENOENT)
-				exit(127);
-			if (errno == EISDIR)
-				exit(126);
+			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd_path);
+			free(cmd_path);
+			exit(127);
+		}
+		if (access(cmd_path, X_OK) != 0)
+		{
+			fprintf(stderr, "minishell: %s: Permission denied\n", cmd_path);
 			free(cmd_path);
 			exit(126);
 		}
-		else
-		{
-			cmd_path = find_cmd_path(cmd, ctx->env);
-			if (!cmd_path)
-			{
-				printf("%s: command not found\n", node->argv[0]);
-				exit(127);
-			}
-		}
 		execve(cmd_path, node->argv, environ);
+		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free(cmd_path);
+		if (errno == ENOENT)
+			exit(127);
 		exit(126);
 	}
-	else if (pid > 0)
+	else
 		return (external_command_status(ctx, pid));
 	ctx->exit_code = 1;
 	return (1);

@@ -6,11 +6,26 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:39:02 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 15:28:58 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+int	is_valid_export(char *arg)
+{
+	int	i = 0;
+
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (0);
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	ft_export(t_treenode *node, t_ctx *ctx)
 {
@@ -27,7 +42,7 @@ int	ft_export(t_treenode *node, t_ctx *ctx)
 		add_export_variable(ctx, node->argv[i]);
 		i++;
 	}
-	return (0);
+	return (ctx->exit_code);
 }
 
 void	add_export_variable(t_ctx *ctx, char *arg)
@@ -38,8 +53,20 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 	char	*value;
 
 	j = 0;
+	if (!is_valid_export(arg))
+	{
+		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ctx->exit_code = 1;
+		return;
+	}
 	while (arg[j] && arg[j] != '=')
 		j++;
+	if (!ft_isalpha(arg[0]))
+	{
+		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ctx->exit_code = 1;
+		return;
+	}
 	if (arg[j] == '=')
 	{
 		key = ft_substr(arg, 0, j);

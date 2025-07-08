@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:39:24 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:23:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			ft_cd(t_treenode *node, t_ctx *ctx);
 int			ft_echo(t_treenode *node);
 int			ft_echo_n(char *argv);
 // env
-int			ft_env(t_env *env_list);
+int	ft_env(t_treenode *node, t_ctx *ctx);
 void	print_env_reverse(t_env *node);
 //unset
 int			ft_unset(t_treenode *node, t_ctx *ctx);

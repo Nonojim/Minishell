@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:55:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 13:58:27 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:23:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	execute_builtin_command(t_treenode *node, t_token *token, char *line, t_ctx 
 	if (ft_strcmp(cmd, "unset") == 0)
 		return (ft_unset(node, ctx));
 	if (ft_strcmp(cmd, "env") == 0)
-		return (ft_env(ctx->env));
+		return (ft_env(node, ctx));
 	if (ft_strcmp(cmd, "exit") == 0)
 		return (ft_exit(line, token, node, ctx));
 	return (1);

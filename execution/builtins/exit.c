@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:19:50 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:20:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 			error_numeric_exit(token, line, ast, ctx);
 		else if (ast->argv[2])
 		{
-			printf("Minishell: exit: too many arguments\n");
+			fprintf(stderr, "Minishell: exit: too many arguments\n");
 			ctx->exit_code = 1;
 			return (ctx->exit_code);
 		}
@@ -55,13 +55,13 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 void	error_numeric_exit(t_token *token, char *line, t_treenode *ast, t_ctx *ctx)
 {
 	printf("exit\n");
-	printf("Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
+	fprintf(stderr, "Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
 	free_token(token);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);
 	rl_clear_history();
-	exit(255);
+	exit(2);
 }
 
 int	is_numeric_exit(char *argv)

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 03:59:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:44:15 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 		{
 			expanded = expand_string(node->argv[i], node, ctx);
 			if (expanded == NULL)
-				return ;
-			if (expanded != NULL && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
+			{
+				i++;
+				continue ;
+			}
+			if ((expanded != NULL) && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
 			{
 				clean = remove_quotes_after_expansion(expanded);
 				free(expanded);
@@ -91,10 +94,11 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	char			*tmp;
 	t_quote_state	q;
 	int				i;
-	
+
+	i = 0;
 	if (!ft_strchr(str, '$') && !ft_strchr(str, '*') && str[0] != '~')
 		return (ft_strdup(str));
-	if (str[0] == '~' && str[i] == '\0')
+	if (str[0] == '~' && str[i + 1] == '\0')
 	{
 		tmp = expand_tilde(str, ctx);
 		if (tmp)
@@ -227,6 +231,6 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);
 	free(tmp);
-	free(expanse);
+//	free(expanse);
 	return (j);
 }

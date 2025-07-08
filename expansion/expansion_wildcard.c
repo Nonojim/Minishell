@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 23:46:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:43:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,42 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		free(psm);
 		return (NULL);
 	}
-	int	i = 0;
-	while (result[i])
-		i++;
-	char **new_argv = malloc(sizeof(char *) * (i + 2));
+	//pour conserver les autres argv 
+	int	wildcard_index = 0;
+	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
+		wildcard_index++;
+	int len_argv = 0;
+	while (node->argv[len_argv])
+		len_argv++;
+	int len_result = 0;
+	while (result[len_result])
+		len_result++;
+	char **new_argv = malloc(sizeof(char *) * (len_argv + len_result));
 	if (!new_argv)
 		return (NULL);
-	new_argv[0] = ft_strdup(node->argv[0]);
-	//printf("node : %s \n", node->argv[0]);
-	i = 0;
-	int j = 0;
-	while (result[i])
+	int i = 0;
+	while (i < wildcard_index)
 	{
-		new_argv[j + 1] = result[i];
+		new_argv[i] = ft_strdup(node->argv[i]);
 		i++;
+	}
+	//
+	//creation des new_arg
+	int j = 0;
+	while (result[j])
+	{
+		new_argv[i + j] = result[j];
 		j++;
 	}
-	new_argv[j + 1] = NULL;
-	//printf("new_arg[0] = %s, new_arg[1] = %s , new_arg[2] = %s , new_arg[3] = %s \n", new_argv[0], new_argv[1], new_argv[2], new_argv[3]);
+	int k = wildcard_index + 1;
+	while (k < len_argv)
+	{
+		new_argv[i + j] = ft_strdup(node->argv[k]);
+		k++;
+		j++;
+	}
+	new_argv[i + j] = NULL;
+
 	free_split(node->argv);
 	free(result);
 	free(psm->middle);
@@ -152,7 +170,6 @@ int	match_middle(char *str, char *middle)
 
 	len_str = ft_strlen(str);
 	match = ft_strnstr_for_wildcard(str, middle, len_str);
-	printf("match middle : %d\n", match);
 	if (match == 0)
 		return (1);
 	return (0);
@@ -206,7 +223,7 @@ char	**add_array(char **result, char *file)
 	new[i] = ft_strdup(file);
 	new[i + 1] = NULL;
 	free(result);
-	printf("ajout : %s\n", file);
+	//printf("ajout : %s\n", file);
 	return (new);
 }
 

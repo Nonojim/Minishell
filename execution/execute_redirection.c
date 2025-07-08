@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:09:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:40:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	execute_redirection_chain(t_treenode *node, t_token *token, char *line, t_ct
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (!node)
+	{
+		ctx->exit_code = 1;
 		return (1);
+	}
 	if (node->type == INPUT_REDIRECTION)
 		status = redir_input(node, token, line, ctx);
 	else if (node->type == OUTPUT_REDIRECTION)
@@ -45,7 +48,11 @@ int	redir_input(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 
 	fd = open(node->right->str, O_RDONLY);
 	if (fd < 0)
-		return (perror("open <"), 1);
+	{
+		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ctx->exit_code = 1;
+		return (1);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (execute_redirection_chain(node->left, token, line, ctx));
@@ -57,7 +64,11 @@ int	redir_output(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return (perror("open >"), 1);
+	{
+		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ctx->exit_code = 1;
+		return (1);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (execute_redirection_chain(node->left, token, line, ctx));
@@ -69,8 +80,13 @@ int	redir_append(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		return (perror("open >>"), 1);
+	{
+		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ctx->exit_code = 1;
+		return (1);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (execute_redirection_chain(node->left, token, line, ctx));
 }
+

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 16:45:50 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 05:07:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ char	*ft_getenv(char *name, t_ctx *ctx)
 
 	usrvar = find_usrvar(ctx->env, name);
 	if (!usrvar)
-		return (ft_strdup(""));
-	return (ft_strdup(usrvar->value));
+		return ("");
+	return (usrvar->value);
 }
 
 /* Les deux premiers blocs if = TOGGLE QUOTES

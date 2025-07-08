@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:08:17 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:12:33 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	pipe_status(pid_t pid1, pid_t pid2, t_ctx *ctx)
 	if (WIFSIGNALED(status2))
 		ctx->exit_code = 128 + WTERMSIG(status2);
 	else if (WIFEXITED(status2))
-		ctx->exit_code = 130 + WEXITSTATUS(status2);
+		ctx->exit_code = WEXITSTATUS(status2);
 	else
 		ctx->exit_code = 1;
 	return (ctx->exit_code);

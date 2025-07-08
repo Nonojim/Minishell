@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:16:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:25:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ extern char	**environ;
 int	execute_simple_command(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
 {
 	if (!node || !node->str || !node->argv)
-	{
 		return (ctx->exit_code = 1);
-	}
 	expanse_ast(node, ctx);
 	if (is_builtin(node->argv[0]))
 		ctx->exit_code = execute_builtin_command(node, token, line, ctx);
