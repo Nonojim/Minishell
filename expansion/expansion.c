@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 03:04:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 03:59:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	char			*tmp;
 	t_quote_state	q;
 	int				i;
-
 	
 	if (!ft_strchr(str, '$') && !ft_strchr(str, '*') && str[0] != '~')
 		return (ft_strdup(str));
@@ -100,12 +99,14 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 		tmp = expand_tilde(str, ctx);
 		if (tmp)
 			return (tmp);
+		return(tmp);
 	}
 	if (ft_strchr(str, '*'))
 	{
 		tmp = expand_wildcard(str, node);
 		if (tmp)
 			return (tmp);
+		return(tmp);
 	}
 	result = ft_strdup("");
 	i = 0;
