@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:25:09 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 02:19:50 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ Bash fait un modulo de 256 pour avoir un affichage correct.
 
 int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 {
-	int	code_error;
-
-	code_error = 0;
 	if (ast->argv[1])
 	{
 		if (!is_numeric_exit(ast->argv[1]))
@@ -39,21 +36,20 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 		else if (ast->argv[2])
 		{
 			printf("Minishell: exit: too many arguments\n");
-			code_error = 1;
-			add_code_error(&ctx->env, code_error);
-			return (code_error);
+			ctx->exit_code = 1;
+			return (ctx->exit_code);
 		}
 		else
-			code_error = ft_atoi(ast->argv[1]) % 256;
+			ctx->exit_code = ft_atoi(ast->argv[1]) % 256;
 	}
 	else
-		code_error = 0;
+		ctx->exit_code = 0;
 	free_token(token);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);
 	rl_clear_history();
-	exit(code_error);
+	exit(ctx->exit_code);
 }
 
 void	error_numeric_exit(t_token *token, char *line, t_treenode *ast, t_ctx *ctx)

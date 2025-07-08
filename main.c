@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/30 20:18:01 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 03:43:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ int	main(void)
 	t_treenode	*ast;
 	t_ctx		ctx;
 
+	ctx.exit_code = 0;
 	ctx.env = init_env_list();
-	//ctx.exit_code = 0;
-	add_code_error(&ctx.env, 0);
 	while (1)
 	{
 		setup_signals();
@@ -39,7 +38,10 @@ int	main(void)
 		ast_is_created(ast, tmp, line, &ctx);
 		free_prompt(ast, line, tmp);
 	}
-	return (free_env_list(ctx.env), rl_clear_history(), 0);
+	free_env_list(ctx.env);
+	rl_clear_history();
+	return (0);
+	//return (free_env_list(ctx.env), rl_clear_history(), 0);
 }
 
 void	token_not_empty(t_token **token, t_treenode **ast)

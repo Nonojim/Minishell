@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:32:57 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 02:09:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	execute_redirection_chain(t_treenode *node, t_token *token, char *line, t_ct
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
-	add_code_error(&ctx->env, status);
-	return (status);
+	ctx->exit_code = status;
+	return (ctx->exit_code);
 }
 
 int	redir_input(t_treenode *node, t_token *token, char *line, t_ctx *ctx)

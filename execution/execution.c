@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:35:08 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 02:14:33 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@
 
 void	execute_tree(t_treenode *tree, t_token *token, char *line, t_ctx	*ctx)
 {
-	int	code_error;
 
-	code_error = execute_node(tree, token, line, ctx);
-	add_code_error(&ctx->env, code_error);
+	ctx->exit_code = execute_node(tree, token, line, ctx);
 }
 
 int	execute_node(t_treenode *node, t_token *token, char *line, t_ctx *ctx)

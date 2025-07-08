@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 15:24:32 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 02:15:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	if (pid == -1)
 	{
 		perror("fork");
-		add_code_error(&ctx->env, 1);
+		ctx->exit_code = 1;
 	}
 	if (pid == 0)
 	{
@@ -66,24 +66,22 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	}
 	else if (pid > 0)
 		return (external_command_status(ctx, pid));
-	add_code_error(&ctx->env, 1);
+	ctx->exit_code = 1;
 	return (1);
 }
 
 int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
-	int	code_error;
 
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
-		code_error = 128 + WTERMSIG(status);
+		ctx->exit_code = 128 + WTERMSIG(status);
 	else if (WIFEXITED(status))
-		code_error = WEXITSTATUS(status);
+		ctx->exit_code = WEXITSTATUS(status);
 	else
-		code_error = 1;
-	add_code_error(&ctx->env, code_error);
-	return (code_error);
+		ctx->exit_code = 1;
+	return (ctx->exit_code);
 }
 
 char	*find_cmd_path(char *cmd, t_env *env_list)

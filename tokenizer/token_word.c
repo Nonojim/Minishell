@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 19:55:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 03:20:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 */
 int	is_word(int c)
 {
-	if (c == '&' || c == '|' || c == '<' || c == '>' || c == ';'
+	if (c == '|' || c == '<' || c == '>' || c == ';'
 		|| c == '(' || c == ')')
 		return (0);
 	if ((c >= 33 && c <= 126) || c == '\\' || c == '"' || c == '\'')
@@ -36,10 +36,17 @@ void	token_word(int *i, int start, char *line, t_token **token)
 	char	*str;
 
 	while (line[*i] != '\0' && is_word(line[*i]) == 1)
+	{
+		if ((line[*i] == '&' && line[*i + 1] == '&'))
+			break;
 		(*i)++;
+	}
 	str = ft_substr(line, start, *i - start);
 	if (is_word(*str) == 1)
 		add_token_end(token, create_token(WORD, str));
 	else
+	{
+		free(str);
 		(*i)++;
+	}
 }

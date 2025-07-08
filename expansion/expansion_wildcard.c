@@ -6,19 +6,209 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 00:17:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:46:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-char	*expand_wildcard(char *str);
+char	*expand_wildcard(char *str, t_treenode *node);
 int	match_prefix(char *str, char *prefix);
 int	match_middle(char *str, char *middle);
 int	match_suffix(char *str, char *suffix);
-char	*add_string(char *result, char *file);
-void	create_prefix_and_suffix(char **prefix, char **suffix, char *str);
-char	*create_middle(char **middle, char *str);
+char	**add_array(char **result, char *file);
+void	create_prefix_middle_suffix(char *str, t_wildcard *psm);
+
+char	*expand_wildcard(char *str, t_treenode *node)
+{
+	DIR				*dir; //dossier ouvert = opendir
+	struct dirent	*entry;
+	char			**result;
+	t_wildcard *psm = malloc(sizeof(t_wildcard));
+
+	if (!psm)
+    return (NULL);
+	psm->prefix = NULL;
+	psm->middle = NULL;
+	psm->suffix = NULL;
+	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
+	if (!dir)
+		return (str);
+	result = NULL;
+	create_prefix_middle_suffix(str, psm);
+	//printf("prefix : %s , middle: %s, suffix : %s \n", psm->prefix, psm->middle, psm->suffix);
+	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
+	{
+
+		if (entry->d_name[0] == '.') //on ignore les files caché (ex .git)
+			continue;
+		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix)) &&
+				(psm->middle == NULL || match_middle(entry->d_name, psm->middle)) &&
+				(psm->suffix == NULL || match_suffix(entry->d_name, psm->suffix)))
+			result = add_array(result, entry->d_name);
+	}
+	closedir(dir);
+	if (!result)
+	{
+		free(psm->middle);
+		free(psm->prefix);
+		free(psm->suffix);
+		free(psm);
+		return (NULL);
+	}
+	int	i = 0;
+	while (result[i])
+		i++;
+	char **new_argv = malloc(sizeof(char *) * (i + 2));
+	if (!new_argv)
+		return (NULL);
+	new_argv[0] = ft_strdup(node->argv[0]);
+	//printf("node : %s \n", node->argv[0]);
+	i = 0;
+	int j = 0;
+	while (result[i])
+	{
+		new_argv[j + 1] = result[i];
+		i++;
+		j++;
+	}
+	new_argv[j + 1] = NULL;
+	//printf("new_arg[0] = %s, new_arg[1] = %s , new_arg[2] = %s , new_arg[3] = %s \n", new_argv[0], new_argv[1], new_argv[2], new_argv[3]);
+	free_split(node->argv);
+	free(result);
+	free(psm->middle);
+	free(psm->prefix);
+	free(psm->suffix);
+	free(psm);
+	node->argv = new_argv;
+	return (NULL);
+}
+
+void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
+{
+	int	i = 0;
+	int	start;
+
+
+	if (str[i] && str[i] != '*')
+	{
+		start = 0;
+		while (str[i] && str[i] != '*')
+			i++;
+		if (i > 0)
+			psm->prefix = ft_substr(str, start, i - start);
+	}
+	while (str[i] == '*')
+		i++;
+	start = i;
+	while (str[i] && str[i] != '*')
+		i++;
+	if (str[i] == '*')
+	{
+		if (i > start)
+			psm->middle = ft_substr(str, start, i - start);
+		while (str[i] == '*')
+			i++;
+		if (str[i])
+			psm->suffix = ft_strdup(str + i);
+	}
+	else
+	{
+		if (i > start)
+			psm->suffix = ft_substr(str, start, i - start);
+	}
+}
+
+
+int	ft_strnstr_for_wildcard(char *str,	char *middle, int len_str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i] && i < len_str)
+	{
+		if (str[i] == middle[j])
+			j++;
+		else
+		{
+			i -= (j - 1);
+			j = 0;
+			if (str[i] == middle[0])
+				j++;
+		}
+		i++;
+		int	len_middle = ft_strlen(middle);
+		if (j == len_middle)
+			return(0);
+	}
+	return (1);
+}
+int	match_middle(char *str, char *middle)
+{
+	int	match;
+	int	len_str;
+
+	len_str = ft_strlen(str);
+	match = ft_strnstr_for_wildcard(str, middle, len_str);
+	printf("match middle : %d\n", match);
+	if (match == 0)
+		return (1);
+	return (0);
+}
+
+//verif que str comment par le prefix
+int	match_prefix(char *str, char *prefix)
+{
+	int	match;
+	int	len_prefix;
+	
+	len_prefix = ft_strlen(prefix);
+	match = ft_strncmp(str, prefix, len_prefix);
+	if (match == 0)
+		return (1);
+	return (0);
+}
+
+
+//verif que str finit par le suffix
+int	match_suffix(char *str, char *suffix)
+{
+	int	len_str;
+	int	len_suffix;
+	int	match;
+
+	len_str = ft_strlen(str);
+	len_suffix = ft_strlen(suffix);
+	match = ft_strcmp(str + len_str - len_suffix, suffix);
+	if (match == 0)
+		return (1);
+	return (0);
+}
+
+char	**add_array(char **result, char *file)
+{
+	int		i = 0;
+	char	**new;
+
+	while (result && result[i])
+		i++;
+	new = malloc(sizeof(char *) * (i + 2));
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (result && result[i])
+	{
+		new[i] = result[i];
+		i++;
+	}
+	new[i] = ft_strdup(file);
+	new[i + 1] = NULL;
+	free(result);
+	printf("ajout : %s\n", file);
+	return (new);
+}
 
 /* = Glob 
  * PREFIXE***SUFFIXE 
@@ -59,179 +249,4 @@ closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
 * 
 * closedir(dir) = a la fin de la lecture on ferme le dossier pour free les ressources
 *h
-*
-*
 */
-char	*expand_wildcard(char *str)
-{
-	DIR				*dir; //dossier ouvert = opendir
-	struct dirent	*entry;
-	char			*result;
-	char			*prefix; //nom du fichier ex: on recherche les fichier ma*.c donc main.c
-	char			*suffix; //terminaison du fichier ex: .c
-	char			*middle; //*ai*
-
-	result = ft_strdup("");
-	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
-	if (!dir || !str)
-		return (ft_strdup(str)); 
-	middle = NULL;
-	printf("middle = %s\n", middle);
-	create_prefix_and_suffix(&prefix, &suffix, str);
-	middle = create_middle(&middle, str);	
-	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
-	{
-		if (entry->d_name[0] == '.') //on ignore les files caché (ex .git)
-			continue;
-		if ((match_prefix(entry->d_name, prefix) && match_suffix(entry->d_name, suffix))) /*|| match_middle(entry->d_name, middle))*/ //ignore file caché 
-			result = add_string(result, entry->d_name);
-		else if(middle != NULL && match_middle(entry->d_name, middle))
-			result = add_string(result, entry->d_name);
-	}
-	closedir(dir);
-	free(prefix);
-	free(suffix);
-	if (result[0] == '\0')
-	{
-		free(result);
-		str = ft_strdup(str);
-		return (str);
-	}
-	return (result);
-}
-
-char	*create_middle(char **middle, char *str)
-{
-	int	end_middle = 0;
-	int	i = 0;
-	while(str[i] == '*')
-		i++;
-	int	start_middle = i;
-	while(str[i] && str[i] != '*') // cas du *test*  ex: *ai* = main.c
-		i++;
-	end_middle = i;
-	if (str[i] == '*')
-	{
-		while(str[i])
-		{
-			if (str[i] != '*')
-				return (NULL);
-			i++;
-		}
-		printf("middle after : %d\n", str[i]);
-		printf("middle_in_fonction = %s\n", *middle);
-		*middle = ft_substr(str, start_middle, end_middle-start_middle);
-		return (*middle);
-	}
-	else 
-		return (NULL);	
-}
-
-void	create_prefix_and_suffix(char **prefix, char **suffix, char *str)
-{
-	int	i;
-	int	first_wildcard;
-
-	i = 0;
-	first_wildcard = 0;
-	while (str[i] && str[i] != '*')
-		i++;
-	first_wildcard = i;
-	while (str[i] && str[i] == '*') //on passe toutes les autres etoiles
-		i++;
-	*prefix = ft_substr(str, 0, first_wildcard);
-	*suffix = ft_strdup(str + i); 
-}
-
-int	ft_strnstr_for_wildcard(char *str,	char *middle, int len_str)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str[i] && i < len_str)
-	{
-		if (str[i] == middle[j])
-			j++;
-		else
-		{
-			i -= (j - 1);
-			j = 0;
-			if (str[i] == middle[0])
-			{
-				j++;
-			}
-		}
-		i++;
-		int	len_middle = ft_strlen(middle);
-		if (j == len_middle)
-			//return ((char *)&big[i - j]);
-			return(0);
-	}
-	return (1);
-}
-
-int	match_middle(char *str, char *middle)
-{
-	int	match;
-	int	len_str;
-
-	if (!middle || middle[0] == '\0')
-		return (1);
-	len_str = ft_strlen(str);
-	//char	*ft_strnstr(const char *big,	const char *little, size_t len)
-	match = ft_strnstr_for_wildcard(str, middle, len_str);
-	printf("match middle : %d\n", match);
-	if (match == 0)
-		return (1);
-	return (0);
-	//fonction qui cherche dans tous les files/folder de entry si il y a un ex:ai à l'intérieur
-//trouver une fonction pour faire ça 
-}
-
-//verif que str comment par le prefix
-int	match_prefix(char *str, char *prefix)
-{
-	int	match;
-	int	len_prefix;
-	
-	if (!prefix || prefix[0] == '\0')
-		return (1);
-	len_prefix = ft_strlen(prefix);
-	match = ft_strncmp(str, prefix, len_prefix);
-	if (match == 0)
-		return (1);
-	return (0);
-}
-
-
-//verif que str finit par le suffix
-int	match_suffix(char *str, char *suffix)
-{
-	int	len_str;
-	int	len_suffix;
-	int	match;
-
-	if (!suffix || suffix[0] == '\0')
-		return (1);
-	len_str = ft_strlen(str);
-	len_suffix = ft_strlen(suffix);
-	match = ft_strcmp(str + len_str - len_suffix, suffix);
-	if (match == 0)
-		return (1);
-	return (0);
-}
-
-//ajoute un space entre les resultats, return la string
-char	*add_string(char *result, char *file)
-{
-	char	*tmp;
-	char	*result2;
-
-	tmp = ft_strjoin(result, file);
-	result2 = ft_strjoin(tmp, " ");
-	free(result);
-	free(tmp);
-	return (result2);
-}

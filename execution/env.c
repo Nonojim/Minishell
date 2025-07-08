@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 12:25:40 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 02:42:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,22 @@
 
 extern char	**environ;
 
-void	add_code_error(t_env	**env, int code_error)
+/*void	add_code_error(t_env	**env, int code_error)
 {
 	char	*value;
-
+	
+	(void)env;
 	value = ft_itoa(code_error);
 	export_to_env(env, "?", value);
 	free(value);
-}
+}*/
+
+/*void	add_code_error(t_ctx exit_code, int code_error)
+{
+	ctw->exit_code = code_error;
+}*/
+//dans l'expansion : 
+//return(ft_itoa(ctx->exit_code));
 
 // Trouve un node existant avec cette clé
 t_env	*find_usrvar(t_env *env, const char *key)
@@ -53,10 +61,9 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return ;
-		new->key = ft_strdup(key);
+		new->key = ft_strdup(key); 
 		new->value = ft_strdup(value);
-			new->next = NULL;
-
+		new->next = NULL;
 		// Ajout à la fin de la liste
 		if (!*env_list)
 		{
@@ -101,6 +108,7 @@ t_env	*init_env_list(void)
 void	free_env_list(t_env *env)
 {
 	t_env	*tmp;
+	int	count = 0;
 
 	while (env)
 	{
@@ -109,5 +117,7 @@ void	free_env_list(t_env *env)
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
+		count++;
 	}
+	printf("free_env_list: %d variables libérées\n", count);
 }

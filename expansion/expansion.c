@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 16:37:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/08 03:04:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 void	expanse_ast(t_treenode *node, t_ctx *ctx)
 {
 	int		i;
+	char	*expanded;
+	char	*clean;
 
 	if (!node)
 		return ;
@@ -24,11 +26,21 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 		i = 0;
 		while (node->argv[i])
 		{
-			char	*expanded = expand_string(node->argv[i], ctx);
-			char	*clean = remove_quotes_after_expansion(expanded);
-			free(expanded);
-			free(node->argv[i]);
-			node->argv[i] = clean;
+			expanded = expand_string(node->argv[i], node, ctx);
+			if (expanded == NULL)
+				return ;
+			if (expanded != NULL && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
+			{
+				clean = remove_quotes_after_expansion(expanded);
+				free(expanded);
+				free(node->argv[i]);
+				node->argv[i] = clean;
+			}
+			else
+			{
+				free(node->argv[i]);
+				node->argv[i] = expanded;
+			}
 			i++;
 		}
 	}
@@ -41,22 +53,19 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 		{
 			while (node->argv && node->argv[i])
 			{
-				char *expanded = expand_string(node->argv[i], ctx);
-				char *clean = remove_quotes_after_expansion(expanded);
-				free(expanded);
+				expanded = expand_string(node->argv[i], node, ctx);
+				if (expanded == NULL)
+					return ;
 				free(node->argv[i]);
-				node->argv[i] = clean;
+				node->argv[i] = expanded;
 				i++;
 			}
 		}
 	}
 	if (node->type == WORD && node->argv && node->argv[0])
-	{
-		free(node->str);
-		node->str = ft_strdup(node->argv[0]);
-	}
-	expanse_ast(node->left, ctx);
-	expanse_ast(node->right, ctx);
+		return ;
+//	expanse_ast(node->left, ctx);
+//	expanse_ast(node->right, ctx);
 }
 
 //void give_env(t_treenode *node)
@@ -76,13 +85,28 @@ On traite les strings pour remplacer les vars d'environnement,
 le tilde. On vérifie que les quotes sont ok avec ça.
 On return les expansions appliqués
 */
-char	*expand_string(char *str, t_ctx *ctx)
+char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 {
 	char			*result;
 	char			*tmp;
 	t_quote_state	q;
 	int				i;
 
+	
+	if (!ft_strchr(str, '$') && !ft_strchr(str, '*') && str[0] != '~')
+		return (ft_strdup(str));
+	if (str[0] == '~' && str[i] == '\0')
+	{
+		tmp = expand_tilde(str, ctx);
+		if (tmp)
+			return (tmp);
+	}
+	if (ft_strchr(str, '*'))
+	{
+		tmp = expand_wildcard(str, node);
+		if (tmp)
+			return (tmp);
+	}
 	result = ft_strdup("");
 	i = 0;
 	q.in_single_quote = 0;
@@ -91,7 +115,22 @@ char	*expand_string(char *str, t_ctx *ctx)
 	{
 		if (toggle_quote(str, &i, &q, &result))
 			continue ;
-		if (!q.in_single_quote && !q.in_double_quote && str[i] == '~')
+		if (!q.in_single_quote && str[i] == '$'
+			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+		{
+			i = expand_variable(str, i, &result, ctx);
+			continue ;
+		}
+		add_char_to_string(&result, str[i]);
+		i++;
+	}
+	return (result);
+}
+	/*while (str[i])
+	{
+		if (toggle_quote(str, &i, &q, &result))
+			continue ;
+		if (!q.in_single_quote && !q.in_double_quote && str[0] == '~' && str[1] == '\0')
 		{
 			tmp = expand_tilde(str, ctx);
 			if (tmp)
@@ -102,7 +141,9 @@ char	*expand_string(char *str, t_ctx *ctx)
 		}
 		if (!q.in_single_quote && !q.in_double_quote && ft_strchr(str,'*'))
 		{
-			tmp = expand_wildcard(str);
+			tmp = expand_wildcard(str, node);
+			free(result);
+			return(tmp);
 			if (tmp)
 			{
 				free(result);
@@ -116,11 +157,11 @@ char	*expand_string(char *str, t_ctx *ctx)
 			i = expand_variable(str, i, &result, ctx);
 			continue ;
 		}
+		//LOGIQUE A REVOIR ! Renvoi la même string si pas d'expansion !!!
 		add_char_to_string(&result, str[i]);
 		i++;
 	}
-	return (result);
-}
+	return (result);*/
 
 void	add_char_to_string(char **result, char c)
 {
@@ -130,16 +171,16 @@ void	add_char_to_string(char **result, char c)
 	if (!result)
 		return ;
 	len = ft_strlen(*result);
-	tmp = malloc(len + 2); // +1 pour le char, +1 pour le \0
+	tmp = malloc(len + 2);
 	if (!tmp)
 		return ;
 	ft_memcpy(tmp, *result, len);
 	tmp[len] = c;
 	tmp[len + 1] = '\0';
-	free(*result);
+	if (result != NULL)
+		free(*result);
 	*result = tmp;
 }
-
 
 char	*expand_tilde(char *str, t_ctx *ctx)
 {
@@ -169,7 +210,7 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 
 	if (str[i + 1] == '?')
 	{
-		expanse = ft_getenv("?", ctx);
+		expanse = ft_itoa(ctx->exit_code);
 		tmp = *result;
 		*result = ft_strjoin(tmp, expanse);
 		free(tmp);
@@ -177,7 +218,7 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 		return (i + 2);
 	}
 	j = i + 1;
-	while (str[j] != '\0' && (ft_isalpha(str[j]) || str[j] == '_'))
+	while (str[j] != '\0' && (ft_isalnum(str[j]) || str[j] == '_'))
 		j++;
 	new_str = ft_substr(str, i + 1, j - (i + 1));
 	expanse = ft_getenv(new_str, ctx);
