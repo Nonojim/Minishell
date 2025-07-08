@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 14:55:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 21:46:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		if (!cmd_path)
 		{
 			fprintf(stderr, "minishell: %s: command not found\n", cmd);
+			free_treenode(node);
+			//return (127);
 			exit(127);
 		}
 		if (access(cmd_path, F_OK) != 0)

@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 03:20:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 20:00:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,38 @@ void	token_word(int *i, int start, char *line, t_token **token)
 			break;
 		(*i)++;
 	}
+
 	str = ft_substr(line, start, *i - start);
-	if (is_word(*str) == 1)
-		add_token_end(token, create_token(WORD, str));
-	else
+if (!str)
+	return ;
+
+if (is_word(*str) == 1)
+{
+	t_token *t = create_token(WORD, str);
+	if (!t)
 	{
 		free(str);
-		(*i)++;
+		return ;
+	}
+
+	// Sauvegarde dernier avant ajout
+	t_token *last = *token;
+	while (last && last->next)
+		last = last->next;
+
+	add_token_end(token, t);
+
+	// Vérifie si t a été ajouté
+	if (t->next == NULL && last == t)
+	{
+		free_token(t); // On libère manuellement
 	}
 }
+else
+{
+	free(str);
+	(*i)++;
+}
+
+}
+

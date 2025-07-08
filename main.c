@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/08 11:39:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 21:24:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	main(void)
 	t_token		*tmp;
 	t_treenode	*ast;
 	t_ctx		ctx;
-
+	
+	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.env = init_env_list();
 	while (1)
@@ -30,6 +31,7 @@ int	main(void)
 		if (line == NULL)
 			break ;
 		token = tokenize(token, &line);
+		print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);
@@ -64,7 +66,10 @@ void	ast_is_created(t_treenode *ast, t_token *token,
 
 void	free_prompt(t_treenode *ast, char *line, t_token *tmp)
 {
-	free_treenode(ast);
-	free_token(tmp);
-	free(line);
+	if (ast)
+		free_treenode(ast);
+	if (tmp)
+		free_token(tmp);
+	if (line)
+		free(line);
 }
