@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 02:14:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:32:34 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	execute_subshell_node(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
+int	execute_subshell_node(t_treenode *node, char *line, t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -23,7 +23,7 @@ int	execute_subshell_node(t_treenode *node, t_token *token, char *line, t_ctx *c
 		ctx->exit_code = 1;
 	}
 	else if (pid == 0)
-		exit(execute_node(node->left, token, line, ctx));
+		exit(execute_node(node->left, line, ctx));
 	return (subshell_status(ctx, pid));
 }
 

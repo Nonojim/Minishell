@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 12:23:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:34:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void		unset_list(t_ctx *ctx, char *key);
 // exit
 int			compar_long_limits(char *nb, char sign);
 int			is_numeric_exit(char *argv);
-void		error_numeric_exit(t_token *token, char *line, t_treenode *ast, t_ctx *ctx);
-int			ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx);
+void		error_numeric_exit(char *line, t_treenode *ast, t_ctx *ctx);
+int			ft_exit(char *line, t_treenode *ast, t_ctx *ctx);
 // export
 int			ft_export(t_treenode *node, t_ctx *ctx);
 void		print_export(t_env *env);

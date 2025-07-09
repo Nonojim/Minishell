@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/08 21:24:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:36:30 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ int	main(void)
 		parse_error(0);
 		ast = parse_line_node(&token);
 		token_not_empty(&token, &ast);
-		ast_is_created(ast, tmp, line, &ctx);
-		free_prompt(ast, line, tmp);
+		free_token(tmp);
+		resolve_ast(ast, line, &ctx);
+		free_prompt(ast, line);
 	}
 	free_env_list(ctx.env);
 	rl_clear_history();
@@ -56,21 +57,19 @@ void	token_not_empty(t_token **token, t_treenode **ast)
 	}
 }
 
-void	ast_is_created(t_treenode *ast, t_token *token,
+void	resolve_ast(t_treenode *ast, 
 			char *line,	t_ctx	*ctx)
 {
 	if (!ast)
 		return ;
-	execute_tree(ast, token, line, ctx);
+	execute_tree(ast, line, ctx);
 }
 
-void	free_prompt(t_treenode *ast, char *line, t_token *tmp)
+void	free_prompt(t_treenode *ast, char *line)
 {
 	//(void)tmp;
 	if (ast)
 		free_treenode(ast);
-	 if (tmp)
-	 	free_token(tmp);
 	if (line)
 		free(line);
 }

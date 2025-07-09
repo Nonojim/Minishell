@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 15:20:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:16:28 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ Le code de sortie étant limité à 8 bits = 255 max.
 Bash fait un modulo de 256 pour avoir un affichage correct. 
 */
 
-int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
+int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
 	if (ast->argv[1])
 	{
 		if (!is_numeric_exit(ast->argv[1]))
-			error_numeric_exit(token, line, ast, ctx);
+			error_numeric_exit(line, ast, ctx);
 		else if (ast->argv[2])
 		{
 			fprintf(stderr, "Minishell: exit: too many arguments\n");
@@ -44,7 +44,6 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 	}
 	else
 		ctx->exit_code = 0;
-	free_token(token);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);
@@ -52,11 +51,10 @@ int	ft_exit(char *line, t_token *token, t_treenode *ast, t_ctx *ctx)
 	exit(ctx->exit_code);
 }
 
-void	error_numeric_exit(t_token *token, char *line, t_treenode *ast, t_ctx *ctx)
+void	error_numeric_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
 	printf("exit\n");
 	fprintf(stderr, "Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
-	free_token(token);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);

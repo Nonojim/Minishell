@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 11:38:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/09 13:41:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ void	print_token_list(t_token *token_list)
 				printf("%c", str[i]);
 			i++;
 		}
-		// Affiche l'adresse du token pour détecter les doublons
-		printf("] (%p) -> ", (void *)token_list);
+		printf("] -> ");
 		token_list = token_list->next;
 	}
 	printf("NULL\n");
@@ -85,12 +84,12 @@ void	print_token_list(t_token *token_list)
 void	free_token(t_token *token_list)
 {
 	t_token	*tmp;
-	static int freed_id = 0;
+	//static int freed_id = 0;
 
 	while (token_list)
 	{
 		tmp = token_list->next;
-		printf("[free_token %d] %s\n", freed_id++, token_list->str); // ✅ AVANT
+		//printf("[free_token %d] %s\n", freed_id++, token_list->str); // ✅ AVANT
 		if (token_list->str)
 			free(token_list->str);
 		free(token_list);

@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:55:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 12:23:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:16:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	execute_builtin_command(t_treenode *node, t_token *token, char *line, t_ctx *ctx)
+int	execute_builtin_command(t_treenode *node, char *line, t_ctx *ctx)
 {
 	char	*cmd;
 
@@ -30,7 +30,7 @@ int	execute_builtin_command(t_treenode *node, t_token *token, char *line, t_ctx 
 	if (ft_strcmp(cmd, "env") == 0)
 		return (ft_env(node, ctx));
 	if (ft_strcmp(cmd, "exit") == 0)
-		return (ft_exit(line, token, node, ctx));
+		return (ft_exit(line, node, ctx));
 	return (1);
 }
 
