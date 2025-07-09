@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 13:56:10 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:52:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,34 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 		ctx->exit_code = 1;
 		return;
 	}
-	if (arg[j] == '=')
-	{
-		key = ft_substr(arg, 0, j);
-		value_len = ft_strlen(arg) - j - 1;
-		value = ft_substr(arg, j + 1, value_len);
-		export_to_env(&ctx->env, key, value);
-		free(key);
-		free(value);
-	}
+	key = ft_substr(arg, 0, j);
+	value_len = ft_strlen(arg) - j - 1;
+	value = ft_substr(arg, j + 1, value_len);
+	export_to_env(&ctx->env, key, value);
+	free(key);
+	free(value);
 }
 
 void	print_export(t_env *env)
 {
 	t_env	*tmp;
 	t_env	*copy;
+	int		j;
+
+	j = 0;
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
+
 	while (tmp->next)
 	{
 		if (tmp->value && ft_strcmp(tmp->key, "?") != 0)
-			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		{
+			if (ft_strcmp(tmp->value, "") == 0)
+				printf("declare -x %s\n", tmp->key);
+			else
+				printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		}
 		tmp = tmp->next;
 	}
 	free_env_list(copy);

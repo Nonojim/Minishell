@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 14:41:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:45:22 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	main(void)
 	free_env_list(ctx.env);
 	rl_clear_history();
 	return (0);
-	//return (free_env_list(ctx.env), rl_clear_history(), 0);
 }
 
 void	token_not_empty(t_token **token, t_treenode **ast)
