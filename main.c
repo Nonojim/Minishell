@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 13:36:30 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/09 14:41:58 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(void)
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
-		token = tokenize(token, &line);
+		token = tokenize(token, &line, &ctx);
 		print_token_list(token);
 		tmp = token;
 		add_history(line);

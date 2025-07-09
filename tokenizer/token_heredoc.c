@@ -6,19 +6,19 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 13:08:04 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:36:11 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-char	*open_heredoc(int *i, int start, char *line, t_token **token);
-char	*newline_heredoc(char *token_doc, int j);
+char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx);
+char	*newline_heredoc(char *token_doc, int j, t_ctx *ctx);
 int		create_token_op_heredoc(char *line, int *i, t_token **token);
 char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
 
-char	*open_heredoc(int *i, int start, char *line, t_token **token)
+char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 {
 	char	*token_doc;
 	char	*heredoc_line;
@@ -39,10 +39,10 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token)
 	if (!token_doc)
 		return (free(line), NULL);
 	clean_quote = delete_quote(token_doc, token);
-	heredoc_line = newline_heredoc(clean_quote, j);
+	heredoc_line = newline_heredoc(clean_quote, j, ctx);
 	free(clean_quote);
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
-	free(token_doc);
+	printf("line : [%s]\n", line);
 	return (line);
 }
 
@@ -66,7 +66,7 @@ int	create_token_op_heredoc(char *line, int *i, t_token **token)
 /*
 * Faire un tab dabs le terminal : CTRL+V puis TAB
 */
-char	*newline_heredoc(char *token_doc, int j)
+char	*newline_heredoc(char *token_doc, int j, t_ctx *ctx)
 {
 	char	*line;
 	char	*next_line;
@@ -88,35 +88,39 @@ char	*newline_heredoc(char *token_doc, int j)
 		line = ft_strdup("");
 		setup_signal_heredoc();
 		close(fd[0]);
-		size_line = ft_strlen(token_doc) + 1;
+		size_line = ft_strlen(token_doc);
 		while (1)
 		{
 			next_line = readline("> ");
 			if (!next_line)
 			{
-				//printf("line ctrl+d: [%s]", line);
 				write(fd[1], line, ft_strlen(line));
-				free(line);
+				//free(line);
+				//free(token_doc);
+				//free_env_list(ctx->env);
 				break ;
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
 			{
 				free(next_line);
-				//printf("line ctrl+c: [%s]", line);
 				write(fd[1], line, ft_strlen(line));
-				free(line);
+				//free_env_list(ctx->env);
+				//free(token_doc);
+				//free(line);
 				break;
-				//return (free(next_line), heredoc_line);
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) != 0)
 			{
 				next_line = delete_tab_or_ad_return_line(next_line, j);
-				//printf("next_line: [%s]", next_line);
+				buffer = line;
 				line = ft_strjoin(line, next_line);
+				free(buffer);
+				free(next_line);
 			}
-			free(next_line);
-			//write(fd[1], "\n", 1);
 		}
+		free_env_list(ctx->env);
+		free(token_doc);
+		free(line);
 		close(fd[1]);
 		exit(EXIT_SUCCESS);
 	}
@@ -172,5 +176,6 @@ char	*delete_quote(char *str, t_token **token)
 		no_quote = ft_substr(str, 1, i - 2);
 	else
 		no_quote = ft_strdup(str);
+	free(str);
 	return (no_quote);
 }
