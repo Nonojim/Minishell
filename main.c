@@ -66,10 +66,11 @@ void	ast_is_created(t_treenode *ast, t_token *token,
 
 void	free_prompt(t_treenode *ast, char *line, t_token *tmp)
 {
+	//(void)tmp;
 	if (ast)
 		free_treenode(ast);
-	if (tmp)
-		free_token(tmp);
+	 if (tmp)
+	 	free_token(tmp);
 	if (line)
 		free(line);
 }

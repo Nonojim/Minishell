@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_word.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 20:00:32 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 11:38:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,36 +43,18 @@ void	token_word(int *i, int start, char *line, t_token **token)
 	}
 
 	str = ft_substr(line, start, *i - start);
-if (!str)
-	return ;
-
-if (is_word(*str) == 1)
-{
-	t_token *t = create_token(WORD, str);
-	if (!t)
-	{
-		free(str);
+	if (!str)
 		return ;
-	}
-
-	// Sauvegarde dernier avant ajout
-	t_token *last = *token;
-	while (last && last->next)
-		last = last->next;
-
-	add_token_end(token, t);
-
-	// Vérifie si t a été ajouté
-	if (t->next == NULL && last == t)
+	if (is_word(*str) == 1)
 	{
-		free_token(t); // On libère manuellement
+		add_token_end(token, create_token(WORD,str));
+		// free(str);
 	}
-}
-else
-{
-	free(str);
-	(*i)++;
-}
+	else
+	{
+		(*i)++;
+		free (str);
+	}
 
 }
 

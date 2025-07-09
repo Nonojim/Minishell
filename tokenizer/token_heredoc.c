@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 19:26:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:08:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ char	*newline_heredoc(char *token_doc, int j)
 				free(line);
 				break ;
 			}
-
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
 			{
 				free(next_line);

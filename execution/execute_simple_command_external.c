@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 21:46:49 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 13:08:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,22 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		{
 			fprintf(stderr, "minishell: %s: command not found\n", cmd);
 			free_treenode(node);
-			//return (127);
+			free_env_list(ctx->env);
 			exit(127);
 		}
 		if (access(cmd_path, F_OK) != 0)
 		{
 			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd_path);
+			free_treenode(node);
+			free_env_list(ctx->env);
 			free(cmd_path);
 			exit(127);
 		}
 		if (access(cmd_path, X_OK) != 0)
 		{
 			fprintf(stderr, "minishell: %s: Permission denied\n", cmd_path);
+			free_treenode(node);
+			free_env_list(ctx->env);
 			free(cmd_path);
 			exit(126);
 		}
@@ -62,7 +66,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	}
 	else
 		return (external_command_status(ctx, pid));
-	ctx->exit_code = 1;
+	ctx->exit_code = 1; //EXECUTE QUAND ?
 	return (1);
 }
 
