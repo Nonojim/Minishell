@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/30 20:53:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 21:21:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,21 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 
 void	free_treenode(t_treenode *node)
 {
-	int	i;
 
-	if (node == NULL)
+if (!node)
 		return ;
 	free_treenode(node->left);
-	node->left = NULL;
 	free_treenode(node->right);
-	node->right = NULL;
-	if (node->str != NULL)
+	if (node->argv)
 	{
-		free(node->str);
-		node->str = NULL;
-	}
-	if (node->argv != NULL)
-	{
-		i = 0;
-		while (node->argv[i] != NULL)
+		int i = 0;
+		while (node->argv[i])
 			free(node->argv[i++]);
 		free(node->argv);
-		node->argv = NULL;
 	}
+	if (node->str)
+		free(node->str); // ← 🌟 Ajoute ça !
 	free(node);
-	node = NULL;
 }
 
 t_treenode	*free_then_return_null(t_treenode *node)

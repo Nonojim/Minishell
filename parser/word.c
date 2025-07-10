@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 20:48:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 21:23:05 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ t_treenode	*create_word_node(int *argc, t_token *tmp, t_token **tokens)
 		i++;
 	}
 	argv[*argc] = NULL;
-	cmd_node = create_treenode(0, argv[0]);
+	cmd_node = create_treenode(0, NULL);
 	cmd_node->argv = argv;
+	cmd_node->str = ft_strdup(argv[0]);  
 	*tokens = tmp;
 	return (cmd_node);
 }

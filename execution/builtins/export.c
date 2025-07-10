@@ -6,31 +6,47 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:43:05 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:18:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_export(t_treenode *node)
+int	is_valid_export(char *arg)
+{
+	int	i = 0;
+
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (0);
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '~')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_export(t_treenode *node, t_ctx *ctx)
 {
 	int		i;
 
 	i = 0;
 	if (node->argv[i + 1] == NULL)
 	{
-		print_export(node->env);
+		print_export(ctx->env);
 		return (0);
 	}
+	i = 1;
 	while (node->argv[i])
 	{
-		add_export_variable(node, node->argv[i]);
+		add_export_variable(ctx, node->argv[i]);
 		i++;
 	}
 	return (0);
 }
 
-void	add_export_variable(t_treenode *node, char *arg)
+void	add_export_variable(t_ctx *ctx, char *arg)
 {
 	int		j;
 	int		value_len;
@@ -38,30 +54,54 @@ void	add_export_variable(t_treenode *node, char *arg)
 	char	*value;
 
 	j = 0;
+	if (!is_valid_export(arg))
+	{
+		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ctx->exit_code = 1;
+		return;
+	}
+	if (!ft_isalpha(arg[0]))
+	{
+		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ctx->exit_code = 1;
+		return;
+	}
 	while (arg[j] && arg[j] != '=')
 		j++;
+	key = ft_substr(arg, 0, j);
 	if (arg[j] == '=')
 	{
-		key = ft_substr(arg, 0, j);
 		value_len = ft_strlen(arg) - j - 1;
 		value = ft_substr(arg, j + 1, value_len);
-		export_to_env(&node->env, key, value);
-		free(key);
-		free(value);
 	}
+	else
+		value = NULL;
+	export_to_env(&ctx->env, key, value);
+	free(key);
+	if (value)
+		free(value);
 }
 
 void	print_export(t_env *env)
 {
 	t_env	*tmp;
 	t_env	*copy;
+	int		j;
+
+	j = 0;
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
+
 	while (tmp->next)
 	{
-		if (tmp->value && ft_strcmp(tmp->key, "?") != 0)
-			printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		if (tmp->key && ft_strcmp(tmp->key, "?") != 0)
+		{
+			if (tmp->value == NULL)
+				printf("declare -x %s\n", tmp->key);
+			else
+				printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		}
 		tmp = tmp->next;
 	}
 	free_env_list(copy);
@@ -78,9 +118,9 @@ t_env	*copy_env(t_env *env)
 		node = malloc(sizeof(t_env));
 		if (!node)
 			return (free_env_list(new), NULL);
-
 		node->key = strdup(tmp->key);
-		node->value = strdup(tmp->value);
+		if (tmp->value)
+			node->value = strdup(tmp->value);
 		node->next = NULL;
 		ft_env_add_back(&new, node);
 		tmp = tmp->next;

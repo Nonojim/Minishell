@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/30 19:18:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 15:39:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-t_token	*tokenize(t_token *token, char **line_ptr)
+t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 {
 	char	*line;
 	int		start;
@@ -27,13 +27,13 @@ t_token	*tokenize(t_token *token, char **line_ptr)
 				|| line[i] == '\n'))
 			i++;
 		start = i;
-		line = tokenize2(&i, start, line, &token);
+		line = tokenize2(&i, start, line, &token, ctx);
 	}
 	*line_ptr = line;
 	return (token);
 }
 
-char	*tokenize2(int	*i, int start, char *line, t_token **token)
+char	*tokenize2(int	*i, int start, char *line, t_token **token, t_ctx *ctx)
 {
 	if ((line[*i] == '\'' || line[*i] == '\"') && line[*i])
 		line = token_quote(i, start, line, token);
@@ -43,9 +43,9 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token)
 	else if (line[*i] == '|')
 		line = token_pipe_unclose(i, start, line, token);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
-		line = open_heredoc(i, start, line, token);
+		line = open_heredoc(i, start, line, token, ctx);
 	else if (line[*i] == '(' && line[*i])
-		line = token_bracket(i, start, line, token);
+		line = token_bracket(i, start, line, token, ctx);
 	else if (is_operator_logical(line[*i]) == line[*i] && line[*i])
 		token_logical_operator(i, start, line, token);
 	else if (line[*i] != '\0' && is_word(line[*i]) == 1)

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:52:43 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:52:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,14 @@ extern char	**environ;
 //celle-ci contiens toutes les variables d'env. 
 //Même chose que faire : int maint(int argc, char **argv, char **envp).
 
-int	execute_simple_command(t_treenode *node, t_token *token, char *line)
+int	execute_simple_command(t_treenode *node, char *line, t_ctx *ctx)
 {
-	int	code_error;
-
 	if (!node || !node->str || !node->argv)
-	{
-		add_code_error(&node->env, 1);
-		return (1);
-	}
-	expanse_ast(node);
+		return (ctx->exit_code = 1);
+	expanse_ast(node, ctx);
 	if (is_builtin(node->argv[0]))
-		code_error = execute_builtin_command(node, token, line);
+		ctx->exit_code = execute_builtin_command(node, line, ctx);
 	else
-		code_error = execute_external_command(node);
-	add_code_error(&node->env, code_error);
-	return (code_error);
+		ctx->exit_code = execute_external_command(node, ctx);
+	return (ctx->exit_code);
 }

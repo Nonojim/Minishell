@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:53:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:50:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,45 +27,39 @@ Le code de sortie étant limité à 8 bits = 255 max.
 Bash fait un modulo de 256 pour avoir un affichage correct. 
 */
 
-int	ft_exit(char *line, t_token *token, t_treenode *ast)
+int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
-	int	code_error;
-
-	code_error = 0;
 	if (ast->argv[1])
 	{
 		if (!is_numeric_exit(ast->argv[1]))
-			error_numeric_exit(token, line, ast);
+			error_numeric_exit(line, ast, ctx);
 		else if (ast->argv[2])
 		{
-			printf("Minishell: exit: too many arguments\n");
-			code_error = 1;
-			add_code_error(&ast->env, code_error);
-			return (code_error);
+			fprintf(stderr, "Minishell: exit: too many arguments\n");
+			ctx->exit_code = 1;
+			return (1);
 		}
 		else
-			code_error = ft_atoi(ast->argv[1]) % 256;
+			ctx->exit_code = ft_atoi(ast->argv[1]) % 256;
 	}
 	else
-		code_error = 0;
-	free_token(token);
+		ctx->exit_code = 0;
 	free(line);
-	free_env_list(ast->env);
+	free_env_list(ctx->env);
 	free_treenode(ast);
 	rl_clear_history();
-	exit(code_error);
+	exit(ctx->exit_code);
 }
 
-void	error_numeric_exit(t_token *token, char *line, t_treenode *ast)
+void	error_numeric_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
 	printf("exit\n");
-	printf("Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
-	free_token(token);
+	fprintf(stderr, "Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
 	free(line);
-	free_env_list(ast->env);
+	free_env_list(ctx->env);
 	free_treenode(ast);
 	rl_clear_history();
-	exit(255);
+	exit(2);
 }
 
 int	is_numeric_exit(char *argv)
@@ -119,3 +113,4 @@ int	compar_long_limits(char *nb, char sign)
 	}
 	return (1);
 }
+

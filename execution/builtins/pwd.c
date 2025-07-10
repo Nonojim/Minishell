@@ -3,21 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:04:30 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 11:35:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 12:14:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_pwd(t_treenode *node)
+int	ft_pwd(t_ctx *ctx)
 {
 	char	*pwd;
 
-	(void)node;
-	pwd = ft_getenv("PWD", node);
+	pwd = ft_getenv("PWD", ctx);
+	if (!pwd)
+	{
+		perror("pwd");
+		ctx->exit_code = 1;
+		return (1);
+	}
 	printf("%s\n", pwd);
 	return (0);
 }

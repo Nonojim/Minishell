@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:48:03 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 13:27:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/09 16:06:54 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_indent(int depth)
 		printf("  ");
 }
 
-/*void	astreeprint(t_treenode *node, int depth)
+void	astreeprint(t_treenode *node, int depth)
 {
 	int	i;
 
@@ -56,4 +56,4 @@ void	print_indent(int depth)
 		printf("Right:\n");
 		astreeprint(node->right, depth + 1);
 	}
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 19:55:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/10 10:29:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ typedef struct s_token
 
 // Fonctions tokenisations
 //tokenize the input
-t_token	*tokenize(t_token *token, char **line);
-char	*tokenize2(int	*i, int start, char *line, t_token **token);
+t_token	*tokenize(t_token *token, char **line, t_ctx *ctx);
+char	*tokenize2(int	*i, int start, char *line, t_token **token, t_ctx *ctx);
 //Create_free_print Token
 t_token	*create_token(int type, char *str);
 void	add_token_end(t_token **token, t_token *new_token);
@@ -66,15 +66,15 @@ char	*token_logical_unclose(int *i, int start, char *line, t_token **token);
 int		only_spaces_after_operator_logical(char *line, int i);
 char	*token_bracket_unclose(char *line);
 void	bracket_unclosed(char **line, char **history_line, char*next_line);
-char	*token_bracket(int *i, int start, char *line, t_token **token);
+char	*token_bracket(int *i, int start, char *line, t_token **token, t_ctx *ctx);
 int		count_matching_bracket(char *str);
 void	token_expansion(int *i, int start, char *line, t_token **token);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
 //Token_HereDoc
-char	*open_heredoc(int *i, int start, char *line, t_token **token);
-char	*newline_heredoc(char *token_doc, int j);
+char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx);
+char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx);
 int		create_token_op_heredoc(char *line, int *i, t_token **token);
 char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);

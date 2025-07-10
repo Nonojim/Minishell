@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 11:58:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:16:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	ft_echo(t_treenode *node)
 	while (node->argv[i])
 	{
 		printf("%s", node->argv[i]);
-		printf(" ");
+		if (node->argv[i + 1])
+			printf(" ");
 		i++;
 	}
 	if (n == 0)

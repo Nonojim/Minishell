@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/05 16:52:20 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:49:03 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern char	**environ;
 
-int    execute_external_command(t_treenode *node)
+int    execute_external_command(t_treenode *node, t_ctx *ctx)
 {
 	pid_t	pid;
 	char	*cmd_path;
@@ -25,65 +25,69 @@ int    execute_external_command(t_treenode *node)
 	if (pid == -1)
 	{
 		perror("fork");
-		add_code_error(&node->env, 1);
+		ctx->exit_code = 1;
+		return (1);
 	}
 	if (pid == 0)
 	{
-		if (node->argv[0][0] == '.' && node->argv[0][1] == '/')
+		if(cmd[0] == '\0')
 		{
-			if (ft_strcmp(cmd, "./minishell") == 0 && access(node->argv[0], F_OK) == 0 && access(node->argv[0], X_OK) == 0)
-				cmd_path = ft_strdup(node->argv[0]);
-			else
-			{
-				printf("minishell: %s: No such file or directory\n", node->argv[0]);
-				exit(127);
-			}
+			free_treenode(node);
+			free_env_list(ctx->env);
+			exit(0);
 		}
-		else if (node->argv[0][0] == '/')
+		if (cmd[0] == '.' || cmd[0] == '/')
+			cmd_path = ft_strdup(cmd);
+		else
+			cmd_path = find_cmd_path(cmd, ctx->env);
+		if (!cmd_path)
 		{
-			cmd_path = ft_strdup(node->argv[0]);
-			execve(cmd_path, node->argv, environ);
-			printf("minishell: %s: %s\n", cmd_path, strerror(errno));
-			if (errno == ENOENT)
-				exit(127);
-			if (errno == EISDIR)
-				exit(126);
+			fprintf(stderr, "minishell: %s: command not found\n", cmd);
+			free_treenode(node);
+			free_env_list(ctx->env);
+			exit(127);
+		}
+		if (access(cmd_path, F_OK) != 0)
+		{
+			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd_path);
+			free_treenode(node);
+			free_env_list(ctx->env);
+			free(cmd_path);
+			exit(127);
+		}
+		if (access(cmd_path, X_OK) != 0)
+		{
+			fprintf(stderr, "minishell: %s: Permission denied\n", cmd_path);
+			free_treenode(node);
+			free_env_list(ctx->env);
 			free(cmd_path);
 			exit(126);
 		}
-		else
-		{
-			cmd_path = find_cmd_path(cmd, node->env);
-			if (!cmd_path)
-			{
-				printf("%s: command not found\n", node->argv[0]);
-				exit(127);
-			}
-		}
 		execve(cmd_path, node->argv, environ);
+		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free(cmd_path);
+		if (errno == ENOENT)
+			exit(127);
 		exit(126);
 	}
-	else if (pid > 0)
-		return (external_command_status(node, pid));
-	add_code_error(&node->env, 1);
+	else
+		return (external_command_status(ctx, pid));
+	ctx->exit_code = 1; //EXECUTE QUAND ?
 	return (1);
 }
 
-int	external_command_status(t_treenode *node, pid_t pid)
+int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
-	int	code_error;
 
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
-		code_error = 128 + WTERMSIG(status);
+		ctx->exit_code = 128 + WTERMSIG(status);
 	else if (WIFEXITED(status))
-		code_error = WEXITSTATUS(status);
+		ctx->exit_code = WEXITSTATUS(status);
 	else
-		code_error = 1;
-	add_code_error(&node->env, code_error);
-	return (code_error);
+		ctx->exit_code = 1;
+	return (ctx->exit_code);
 }
 
 char	*find_cmd_path(char *cmd, t_env *env_list)
@@ -94,7 +98,7 @@ char	*find_cmd_path(char *cmd, t_env *env_list)
 	char	*tmp;
 	char	*cmd_path;
 
-	path_node = find_node(env_list, "PATH");
+	path_node = find_usrvar(env_list, "PATH");
 	if (!path_node || !path_node->value)
 		return (NULL);
 	paths = ft_split(path_node->value, ':');
