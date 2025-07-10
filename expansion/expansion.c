@@ -6,70 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:17:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:48:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
-
-
-void	expanse_ast(t_treenode *node, t_ctx *ctx)
-{
-	int		i;
-	char	*expanded;
-	char	*clean;
-
-	if (!node)
-		return ;
-	if (node->argv)
-	{
-		i = 0;
-		while (node->argv[i])
-		{
-			expanded = expand_string(node->argv[i], node, ctx);
-			if (expanded == NULL)
-			{
-				i++;
-				continue ;
-			}
-			if ((expanded != NULL) && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
-			{
-				clean = remove_quotes_after_expansion(expanded);
-				free(expanded);
-				free(node->argv[i]);
-				node->argv[i] = clean;
-			}
-			else
-			{
-				free(node->argv[i]);
-				node->argv[i] = expanded;
-			}
-			i++;
-		}
-	}
-	if (node->type == HERE_DOCUMENT)
-	{
-		i = 0;
-		if (node->str[i] == '\'' || node->str[i] == '"')
-			return ;
-		else
-		{
-			while (node->argv && node->argv[i])
-			{
-				expanded = expand_string(node->argv[i], node, ctx);
-				if (expanded == NULL)
-					return ;
-				free(node->argv[i]);
-				node->argv[i] = expanded;
-				i++;
-			}
-		}
-	}
-	if (node->type == WORD && node->argv && node->argv[0])
-		return ;
-//	expanse_ast(node->left, ctx);
-//	expanse_ast(node->right, ctx);
-}
 
 void	expanse_ast(t_treenode *node, t_ctx *ctx)
 {
