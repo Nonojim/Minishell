@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 09:36:50 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 09:48:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	print_export(t_env *env)
 	{
 		if (tmp->key && ft_strcmp(tmp->key, "?") != 0)
 		{
-			//if (ft_strcmp(tmp->value, "") == 0)
 			if (tmp->value == NULL)
 				printf("declare -x %s\n", tmp->key);
 			else
