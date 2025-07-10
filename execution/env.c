@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 19:02:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/10 09:32:50 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,12 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 	node = find_usrvar(*env_list, key);
 	if (node)
 	{
-		free(node->value);
-		node->value = ft_strdup(value);
+		if (value)
+		{
+			if (node->value)
+				free(node->value);
+			node->value = ft_strdup(value);
+		}
 	}
 	else
 	{
@@ -62,7 +66,8 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		if (!new)
 			return ;
 		new->key = ft_strdup(key);
-		new->value = ft_strdup(value);
+		if (value)
+			new->value = ft_strdup(value);
 		new->next = NULL;
 		if (!*env_list)
 		{
