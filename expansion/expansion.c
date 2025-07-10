@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 15:44:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/10 11:17:11 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,59 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 //	expanse_ast(node->right, ctx);
 }
 
-//void give_env(t_treenode *node)
-//{
-//	if (!node)
-//		return ;
-//	if (node->left)
-//		node->left->env = node->env;
-//	if (node->right)
-//		node->right->env = node->env;
-//	give_env(node->left);
-//	give_env(node->right);
-//}
+void	expanse_ast(t_treenode *node, t_ctx *ctx)
+{
+	int		i;
+	char	*expanded;
+	char	*clean;
+
+	if (!node)
+		return ;
+	if (node->type == HERE_DOCUMENT)
+	{
+		if (node->str && (node->str[0] == '\'' || node->str[0] == '"'))
+		{
+			return ;
+		}
+		if (node->right && node->right->str)
+		{
+			char *expanded = expand_string(node->right->str, node, ctx);
+			free(node->right->str);
+			node->right->str = expanded;
+		}
+		return ;
+	}
+	if (node->argv)
+	{
+		i = 0;
+		while (node->argv[i])
+		{
+			expanded = expand_string(node->argv[i], node, ctx);
+			if (expanded == NULL)
+			{
+				clean = remove_quotes_after_expansion(node->argv[i]);
+				free(node->argv[i]);
+				node->argv[i] = clean;
+				i++;
+				continue ;
+			}
+			free(node->argv[i]);
+			if ((expanded != NULL) && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
+			{
+				clean = remove_quotes_after_expansion(expanded);
+				free(expanded);
+				node->argv[i] = clean;
+			}
+			else
+				node->argv[i] = expanded;
+			i++;
+		}
+	}
+	if(node->left)
+		expanse_ast(node->left, ctx);
+	if(node->right)
+		expanse_ast(node->right, ctx);
+}
 
 /*
 On traite les strings pour remplacer les vars d'environnement,
@@ -101,15 +143,11 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	if (str[0] == '~' && str[i + 1] == '\0')
 	{
 		tmp = expand_tilde(str, ctx);
-		if (tmp)
-			return (tmp);
 		return(tmp);
 	}
-	if (ft_strchr(str, '*'))
+	if (ft_strchr(str, '*') && (!node || node->type != HERE_DOCUMENT))
 	{
 		tmp = expand_wildcard(str, node);
-		if (tmp)
-			return (tmp);
 		return(tmp);
 	}
 	result = ft_strdup("");
@@ -231,6 +269,5 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);
 	free(tmp);
-//	free(expanse);
 	return (j);
 }

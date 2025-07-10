@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 13:25:49 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:41:39 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		exit(execute_node(node->left, line, ctx));
+		int exit_code = execute_node(node->left, line, ctx);
+		free_treenode(node);
+		free_env_list(ctx->env);
+		exit(exit_code);
 	}
 	close(pipefd[0]);
 	return (heredoc_status(ctx, pid));

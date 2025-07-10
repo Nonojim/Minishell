@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 15:43:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/10 11:35:26 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		free(psm);
 		return (NULL);
 	}
-	//pour conserver les autres argv 
 	int	wildcard_index = 0;
 	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
 		wildcard_index++;
@@ -75,8 +74,6 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		new_argv[i] = ft_strdup(node->argv[i]);
 		i++;
 	}
-	//
-	//creation des new_arg
 	int j = 0;
 	while (result[j])
 	{

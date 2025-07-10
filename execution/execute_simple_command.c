@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 09:48:54 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:52:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,5 @@ int	execute_simple_command(t_treenode *node, char *line, t_ctx *ctx)
 		ctx->exit_code = execute_builtin_command(node, line, ctx);
 	else
 		ctx->exit_code = execute_external_command(node, ctx);
-	printf("exitcode: %i\n", ctx->exit_code);
 	return (ctx->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 09:48:49 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:18:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_valid_export(char *arg)
 		return (0);
 	while (arg[i] && arg[i] != '=')
 	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '~')
 			return (0);
 		i++;
 	}
@@ -118,7 +118,6 @@ t_env	*copy_env(t_env *env)
 		node = malloc(sizeof(t_env));
 		if (!node)
 			return (free_env_list(new), NULL);
-
 		node->key = strdup(tmp->key);
 		if (tmp->value)
 			node->value = strdup(tmp->value);

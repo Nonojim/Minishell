@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 13:08:31 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:49:03 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	}
 	if (pid == 0)
 	{
+		if(cmd[0] == '\0')
+		{
+			free_treenode(node);
+			free_env_list(ctx->env);
+			exit(0);
+		}
 		if (cmd[0] == '.' || cmd[0] == '/')
 			cmd_path = ft_strdup(cmd);
 		else

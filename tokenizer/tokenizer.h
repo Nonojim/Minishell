@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 14:50:13 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 10:29:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
 //Token_HereDoc
 char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx);
-char	*newline_heredoc(char *token_doc, int j, t_ctx *ctx);
+char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx);
 int		create_token_op_heredoc(char *line, int *i, t_token **token);
 char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
