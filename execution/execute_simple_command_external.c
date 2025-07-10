@@ -6,13 +6,36 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 10:49:03 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:25:22 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern char	**environ;
+
+char **list_to_dynamiccarray(t_ctx *ctx)
+{
+	int	i = 0;
+	char	**array;
+	t_env *tmp = ctx->env;
+	while (tmp)
+	{
+		i++;	
+		tmp = tmp->next;
+	}
+	free(tmp);
+	array = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (ctx->env)
+	{
+		array[i] = ft_strjoin(ctx->env->key, ctx->env->value);
+		i++;
+		ctx->env = ctx->env->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
 
 int    execute_external_command(t_treenode *node, t_ctx *ctx)
 {
@@ -63,7 +86,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			free(cmd_path);
 			exit(126);
 		}
-		execve(cmd_path, node->argv, environ);
+		execve(cmd_path, node->argv, list_to_dynamiccarray(ctx));
 		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free(cmd_path);
 		if (errno == ENOENT)

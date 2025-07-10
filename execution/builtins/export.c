@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 13:20:33 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:10:25 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	is_valid_export(char *arg)
 int	ft_export(t_treenode *node, t_ctx *ctx)
 {
 	int		i;
-
 	i = 0;
 	if (node->argv[i + 1] == NULL)
 	{
@@ -92,10 +91,11 @@ void	print_export(t_env *env)
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
+	printf("[%s]\n", tmp->key);
 
-	while (tmp->next)
+	while (tmp)
 	{
-		if (tmp->key && ft_strcmp(tmp->key, "?") != 0)
+		if (tmp->key && ft_strcmp(tmp->key, "?") != 0 && ft_strcmp(tmp->key, "LINES") != 0 && ft_strcmp(tmp->key, "COLUMNS") != 0 && ft_strcmp(tmp->key, "_") != 0)
 		{
 			if (tmp->value == NULL)
 				printf("declare -x %s\n", tmp->key);

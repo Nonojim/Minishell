@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 13:30:39 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:17:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ typedef struct s_env
 typedef struct s_ctx
 {
 	t_env	*env;
+	char	**envp;
 	int		exit_code;
 }	t_ctx;
 
-
+//list to char**
+char	**list_to_dynamiccarray(t_ctx *ctx);
 // Exe
 int		execute_node(t_treenode *node, char *line, t_ctx *ctx);
 int		execute_node_simple(t_treenode *node, char *line, t_ctx *ctx);

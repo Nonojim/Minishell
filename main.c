@@ -6,14 +6,17 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 17:45:22 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:25:32 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	char		*line;
 	t_token		*token;
 	t_token		*tmp;
@@ -23,6 +26,13 @@ int	main(void)
 	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.env = init_env_list();
+	//int i = 0;
+	//char **array = list_to_dynamiccarray(&ctx);
+	//while (array[i])
+	//{
+	//	printf("%s\n", array[i]);
+	//	i++;
+	//}
 	while (1)
 	{
 		setup_signals();

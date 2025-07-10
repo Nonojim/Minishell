@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 13:10:57 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 18:19:37 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,17 @@ t_env	*init_env_list(void)
 
 	i = 0;
 	env_list = NULL;
+	
+	//if (!envp[i] || find_usrvar || find_usrvar(en))
+	//{
+	//	export_to_env(&env_list, "SHLVL", "1");//CODER STATIC SH
+	//	export_to_env(&env_list, "PWD", getcwd(NULL, 0));
+	//}
+	if (!*environ || find_usrvar(env_list, "PWD") || find_usrvar(env_list, "SHLVL"))
+	{
+		export_to_env(&env_list, "SHLVL", "1");//CODER STATIC SH
+		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
+	}
 	while (environ[i])
 	{
 		equal = ft_strchr(environ[i], '=');
@@ -99,8 +110,8 @@ t_env	*init_env_list(void)
 		{
 			key = ft_substr(environ[i], 0, equal - environ[i]);
 			value = ft_strdup(equal + 1);
-			if (!value)
-				free(key);
+			//if (!value)
+			//	free(key);
 			export_to_env(&env_list, key, value);
 			free(key);
 			free(value);
