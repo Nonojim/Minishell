@@ -12,11 +12,8 @@
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
 	char		*line;
 	t_token		*token;
 	t_token		*tmp;

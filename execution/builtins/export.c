@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 17:10:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:20:55 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,12 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 
 void	print_export(t_env *env)
 {
-	t_env	*tmp;
-	t_env	*copy;
-	int		j;
+	t_env	*tmp = NULL;
+	t_env	*copy = NULL;
 
-	j = 0;
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
-	printf("[%s]\n", tmp->key);
-
 	while (tmp)
 	{
 		if (tmp->key && ft_strcmp(tmp->key, "?") != 0 && ft_strcmp(tmp->key, "LINES") != 0 && ft_strcmp(tmp->key, "COLUMNS") != 0 && ft_strcmp(tmp->key, "_") != 0)
@@ -118,9 +114,14 @@ t_env	*copy_env(t_env *env)
 		node = malloc(sizeof(t_env));
 		if (!node)
 			return (free_env_list(new), NULL);
-		node->key = strdup(tmp->key);
+		if (tmp->key)
+			node->key = strdup(tmp->key);
+		else
+			node->key = NULL;
 		if (tmp->value)
 			node->value = strdup(tmp->value);
+		else
+			node->value = NULL;
 		node->next = NULL;
 		ft_env_add_back(&new, node);
 		tmp = tmp->next;

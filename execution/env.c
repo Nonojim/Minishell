@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 18:19:37 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:27:15 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		if (!new)
 			return ;
 		new->key = ft_strdup(key);
+		new->value = NULL;
 		if (value)
 			new->value = ft_strdup(value);
 		new->next = NULL;
@@ -81,28 +82,34 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 	}
 }
 
-// Initialise depuis environ[]
-t_env	*init_env_list(void)
+static void	change_shlvl(t_env	**env)
 {
-	t_env	*env_list;
+	t_env	*shlvl;
+	char	*new_shlvl;
+	int		i;
+
+	shlvl = find_usrvar(*env, "SHLVL");
+	if (!shlvl)
+		i = 0;
+	else
+		i = ft_atoi(shlvl->value);
+	new_shlvl = ft_itoa(i + 1);
+	export_to_env(env, "SHLVL", new_shlvl);
+	free(new_shlvl);
+}
+
+// Initialise depuis environ[]
+t_env	*init_env_list()
+{
+	t_env	*env_list = NULL;
 	char	*key;
 	char	*value;
 	char	*equal;
 	int		i;
 
+	
 	i = 0;
 	env_list = NULL;
-	
-	//if (!envp[i] || find_usrvar || find_usrvar(en))
-	//{
-	//	export_to_env(&env_list, "SHLVL", "1");//CODER STATIC SH
-	//	export_to_env(&env_list, "PWD", getcwd(NULL, 0));
-	//}
-	if (!*environ || find_usrvar(env_list, "PWD") || find_usrvar(env_list, "SHLVL"))
-	{
-		export_to_env(&env_list, "SHLVL", "1");//CODER STATIC SH
-		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
-	}
 	while (environ[i])
 	{
 		equal = ft_strchr(environ[i], '=');
@@ -112,12 +119,20 @@ t_env	*init_env_list(void)
 			value = ft_strdup(equal + 1);
 			//if (!value)
 			//	free(key);
-			export_to_env(&env_list, key, value);
-			free(key);
-			free(value);
 		}
+		else
+		{
+			key = ft_strdup(environ[i]);
+			value = NULL;
+		}
+		export_to_env(&env_list, key, value);
+		free(key);
+		free(value);
 		i++;
 	}
+	change_shlvl(&env_list);
+	if (find_usrvar(env_list, "PWD") == NULL)
+		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
 	return (env_list);
 }
 

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 18:25:22 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:20:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,25 @@ char **list_to_dynamiccarray(t_ctx *ctx)
 		i++;	
 		tmp = tmp->next;
 	}
-	free(tmp);
 	array = malloc(sizeof(char *) * (i + 1));
+	if (!array)
+		return(NULL);
+	tmp = ctx->env;
 	i = 0;
-	while (ctx->env)
+	while (tmp)
 	{
-		array[i] = ft_strjoin(ctx->env->key, ctx->env->value);
+		char *key_eq = ft_strdup(tmp->key);
+		if (tmp->value)
+		{
+			free(key_eq);
+			key_eq = ft_strjoin(tmp->key, "=");
+			array[i] = ft_strjoin(key_eq, tmp->value);
+			free(key_eq);
+		}
+		else
+			array[i] = key_eq;
 		i++;
-		ctx->env = ctx->env->next;
+		tmp = tmp->next;
 	}
 	array[i] = NULL;
 	return (array);
@@ -86,7 +97,15 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			free(cmd_path);
 			exit(126);
 		}
-		execve(cmd_path, node->argv, list_to_dynamiccarray(ctx));
+		char **array = list_to_dynamiccarray(ctx);
+		//int i = 0;
+		//while (array[i])
+		//{
+		//	printf("%s\n", array[i]);
+		//	i++;
+		//}
+		execve(cmd_path, node->argv, array);
+		free_split(array);
 		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free(cmd_path);
 		if (errno == ENOENT)
@@ -145,12 +164,13 @@ void	free_split(char	**split)
 {
 	int	i;
 
+	if (!split)
+		return;
 	i = 0;
 	while (split[i])
 	{
 		free(split[i]);
 		i++;
 	}
-	free(split[i]);
 	free(split);
 }
