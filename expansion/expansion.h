@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 23:50:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/11 17:52:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_quote_state
 typedef struct	s_wildcard
 {
 	char	*prefix;
-	char	*middle;
+	char	**middle;
 	char	*suffix;
 }	t_wildcard;
 
@@ -45,7 +45,7 @@ char	*clean_quote_after_expanse(char *str);
 //expanse_wildcard
 char	*expand_wildcard(char *str, t_treenode *node);
 int	match_prefix(char *str, char *prefix);
-int	match_middle(char *str, char *middle);
+int	match_middle(char *str, char **middle);
 int	match_suffix(char *str, char *suffix);
 char	**add_array(char **result, char *file);
 void	create_prefix_middle_suffix(char *str, t_wildcard *psm);

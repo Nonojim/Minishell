@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:51:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:19:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*expand_wildcard(char *str, t_treenode *node);
 int	match_prefix(char *str, char *prefix);
-int	match_middle(char *str, char *middle);
+int	match_middle(char *str, char **middle);
 int	match_suffix(char *str, char *suffix);
 char	**add_array(char **result, char *file);
 void	create_prefix_middle_suffix(char *str, t_wildcard *psm);
@@ -36,7 +36,22 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		return (str);
 	result = NULL;
 	create_prefix_middle_suffix(str, psm);
-	//printf("prefix : %s , middle: %s, suffix : %s \n", psm->prefix, psm->middle, psm->suffix);
+	printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
+	printf("middle : ");
+	if (psm->middle)
+	{
+		int i = 0;
+		while (psm->middle[i])
+		{
+			printf("[%s]", psm->middle[i]);
+			if (psm->middle[i + 1])
+				printf(", ");
+			i++;
+		}
+	}
+	else
+		printf("NULLLLL");
+
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{
 
@@ -99,12 +114,33 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	return (NULL);
 }
 
+
+
 void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 {
 	int	i = 0;
 	int	start;
+	int middle_wildcard = 0;
+	int	j = 0;
 
-
+	while (str[j])
+	{
+		while (str[j] == '*')
+			j++;
+		if (str[j] && str[j] != '*')
+		{
+			while (str[j] != '*')
+				j++;
+			if (str[j] && str[j] == '*')
+				middle_wildcard++;
+		}
+		j++;
+	}
+	
+	psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
+	if (!psm->middle)
+		return ;
+	//PREFIX
 	if (str[i] && str[i] != '*')
 	{
 		start = 0;
@@ -113,62 +149,75 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 		if (i > 0)
 			psm->prefix = ft_substr(str, start, i - start);
 	}
-	while (str[i] == '*')
-		i++;
-	start = i;
-	while (str[i] && str[i] != '*')
-		i++;
-	if (str[i] == '*')
+
+	//MIDDLE
+	j = 0;
+	while (str[i])
 	{
-		if (i > start)
-			psm->middle = ft_substr(str, start, i - start);
 		while (str[i] == '*')
 			i++;
-		if (str[i])
-			psm->suffix = ft_strdup(str + i);
+		start = i;
+		while (str[i] && str[i] != '*')
+			i++;
+		if (str[i] == '*' && i > start)
+		{
+				psm->middle[j] = ft_substr(str, start, i - start);
+				j++;
+		}
+		else if(!str[i] && i > start)
+		{
+				psm->suffix = ft_substr(str, start, i - start);
+		}
 	}
-	else
-	{
-		if (i > start)
-			psm->suffix = ft_substr(str, start, i - start);
-	}
+	psm->middle[j] = NULL;
 }
 
 
-int	ft_strnstr_for_wildcard(char *str,	char *middle, int len_str)
+int	ft_strnstr_for_wildcard(char *str,	char **middle, int len_str)
 {
 	int	i;
 	int	j;
+	int	k;
 
 	i = 0;
 	j = 0;
-	while (str[i] && i < len_str)
+	k = 0;
+
+	while (middle[j])
 	{
-		if (str[i] == middle[j])
-			j++;
-		else
+		while (i < len_str)
 		{
-			i -= (j - 1);
-			j = 0;
-			if (str[i] == middle[0])
-				j++;
+			k = 0;
+			while (str[i + k] && middle[j][k] && str[i + k] == middle[j][k])
+				k++;
+			if (middle[j][k] == '\0')
+			{
+				i = i + k;
+				break;
+			}
+			i++;
 		}
-		i++;
-		int	len_middle = ft_strlen(middle);
-		if (j == len_middle)
-			return(0);
+		if (i >= len_str)
+			return (1);
+		j++;
 	}
-	return (1);
+	return (0);
 }
-int	match_middle(char *str, char *middle)
+
+int	match_middle(char *str, char **middle)
 {
 	int	match;
 	int	len_str;
+	int	i = 0;
 
-	len_str = ft_strlen(str);
-	match = ft_strnstr_for_wildcard(str, middle, len_str);
-	if (match == 0)
-		return (1);
+	while (middle[i])
+	{
+		len_str = ft_strlen(str);
+		match = ft_strnstr_for_wildcard(str, middle, len_str);
+		if (match == 0)
+			return (1);
+		i++;
+	}
 	return (0);
 }
 

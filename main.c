@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/10 18:25:32 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:58:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(void)
 		if (line == NULL)
 			break ;
 		token = tokenize(token, &line, &ctx);
-		print_token_list(token);
+		//print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);

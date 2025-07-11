@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:48:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:26:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 	if (node->type == HERE_DOCUMENT)
 	{
 		if (node->str && (node->str[0] == '\'' || node->str[0] == '"'))
-		{
 			return ;
-		}
 		if (node->right && node->right->str)
 		{
 			char *expanded = expand_string(node->right->str, node, ctx);
@@ -60,10 +58,10 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			i++;
 		}
 	}
-	if(node->left)
-		expanse_ast(node->left, ctx);
-	if(node->right)
-		expanse_ast(node->right, ctx);
+//	if(node->left)
+//		expanse_ast(node->left, ctx);
+//	if(node->right)
+//		expanse_ast(node->right, ctx);
 }
 
 /*
