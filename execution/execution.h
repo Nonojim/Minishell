@@ -69,6 +69,7 @@ int		redir_append(t_treenode *node, char *line, t_ctx *ctx);
 
 // Env
 t_env	*init_env_list(void);
+void	change_shlvl(t_env	**env);
 void	export_to_env(t_env **env_list, char *key, char *value);
 t_env	*find_usrvar(t_env *env, const char *key);
 void	free_env_list(t_env *env);

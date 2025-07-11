@@ -23,13 +23,6 @@ int	main(void)
 	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.env = init_env_list();
-	//int i = 0;
-	//char **array = list_to_dynamiccarray(&ctx);
-	//while (array[i])
-	//{
-	//	printf("%s\n", array[i]);
-	//	i++;
-	//}
 	while (1)
 	{
 		setup_signals();

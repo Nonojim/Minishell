@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 11:36:54 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:44:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 	}
 }
 
-static void	change_shlvl(t_env	**env)
+void	change_shlvl(t_env	**env)
 {
 	t_env	*shlvl;
 	char	*new_shlvl;
