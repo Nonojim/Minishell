@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 18:52:30 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 13:10:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,7 @@ t_env		*copy_env(t_env *env);
 void		ft_env_add_back(t_env **lst, t_env *new);
 // pwd
 int			ft_pwd(t_ctx *ctx);
+//fish
+int	ft_whale(t_treenode *node);
 
 #endif
