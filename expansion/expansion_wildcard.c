@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 18:19:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 00:19:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		}
 	}
 	else
-		printf("NULLLLL");
+		printf("\n");
 
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{
@@ -129,17 +129,16 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 			j++;
 		if (str[j] && str[j] != '*')
 		{
-			while (str[j] != '*')
+			while (str[j] && str[j] != '*')
 				j++;
 			if (str[j] && str[j] == '*')
 				middle_wildcard++;
+			if (str[j] != '*')
+				j++;
 		}
 		j++;
 	}
 	
-	psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
-	if (!psm->middle)
-		return ;
 	//PREFIX
 	if (str[i] && str[i] != '*')
 	{
@@ -148,12 +147,21 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 			i++;
 		if (i > 0)
 			psm->prefix = ft_substr(str, start, i - start);
+	printf("str: %c\n", str[i]);
 	}
 
+	if(psm->prefix)
+		i ++;
+	if (str[i])
+		psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
+	if (!psm->middle)
+		return ;
 	//MIDDLE
 	j = 0;
 	while (str[i])
 	{
+		printf("str2: %c\n", str[i]);
+	
 		while (str[i] == '*')
 			i++;
 		start = i;
@@ -169,7 +177,8 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 				psm->suffix = ft_substr(str, start, i - start);
 		}
 	}
-	psm->middle[j] = NULL;
+	if (psm->middle[j])
+		psm->middle[j] = NULL;
 }
 
 
