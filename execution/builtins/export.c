@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 11:20:55 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:36:35 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,11 @@ t_env	*copy_env(t_env *env)
 		node = malloc(sizeof(t_env));
 		if (!node)
 			return (free_env_list(new), NULL);
+		ft_memset(node, 0, sizeof(t_env));
 		if (tmp->key)
 			node->key = strdup(tmp->key);
-		else
-			node->key = NULL;
 		if (tmp->value)
 			node->value = strdup(tmp->value);
-		else
-			node->value = NULL;
-		node->next = NULL;
 		ft_env_add_back(&new, node);
 		tmp = tmp->next;
 	}

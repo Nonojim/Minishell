@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 11:20:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:36:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,6 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			exit(126);
 		}
 		char **array = list_to_dynamiccarray(ctx);
-		//int i = 0;
-		//while (array[i])
-		//{
-		//	printf("%s\n", array[i]);
-		//	i++;
-		//}
 		execve(cmd_path, node->argv, array);
 		free_split(array);
 		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));

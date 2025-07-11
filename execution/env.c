@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 11:27:15 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:36:54 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return ;
-		new->key = ft_strdup(key);
-		new->value = NULL;
+		ft_memset(new, 0, sizeof(t_env));
+		if (key)
+			new->key = ft_strdup(key);
 		if (value)
 			new->value = ft_strdup(value);
-		new->next = NULL;
 		if (!*env_list)
 		{
 			*env_list = new;
@@ -117,8 +117,6 @@ t_env	*init_env_list()
 		{
 			key = ft_substr(environ[i], 0, equal - environ[i]);
 			value = ft_strdup(equal + 1);
-			//if (!value)
-			//	free(key);
 		}
 		else
 		{
