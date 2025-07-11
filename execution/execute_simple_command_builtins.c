@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:55:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 13:16:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 13:12:09 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ int	execute_builtin_command(t_treenode *node, char *line, t_ctx *ctx)
 		return (ft_env(node, ctx));
 	if (ft_strcmp(cmd, "exit") == 0)
 		return (ft_exit(line, node, ctx));
+	
+	//NEW
+	if (ft_strcmp(cmd, "whale") == 0)
+		return (ft_whale(node));
+	//
 	return (1);
 }
 
@@ -43,5 +48,6 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "export") == 0
 		|| ft_strcmp(cmd, "unset") == 0
 		|| ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "whale") == 0
 		|| ft_strcmp(cmd, "exit") == 0);
 }

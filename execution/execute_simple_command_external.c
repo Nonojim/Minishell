@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 11:36:29 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 12:24:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,17 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	}
 	else
 		return (external_command_status(ctx, pid));
-	ctx->exit_code = 1; //EXECUTE QUAND ?
-	return (1);
 }
 
 int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
 
+
+	signal(SIGINT, SIG_IGN); //ignore le ctrl+C (permet de ne pas quit)
 	waitpid(pid, &status, 0);
+	setup_signals();
+
 	if (WIFSIGNALED(status))
 		ctx->exit_code = 128 + WTERMSIG(status);
 	else if (WIFEXITED(status))
