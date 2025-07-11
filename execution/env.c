@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 09:32:50 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:44:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,11 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return ;
-		new->key = ft_strdup(key);
+		ft_memset(new, 0, sizeof(t_env));
+		if (key)
+			new->key = ft_strdup(key);
 		if (value)
 			new->value = ft_strdup(value);
-		new->next = NULL;
 		if (!*env_list)
 		{
 			*env_list = new;
@@ -81,15 +82,32 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 	}
 }
 
-// Initialise depuis environ[]
-t_env	*init_env_list(void)
+void	change_shlvl(t_env	**env)
 {
-	t_env	*env_list;
+	t_env	*shlvl;
+	char	*new_shlvl;
+	int		i;
+
+	shlvl = find_usrvar(*env, "SHLVL");
+	if (!shlvl)
+		i = 0;
+	else
+		i = ft_atoi(shlvl->value);
+	new_shlvl = ft_itoa(i + 1);
+	export_to_env(env, "SHLVL", new_shlvl);
+	free(new_shlvl);
+}
+
+// Initialise depuis environ[]
+t_env	*init_env_list()
+{
+	t_env	*env_list = NULL;
 	char	*key;
 	char	*value;
 	char	*equal;
 	int		i;
 
+	
 	i = 0;
 	env_list = NULL;
 	while (environ[i])
@@ -99,14 +117,20 @@ t_env	*init_env_list(void)
 		{
 			key = ft_substr(environ[i], 0, equal - environ[i]);
 			value = ft_strdup(equal + 1);
-			if (!value)
-				free(key);
-			export_to_env(&env_list, key, value);
-			free(key);
-			free(value);
 		}
+		else
+		{
+			key = ft_strdup(environ[i]);
+			value = NULL;
+		}
+		export_to_env(&env_list, key, value);
+		free(key);
+		free(value);
 		i++;
 	}
+	change_shlvl(&env_list);
+	if (find_usrvar(env_list, "PWD") == NULL)
+		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
 	return (env_list);
 }
 
@@ -121,7 +145,8 @@ void	free_env_list(t_env *env)
 		tmp = env;
 		env = env->next;
 		free(tmp->key);
-		free(tmp->value);
+		if (tmp->value)
+			free(tmp->value);
 		free(tmp);
 		count++;
 	}

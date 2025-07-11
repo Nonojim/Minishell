@@ -6,13 +6,47 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 10:49:03 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:36:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern char	**environ;
+
+char **list_to_dynamiccarray(t_ctx *ctx)
+{
+	int	i = 0;
+	char	**array;
+	t_env *tmp = ctx->env;
+	while (tmp)
+	{
+		i++;	
+		tmp = tmp->next;
+	}
+	array = malloc(sizeof(char *) * (i + 1));
+	if (!array)
+		return(NULL);
+	tmp = ctx->env;
+	i = 0;
+	while (tmp)
+	{
+		char *key_eq = ft_strdup(tmp->key);
+		if (tmp->value)
+		{
+			free(key_eq);
+			key_eq = ft_strjoin(tmp->key, "=");
+			array[i] = ft_strjoin(key_eq, tmp->value);
+			free(key_eq);
+		}
+		else
+			array[i] = key_eq;
+		i++;
+		tmp = tmp->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
 
 int    execute_external_command(t_treenode *node, t_ctx *ctx)
 {
@@ -63,7 +97,9 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			free(cmd_path);
 			exit(126);
 		}
-		execve(cmd_path, node->argv, environ);
+		char **array = list_to_dynamiccarray(ctx);
+		execve(cmd_path, node->argv, array);
+		free_split(array);
 		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free(cmd_path);
 		if (errno == ENOENT)
@@ -122,12 +158,13 @@ void	free_split(char	**split)
 {
 	int	i;
 
+	if (!split)
+		return;
 	i = 0;
 	while (split[i])
 	{
 		free(split[i]);
 		i++;
 	}
-	free(split[i]);
 	free(split);
 }

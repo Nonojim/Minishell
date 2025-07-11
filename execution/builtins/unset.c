@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 23:06:58 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/07 13:57:09 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:56:03 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	unset_head_list(t_ctx *ctx, char *key)
 	{
 		ctx->env = ctx->env->next;
 		free(tmp->key);
-		free(tmp->value);
+		if (tmp->value)
+			free(tmp->value);
 		free(tmp);
 		return (1);
 	}
@@ -59,7 +60,8 @@ void	unset_list(t_ctx *ctx, char *key)
 			tmp = tmp2->next;
 			tmp2->next = tmp2->next->next;
 			free(tmp->key);
-			free(tmp->value);
+			if (tmp->value)
+				free(tmp->value);
 			free(tmp);
 			break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:35:26 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:51:11 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
 	unsigned short d_reclen;    // longueur de cette entrée
 	unsigned char  d_type;      // type (fichier, dossier, etc.)
 	// type : DT_REG (fichier normal), DT_DIR(dossier))
-	char           d_name[256]; // nom du fichier/dossier _ utile pour wilcard };
+	char           d_name[256]; // nom du fichier/dossier _ utile pour wildcard };
 * 
 * closedir(dir) = a la fin de la lecture on ferme le dossier pour free les ressources
 *h
