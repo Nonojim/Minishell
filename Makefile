@@ -35,6 +35,7 @@ FILES = tokenizer/tokenizer.c \
 				expansion/expansion.c \
 				expansion/expansion_utils.c \
 				expansion/expansion_wildcard.c \
+				expansion/expansion_wildcard_utils.c \
 				execution/execution.c \
 				execution/execute_heredoc.c \
 				execution/execute_pipe.c \

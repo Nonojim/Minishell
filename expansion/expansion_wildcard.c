@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 02:17:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 11:28:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	{
 	//	free_split(psm->middle);
 		free(psm->prefix);
+		free_split(psm->middle);
 		free(psm->suffix);
 		free(psm);
 		return (NULL);
@@ -106,9 +107,10 @@ char	*expand_wildcard(char *str, t_treenode *node)
 
 	free_split(node->argv);
 	free(result);
-	free(psm->middle);
 	free(psm->prefix);
 	free(psm->suffix);
+	if (psm->middle)
+		free_split(psm->middle);
 	free(psm);
 	node->argv = new_argv;
 	return (NULL);
@@ -125,9 +127,9 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 
 	while (str[j])
 	{
-		if (str[j] == '*')
+		if (str[j] && str[j] == '*')
 		{
-			while (str[j] == '*')
+			while (str[j] && str[j] == '*')
 				j++;
 			if (str[j] && str[j] != '*')
 			{
@@ -135,11 +137,12 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 					j++;
 				if (str[j] && str[j] == '*')
 					middle_wildcard++;
-				if (str[j] != '*')
-					j++;
+				//if (str[j] && str[j] != '*')
+					//j++;
 			}
 		}
-		j++;
+		else
+			j++;
 	}
 	printf("middle : %d\n", 				middle_wildcard);	
 	//PREFIX
@@ -150,7 +153,7 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 			i++;
 	//	if (i > 0)
 			psm->prefix = ft_substr(str, start, i - start);
-	printf("str: %c\n", str[i]);
+	//printf("str: %c\n", str[i]);
 	}
 
 	//if(psm->prefix)
@@ -168,7 +171,7 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 	j = 0;
 	while (str[i])
 	{
-		printf("str2: %c\n", str[i]);
+		//printf("str2: %c\n", str[i]);
 	
 		while (str[i] == '*')
 			i++;
@@ -205,7 +208,7 @@ int	ft_strnstr_for_wildcard(char *str,	char **middle, int len_str)
 		while (i < len_str)
 		{
 			k = 0;
-			while (str[i + k] && middle[j][k] && str[i + k] == middle[j][k])
+			while (str[i + k] && middle[j][k] && str[i + k] == middle[j][k]) //permet de trouver dans l'ordre des middles
 				k++;
 			if (middle[j][k] == '\0')
 			{
