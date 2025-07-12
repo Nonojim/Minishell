@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:29:51 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/12 13:26:56 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 		return (free(line), NULL);
 	clean_quote = delete_quote(token_doc, token);
 	heredoc_line = newline_heredoc(clean_quote, j, token, ctx);
+	if (!heredoc_line)
+	{
+		free(clean_quote);
+		return (NULL);
+	}
 	free(clean_quote);
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
 	printf("line : [%s]\n", line);
@@ -95,7 +100,12 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			if (!next_line)
 			{
 				write(fd[1], line, ft_strlen(line));
-				break ;
+				free(line);
+				free(token_doc);
+				free_token(*token);
+				free_env_list(ctx->env);
+				close(fd[1]);
+				exit(0);
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
 			{
@@ -133,7 +143,19 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		}
 		close(fd[0]);
 		waitpid(pid, &status, 0);
-		return (heredoc_line);
+	//	free(token_doc);
+		if (WIFSIGNALED(status))
+	{
+		ctx->exit_code = 130;
+		close(fd[0]);
+		free(heredoc_line);
+		return (NULL);
+	}
+	else if (WIFEXITED(status))
+		ctx->exit_code = WEXITSTATUS(status);
+	else
+		ctx->exit_code = 1;
+	return (heredoc_line);
 	}
 }
 
