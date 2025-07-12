@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/10 18:17:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:14:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ int		subshell_status(t_ctx *ctx, pid_t pid);
 
 // Exe_HereDoc
 int		execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx);
-int		heredoc_status(t_ctx *ctx, pid_t pid);
-
+int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
 // Exe_Redirection
 int		execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx);
 int		redir_input(t_treenode *node, char *line, t_ctx *ctx);

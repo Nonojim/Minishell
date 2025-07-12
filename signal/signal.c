@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 17:45:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 22:35:40 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ void	setup_signals(void)
 void	signal_heredoc_handler(int signum)
 {
 	(void)signum;
-//	g_signum = signum;
+	g_signum = 1;
+//	printf("ctrl+c");
 	write(1, "\n", 1);
-	exit(130);
+	exit(130); //probleme
+	//signal(signum, SIG_DFL);
+	//kill(getpid(), signum); 
 }
 
 void	setup_signal_heredoc(void)

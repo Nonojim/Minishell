@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 14:39:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 22:34:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	create_token_op_heredoc(char *line, int *i, t_token **token)
 */
 char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 {
-	char	*line;
+	char	*line = NULL;
 	char	*next_line;
 	char	*heredoc_line;
 	char	*buffer;
@@ -84,18 +84,22 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	int		status;
 	ssize_t	bytes;
 
-	char *delimiteur = (*token)->str;
-	int	i =0;
+//	char *delimiteur = (*token)->str;
+	//int	i =0;
 
 	pipe(fd);
 	pid = fork();
 	if (pid == -1)
+	{
+		close(fd[0]);
+		close(fd[1]);
 		return (perror("error fork"), NULL);
+	}
 	if (pid == 0)
 	{
-		line = ft_strdup("");
 		setup_signal_heredoc();
 		close(fd[0]);
+		line = ft_strdup("");
 		size_line = ft_strlen(token_doc);
 		while (1)
 		{
@@ -108,7 +112,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 				free_token(*token);
 				free_env_list(ctx->env);
 				close(fd[1]);
-				fprintf(stderr, "minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')", i , delimiteur);
+			//	fprintf(stderr, "minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')", i , delimiteur);
 				exit(130);
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
@@ -131,39 +135,63 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		free_token(*token);
 		free_env_list(ctx->env);
 		close(fd[1]);
-		exit(EXIT_SUCCESS);
+		exit(0);
 	}
 	else
 	{
 		setup_signals();
 		close(fd[1]);
 		heredoc_line = ft_strdup("");
-		while ((bytes = read(fd[0], tmp, sizeof(tmp))) > 0)
+		if (!heredoc_line)
+			return (NULL);
+		while ((bytes = read(fd[0], tmp, sizeof(tmp) - 1)) > 0)
 		{
 			tmp[bytes] = '\0';
 			buffer = ft_strjoin(heredoc_line, tmp);
-			free(heredoc_line);
+			if(heredoc_line)
+				free(heredoc_line);
+			if (!buffer)
+				return (NULL);
 			heredoc_line = buffer;
 		}
-		close(fd[0]);
+		//close(fd[0]);
 		waitpid(pid, &status, 0);
-	//	free(token_doc);
 		if (WIFSIGNALED(status))
 		{
+
+		printf("CTRL+C");
+			close(fd[0]);
+		//	close(fd[1]);
 			ctx->exit_code = 130;
 			free(token_doc);
 			free_token(*token);
 			free_env_list(ctx->env);
-	//	close(fd[0]);
 			free(heredoc_line);
+			free(line);
 			return (NULL);
 		}
 		else if (WIFEXITED(status))
 			ctx->exit_code = WEXITSTATUS(status);
 		else
 			ctx->exit_code = 1;
-		return (heredoc_line);
-	}
+		/*else if (WIFEXITED(status))
+		{
+			int code = WEXITSTATUS(status);
+			if (code == 130)
+			{
+		
+				ctx->exit_code = 130;
+				free(token_doc);
+				free_token(*token);
+				free_env_list(ctx->env);
+				free(heredoc_line);
+				return (NULL);
+			}*/
+		//	else
+		//		ctx->exit_code = code;
+	//	}
+	return (heredoc_line); 
+	}	
 }
 
 char	*delete_tab_or_ad_return_line(char *next_line, int j)
