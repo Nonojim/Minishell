@@ -4,7 +4,7 @@ MAKEFLAGS += --silent
 
 CC = cc
 CFLAGS = -g -Wall -Wextra -Werror
-READFLAG = -lreadline
+READFLAG = -lreadline -ltermcap
 NAME = minishell
 LIBFT = libft/libft.a
 

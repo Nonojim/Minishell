@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 13:26:56 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 14:39:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	int		status;
 	ssize_t	bytes;
 
+	char *delimiteur = (*token)->str;
+	int	i =0;
+
 	pipe(fd);
 	pid = fork();
 	if (pid == -1)
@@ -105,7 +108,8 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 				free_token(*token);
 				free_env_list(ctx->env);
 				close(fd[1]);
-				exit(0);
+				fprintf(stderr, "minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')", i , delimiteur);
+				exit(130);
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
 			{
@@ -145,17 +149,20 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		waitpid(pid, &status, 0);
 	//	free(token_doc);
 		if (WIFSIGNALED(status))
-	{
-		ctx->exit_code = 130;
-		close(fd[0]);
-		free(heredoc_line);
-		return (NULL);
-	}
-	else if (WIFEXITED(status))
-		ctx->exit_code = WEXITSTATUS(status);
-	else
-		ctx->exit_code = 1;
-	return (heredoc_line);
+		{
+			ctx->exit_code = 130;
+			free(token_doc);
+			free_token(*token);
+			free_env_list(ctx->env);
+	//	close(fd[0]);
+			free(heredoc_line);
+			return (NULL);
+		}
+		else if (WIFEXITED(status))
+			ctx->exit_code = WEXITSTATUS(status);
+		else
+			ctx->exit_code = 1;
+		return (heredoc_line);
 	}
 }
 

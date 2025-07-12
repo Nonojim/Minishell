@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/11 16:58:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 17:44:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ int	main(void)
 		line = readline("Minishell$ ");
 		if (line == NULL)
 			break ;
+		if (g_signum == 1)
+		{
+			ctx.exit_code = 130;
+			if (line[0] == '\0')
+			{
+				g_signum = 0;
+				free(line);
+				continue;
+			}
+		}
+		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
 		//print_token_list(token);
 		tmp = token;
