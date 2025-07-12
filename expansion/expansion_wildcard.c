@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 00:19:53 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 02:17:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	if (!psm)
     return (NULL);
 	psm->prefix = NULL;
-	psm->middle = NULL;
+	//psm->middle = NULL;
 	psm->suffix = NULL;
 	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
 	if (!dir)
@@ -43,7 +43,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		int i = 0;
 		while (psm->middle[i])
 		{
-			printf("[%s]", psm->middle[i]);
+			printf("%s", psm->middle[i]);
 			if (psm->middle[i + 1])
 				printf(", ");
 			i++;
@@ -65,7 +65,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	closedir(dir);
 	if (!result)
 	{
-		free(psm->middle);
+	//	free_split(psm->middle);
 		free(psm->prefix);
 		free(psm->suffix);
 		free(psm);
@@ -125,38 +125,46 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 
 	while (str[j])
 	{
-		while (str[j] == '*')
-			j++;
-		if (str[j] && str[j] != '*')
+		if (str[j] == '*')
 		{
-			while (str[j] && str[j] != '*')
+			while (str[j] == '*')
 				j++;
-			if (str[j] && str[j] == '*')
-				middle_wildcard++;
-			if (str[j] != '*')
-				j++;
+			if (str[j] && str[j] != '*')
+			{
+				while (str[j] && str[j] != '*')
+					j++;
+				if (str[j] && str[j] == '*')
+					middle_wildcard++;
+				if (str[j] != '*')
+					j++;
+			}
 		}
 		j++;
 	}
-	
+	printf("middle : %d\n", 				middle_wildcard);	
 	//PREFIX
 	if (str[i] && str[i] != '*')
 	{
 		start = 0;
 		while (str[i] && str[i] != '*')
 			i++;
-		if (i > 0)
+	//	if (i > 0)
 			psm->prefix = ft_substr(str, start, i - start);
 	printf("str: %c\n", str[i]);
 	}
 
-	if(psm->prefix)
-		i ++;
-	if (str[i])
+	//if(psm->prefix)
+		//i ++;
+	if (middle_wildcard > 0)
+	{
 		psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
-	if (!psm->middle)
-		return ;
+		if (!psm->middle)
+			return ;
+	}
+	else 
+		psm->middle = NULL;
 	//MIDDLE
+	
 	j = 0;
 	while (str[i])
 	{
@@ -177,7 +185,7 @@ void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 				psm->suffix = ft_substr(str, start, i - start);
 		}
 	}
-	if (psm->middle[j])
+	if (psm->middle)
 		psm->middle[j] = NULL;
 }
 
