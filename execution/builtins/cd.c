@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 15:23:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/11 16:56:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,27 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 		return (ctx->exit_code = 1);
 	if (!node->argv[1])
 		target = ft_getenv("HOME", ctx);
-	if (node->argv[1] && node->argv[2])
+	if (!node->argv[1])
 	{
-		fprintf(stderr, "minishell: cd: too many arguments\n");
-		return (ctx->exit_code = 1);
-	}
+		char *home = ft_getenv("HOME", ctx);
+		if (!home || home[0] == '\0')
+		{
+			fprintf(stderr, "minishell: cd: HOME not set\n");
+			free(oldpwd);
+			return (ctx->exit_code = 1);
+		}
+		target = ft_strdup(home);
+	}	
 	else if (ft_strcmp(node->argv[1], "-") == 0)
 	{
-		target = ft_getenv("OLDPWD", ctx);
-		if (!target || target[0] == '\0')
+		char *old = ft_getenv("OLDPWD", ctx);
+		if (!old || old[0] == '\0')
 		{
 			fprintf(stderr, "minishell: cd: OLDPWD not set\n");
 			free(oldpwd);
-			free(target);
 			return (ctx->exit_code = 1);
 		}
+		target = ft_strdup(old);
 		printf("%s\n", target);
 	}
 	else

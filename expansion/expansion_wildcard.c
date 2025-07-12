@@ -6,18 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:51:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/12 11:50:34 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
-
-char	*expand_wildcard(char *str, t_treenode *node);
-int	match_prefix(char *str, char *prefix);
-int	match_middle(char *str, char *middle);
-int	match_suffix(char *str, char *suffix);
-char	**add_array(char **result, char *file);
-void	create_prefix_middle_suffix(char *str, t_wildcard *psm);
 
 char	*expand_wildcard(char *str, t_treenode *node)
 {
@@ -29,14 +22,29 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	if (!psm)
     return (NULL);
 	psm->prefix = NULL;
-	psm->middle = NULL;
+	//psm->middle = NULL;
 	psm->suffix = NULL;
 	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
 	if (!dir)
 		return (str);
 	result = NULL;
 	create_prefix_middle_suffix(str, psm);
-	//printf("prefix : %s , middle: %s, suffix : %s \n", psm->prefix, psm->middle, psm->suffix);
+	printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
+	printf("middle : ");
+	if (psm->middle)
+	{
+		int i = 0;
+		while (psm->middle[i])
+		{
+			printf("%s", psm->middle[i]);
+			if (psm->middle[i + 1])
+				printf(", ");
+			i++;
+		}
+	}
+	else
+		printf("\n");
+
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{
 
@@ -50,10 +58,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	closedir(dir);
 	if (!result)
 	{
-		free(psm->middle);
-		free(psm->prefix);
-		free(psm->suffix);
-		free(psm);
+		free_wildcard(psm, result, NULL);
 		return (NULL);
 	}
 	int	wildcard_index = 0;
@@ -88,87 +93,105 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		j++;
 	}
 	new_argv[i + j] = NULL;
-
-	free_split(node->argv);
-	free(result);
-	free(psm->middle);
-	free(psm->prefix);
-	free(psm->suffix);
-	free(psm);
+	free_wildcard(psm, result, node);
 	node->argv = new_argv;
 	return (NULL);
 }
 
+
+
 void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
 {
-	int	i = 0;
+	int	i;
 	int	start;
+	int middle_wildcard;
+	int	j;
 
-
+	i = 0;
+	j = 0;
+	middle_wildcard = count_middle_wildcard(str);
+	///PREFIX
 	if (str[i] && str[i] != '*')
 	{
 		start = 0;
 		while (str[i] && str[i] != '*')
 			i++;
-		if (i > 0)
-			psm->prefix = ft_substr(str, start, i - start);
+		psm->prefix = ft_substr(str, start, i - start);
 	}
-	while (str[i] == '*')
-		i++;
-	start = i;
-	while (str[i] && str[i] != '*')
-		i++;
-	if (str[i] == '*')
+	if (middle_wildcard > 0)
 	{
-		if (i > start)
-			psm->middle = ft_substr(str, start, i - start);
+		psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
+		if (!psm->middle)
+			return ;
+	}
+	else 
+		psm->middle = NULL;
+	//MIDDLE
+	while (str[i])
+	{
 		while (str[i] == '*')
 			i++;
-		if (str[i])
-			psm->suffix = ft_strdup(str + i);
+		start = i;
+		while (str[i] && str[i] != '*')
+			i++;
+		if (str[i] == '*' && i > start)
+		{
+				psm->middle[j] = ft_substr(str, start, i - start);
+				j++;
+		}
+		else if(!str[i] && i > start)
+				psm->suffix = ft_substr(str, start, i - start);
 	}
-	else
-	{
-		if (i > start)
-			psm->suffix = ft_substr(str, start, i - start);
-	}
+	if (psm->middle)
+		psm->middle[j] = NULL;
 }
 
 
-int	ft_strnstr_for_wildcard(char *str,	char *middle, int len_str)
+int	ft_strnstr_for_wildcard(char *str,	char **middle, int len_str)
 {
 	int	i;
 	int	j;
+	int	k;
 
 	i = 0;
 	j = 0;
-	while (str[i] && i < len_str)
+	k = 0;
+
+	while (middle[j])
 	{
-		if (str[i] == middle[j])
-			j++;
-		else
+		while (i < len_str)
 		{
-			i -= (j - 1);
-			j = 0;
-			if (str[i] == middle[0])
-				j++;
+			k = 0;
+			while (str[i + k] && middle[j][k] && str[i + k] == middle[j][k]) //permet de trouver dans l'ordre des middles
+				k++;
+			if (middle[j][k] == '\0')
+			{
+				i = i + k;
+				break;
+			}
+			i++;
 		}
-		i++;
-		int	len_middle = ft_strlen(middle);
-		if (j == len_middle)
-			return(0);
+		if (i >= len_str)
+			return (1);
+		j++;
 	}
-	return (1);
+	return (0);
 }
-int	match_middle(char *str, char *middle)
+
+int	match_middle(char *str, char **middle)
 {
 	int	match;
 	int	len_str;
+	int	i = 0;
 
-	len_str = ft_strlen(str);
-	match = ft_strnstr_for_wildcard(str, middle, len_str);
-	if (match == 0)
-		return (1);
+	while (middle[i])
+	{
+		len_str = ft_strlen(str);
+		match = ft_strnstr_for_wildcard(str, middle, len_str);
+		if (match == 0)
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
@@ -201,28 +224,7 @@ int	match_suffix(char *str, char *suffix)
 	return (0);
 }
 
-char	**add_array(char **result, char *file)
-{
-	int		i = 0;
-	char	**new;
 
-	while (result && result[i])
-		i++;
-	new = malloc(sizeof(char *) * (i + 2));
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (result && result[i])
-	{
-		new[i] = result[i];
-		i++;
-	}
-	new[i] = ft_strdup(file);
-	new[i + 1] = NULL;
-	free(result);
-	//printf("ajout : %s\n", file);
-	return (new);
-}
 
 /* = Glob 
  * PREFIXE***SUFFIXE 
