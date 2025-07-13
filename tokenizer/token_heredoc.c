@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 22:34:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:51:04 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 		return (free(line), NULL);
 	clean_quote = delete_quote(token_doc, token);
 	heredoc_line = newline_heredoc(clean_quote, j, token, ctx);
-	if (!heredoc_line)
+	free(clean_quote);
+	if (!heredoc_line || ctx->exit_code == 130)
 	{
-		free(clean_quote);
+		//free(line);
 		return (NULL);
 	}
-	free(clean_quote);
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
 	printf("line : [%s]\n", line);
 	return (line);
@@ -99,11 +99,22 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	{
 		setup_signal_heredoc();
 		close(fd[0]);
+		//g_signum = 0;
 		line = ft_strdup("");
 		size_line = ft_strlen(token_doc);
 		while (1)
 		{
 			next_line = readline("> ");
+		/*	if (g_signum == 1)
+			{
+				close(fd[1]);
+				free(line);
+				free(next_line);
+				free_token(*token);
+				free_env_list(ctx->env);
+				//continue ;
+				exit(130);
+			}*/
 			if (!next_line)
 			{
 				write(fd[1], line, ft_strlen(line));
@@ -143,7 +154,10 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		close(fd[1]);
 		heredoc_line = ft_strdup("");
 		if (!heredoc_line)
+		{
+			close(fd[0]);
 			return (NULL);
+		}
 		while ((bytes = read(fd[0], tmp, sizeof(tmp) - 1)) > 0)
 		{
 			tmp[bytes] = '\0';
@@ -151,23 +165,26 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			if(heredoc_line)
 				free(heredoc_line);
 			if (!buffer)
+			{
+				close(fd[0]);
 				return (NULL);
+			}
 			heredoc_line = buffer;
 		}
-		//close(fd[0]);
+		close(fd[0]);
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
+		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
 		{
-
-		printf("CTRL+C");
-			close(fd[0]);
-		//	close(fd[1]);
+			printf("CTRL+C");
+		//	close(fd[0]);
+			close(fd[1]);
 			ctx->exit_code = 130;
 			free(token_doc);
 			free_token(*token);
 			free_env_list(ctx->env);
 			free(heredoc_line);
-			free(line);
+			//free(line);
+			g_signum = 0;
 			return (NULL);
 		}
 		else if (WIFEXITED(status))

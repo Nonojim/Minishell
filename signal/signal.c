@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 22:35:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:38:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,5 @@ void	setup_signal_heredoc(void)
 {
 	signal(SIGINT, signal_heredoc_handler);
 	signal(SIGQUIT, SIG_IGN);
-	//signal(EOF, SIG_IGN); semble servir a rien
+	signal(EOF, SIG_IGN); //semble servir a rien
 }

@@ -6,11 +6,23 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/12 17:44:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:34:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_ascii_printable(const char *str)
+{
+	int	i = 0;
+	while(str[i])
+	{
+		if ((unsigned char)str[i] < 1 || (unsigned char)str[i] > 126)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int	main(void)
 {
@@ -39,6 +51,12 @@ int	main(void)
 				free(line);
 				continue;
 			}
+		}
+		if (is_ascii_printable(line))
+		{
+			fprintf(stderr, "minishell: character incognise\n");
+			free(line);
+			continue ;
 		}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
