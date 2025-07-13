@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 15:39:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:40:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 	line = *line_ptr;
 	i = 0;
 	start = 0;
-	while (line[i] != '\0')
+	while (line && line[i] != '\0')
 	{
 		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '\t'
 				|| line[i] == '\n'))
 			i++;
 		start = i;
 		line = tokenize2(&i, start, line, &token, ctx);
+		if (!line)
+			return (NULL);
 	}
 	*line_ptr = line;
 	return (token);

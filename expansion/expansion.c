@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 15:26:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/12 17:47:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 
 	if (str[i + 1] == '?')
 	{
+			printf("Expansion : $?= %d\n", ctx->exit_code);
 		expanse = ft_itoa(ctx->exit_code);
 		tmp = *result;
 		*result = ft_strjoin(tmp, expanse);

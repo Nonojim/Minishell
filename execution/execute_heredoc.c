@@ -6,13 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 10:41:39 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/12 20:28:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	heredoc_status(t_ctx *ctx, pid_t pid);
 
 int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 {
@@ -36,16 +35,18 @@ int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 		int exit_code = execute_node(node->left, line, ctx);
 		free_treenode(node);
 		free_env_list(ctx->env);
+		free(line);
 		exit(exit_code);
 	}
 	close(pipefd[0]);
-	return (heredoc_status(ctx, pid));
+	return (heredoc_status(ctx, pid, node, line));
 }
 
-int	heredoc_status(t_ctx *ctx, pid_t pid)
+int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line)
 {
 	int	status;
-
+	(void)line;
+	(void)node;
 	if (waitpid(pid, &status, 0) == -1)
 	{
 		perror("waitpid");
@@ -53,7 +54,13 @@ int	heredoc_status(t_ctx *ctx, pid_t pid)
 		return (1);
 	}
 	if (WIFSIGNALED(status))
-		ctx->exit_code = 128 + WTERMSIG(status);
+	{
+		printf("CTRL+C");
+	//	free_treenode(node);
+//		free_env_list(ctx->env);
+	//	free(line);
+		ctx->exit_code = 130;
+	}
 	else if (WIFEXITED(status))
 		ctx->exit_code = WEXITSTATUS(status);
 	else
