@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 11:38:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:09:59 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,19 @@
 * Eliminate special characters
 * @return 1 = it's a valid word character 0 = is not
 */
-int	is_word(int c)
+ int    is_word(int c)
 {
-	if (c == '|' || c == '<' || c == '>' || c == ';'
-		|| c == '(' || c == ')')
-		return (0);
-	if ((c >= 33 && c <= 126) || c == '\\' || c == '"' || c == '\'')
-		return (1);
-	return (0);
-}
+    unsigned char uc = (unsigned char)c;
+
+    if (uc >= 128) // UTF-8 multibyte chars (à partir de 0x80)
+        return (1);
+    if (uc == '|' || uc == '<' || uc == '>' || uc == ';'
+        || uc == '(' || uc == ')')
+        return (0);
+    if ((uc >= 33 && uc <= 126) || uc == '\\' || uc == '"' || uc == '\'')
+        return (1);
+    return (0);
+} 
 
 /*
 * Extract the token word and add to the token_list
@@ -47,7 +51,7 @@ void	token_word(int *i, int start, char *line, t_token **token)
 		return ;
 	if (is_word(*str) == 1)
 	{
-		add_token_end(token, create_token(WORD,str));
+		add_token_end(token, create_token(WORD, str));
 		// free(str);
 	}
 	else

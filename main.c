@@ -53,12 +53,12 @@ int	main(void)
 				continue;
 			}
 		}
-		if (is_ascii_printable(line))
-		{
-			fprintf(stderr, "minishell: character incognise\n");
-			free(line);
-			continue ;
-		}
+		//if (is_ascii_printable(line))
+		//{
+		//	fprintf(stderr, "minishell: unrecognized character\n");
+		//	free(line);
+		//	continue ;
+		//}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
 		//print_token_list(token);
@@ -97,7 +97,6 @@ void	resolve_ast(t_treenode *ast,
 
 void	free_prompt(t_treenode *ast, char *line)
 {
-	//(void)tmp;
 	if (ast)
 		free_treenode(ast);
 	if (line)
