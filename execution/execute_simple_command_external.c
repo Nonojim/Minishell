@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 12:24:41 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:17:17 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,14 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		if (!cmd_path)
 		{
 			fprintf(stderr, "minishell: %s: command not found\n", cmd);
-			free_treenode(node);
+			free_treenode(ctx->root);
 			free_env_list(ctx->env);
 			exit(127);
 		}
 		if (access(cmd_path, F_OK) != 0)
 		{
 			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd_path);
-			free_treenode(node);
+			free_treenode(ctx->root);
 			free_env_list(ctx->env);
 			free(cmd_path);
 			exit(127);
@@ -92,16 +92,18 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		if (access(cmd_path, X_OK) != 0)
 		{
 			fprintf(stderr, "minishell: %s: Permission denied\n", cmd_path);
-			free_treenode(node);
+			free_treenode(ctx->root);
 			free_env_list(ctx->env);
 			free(cmd_path);
 			exit(126);
 		}
 		char **array = list_to_dynamiccarray(ctx);
 		execve(cmd_path, node->argv, array);
-		free_split(array);
 		fprintf(stderr, "minishell: %s: %s\n", cmd_path, strerror(errno));
+		free_split(array);
 		free(cmd_path);
+		free_treenode(ctx->root);
+		free_env_list(ctx->env);
 		if (errno == ENOENT)
 			exit(127);
 		exit(126);

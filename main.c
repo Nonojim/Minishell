@@ -34,6 +34,7 @@ int	main(void)
 	
 	ctx.env = NULL;
 	ctx.exit_code = 0;
+	ctx.root = NULL;
 	ctx.env = init_env_list();
 	while (1)
 	{
@@ -65,6 +66,7 @@ int	main(void)
 		add_history(line);
 		parse_error(0);
 		ast = parse_line_node(&token);
+		ctx.root = ast;
 		token_not_empty(&token, &ast);
 		free_token(tmp);
 		resolve_ast(ast, line, &ctx);

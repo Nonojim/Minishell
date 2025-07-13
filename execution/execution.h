@@ -27,6 +27,7 @@ typedef struct s_ctx
 	t_env	*env;
 	char	**envp;
 	int		exit_code;
+	t_treenode *root;
 }	t_ctx;
 
 //list to char**

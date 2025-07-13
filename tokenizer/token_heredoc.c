@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 13:04:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:18:40 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		waitpid(pid, &status, 0);
 		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
 		{
-			printf("CTRL+C");
 			ctx->exit_code = 130;
 			close(fd[0]);
 		//	close(fd[1]);

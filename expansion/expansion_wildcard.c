@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 11:50:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:17:59 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		return (str);
 	result = NULL;
 	create_prefix_middle_suffix(str, psm);
-	printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
-	printf("middle : ");
+	//printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
+	//printf("middle : ");
 	if (psm->middle)
 	{
 		int i = 0;
