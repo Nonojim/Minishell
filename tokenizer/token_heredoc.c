@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 10:51:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 13:04:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,16 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 		return (free(line), NULL);
 	clean_quote = delete_quote(token_doc, token);
 	heredoc_line = newline_heredoc(clean_quote, j, token, ctx);
-	free(clean_quote);
+	//free(clean_quote);
 	if (!heredoc_line || ctx->exit_code == 130)
 	{
-		//free(line);
+		free_token(*token);
+		*token = NULL;
+	//	free(line);
 		return (NULL);
 	}
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
-	printf("line : [%s]\n", line);
+	//printf("line : [%s]\n", line);
 	return (line);
 }
 
@@ -84,8 +86,10 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	int		status;
 	ssize_t	bytes;
 
+	//(void)*token;
 //	char *delimiteur = (*token)->str;
 	//int	i =0;
+	int	line_error = 0; //quand on refactorera ca ira dans une structure et le compteur marchera (normalement)
 
 	pipe(fd);
 	pid = fork();
@@ -97,6 +101,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	}
 	if (pid == 0)
 	{
+		line_error = 1;
 		setup_signal_heredoc();
 		close(fd[0]);
 		//g_signum = 0;
@@ -117,6 +122,9 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			}*/
 			if (!next_line)
 			{
+				fprintf(stderr,
+					"minishell: warning: here-document delimited at line %d delimited by end-of-file (wanted `%s')\n",
+					line_error, token_doc);
 				write(fd[1], line, ft_strlen(line));
 				free(line);
 				free(token_doc);
@@ -124,7 +132,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 				free_env_list(ctx->env);
 				close(fd[1]);
 			//	fprintf(stderr, "minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')", i , delimiteur);
-				exit(130);
+				exit(0);
 			}
 			if (ft_strncmp(next_line, token_doc, size_line) == 0)
 			{
@@ -135,11 +143,17 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			if (ft_strncmp(next_line, token_doc, size_line) != 0)
 			{
 				next_line = delete_tab_or_ad_return_line(next_line, j);
-				buffer = line;
-				line = ft_strjoin(line, next_line);
-				free(buffer);
+				buffer = ft_strjoin(line, next_line);
+			//	buffer = line;
+				//line = ft_strjoin(line, next_line);
+				free(line);
+				free(next_line);
+				if (!buffer)
+					exit(1);
+				line = buffer;
+				line_error++;
 			}
-			free(next_line);
+			//free(next_line);
 		}
 		free(token_doc);
 		free(line);
@@ -162,8 +176,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		{
 			tmp[bytes] = '\0';
 			buffer = ft_strjoin(heredoc_line, tmp);
-			if(heredoc_line)
-				free(heredoc_line);
+			free(heredoc_line);
 			if (!buffer)
 			{
 				close(fd[0]);
@@ -176,19 +189,28 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
 		{
 			printf("CTRL+C");
-		//	close(fd[0]);
-			close(fd[1]);
 			ctx->exit_code = 130;
+			close(fd[0]);
+		//	close(fd[1]);
 			free(token_doc);
-			free_token(*token);
-			free_env_list(ctx->env);
+		//	free_token(*token);
+		//	free_env_list(ctx->env);
 			free(heredoc_line);
 			//free(line);
-			g_signum = 0;
+		//	g_signum = 0;
 			return (NULL);
 		}
 		else if (WIFEXITED(status))
+		{
 			ctx->exit_code = WEXITSTATUS(status);
+			if (ctx->exit_code == 130)
+			{
+
+				free(token_doc);
+				free(heredoc_line);
+				return (NULL);
+			}
+		}
 		else
 			ctx->exit_code = 1;
 		/*else if (WIFEXITED(status))
@@ -207,6 +229,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		//	else
 		//		ctx->exit_code = code;
 	//	}
+	free(token_doc);
 	return (heredoc_line); 
 	}	
 }
