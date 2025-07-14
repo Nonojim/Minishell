@@ -61,7 +61,7 @@ int	main(void)
 		//}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
-		//print_token_list(token);
+		print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);
