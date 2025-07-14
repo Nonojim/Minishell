@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 16:17:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/14 09:42:43 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	}
 	else
 		printf("\n");
-
+	//printf si dessus cause bug avec echo "*"
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{
 
