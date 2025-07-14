@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 18:09:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/14 10:15:50 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
     if (uc == '|' || uc == '<' || uc == '>' || uc == ';'
         || uc == '(' || uc == ')')
         return (0);
-    if ((uc >= 33 && uc <= 126) || uc == '\\' || uc == '"' || uc == '\'')
+    if ((uc >= 32 && uc <= 126) || uc == '\\' || uc == '"' || uc == '\'')
         return (1);
     return (0);
 } 
@@ -38,12 +38,17 @@
 void	token_word(int *i, int start, char *line, t_token **token)
 {
 	char	*str;
-
+	int	inquote = -1;
+	
 	while (line[*i] != '\0' && is_word(line[*i]) == 1)
 	{
+		if(line[*i] == '"' || line[*i] == '\'')
+			inquote *= -1;
 		if ((line[*i] == '&' && line[*i + 1] == '&'))
 			break;
 		(*i)++;
+		if(line[*i] == ' ' && inquote == -1)
+			break;
 	}
 
 	str = ft_substr(line, start, *i - start);
