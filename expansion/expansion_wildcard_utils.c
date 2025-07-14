@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 11:29:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 11:49:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/13 19:29:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void	free_wildcard(t_wildcard *psm, char **result, t_treenode *node)
 
 char	**add_array(char **result, char *file)
 {
-	int		i = 0;
+	int		i;
 	char	**new;
 
+	i = 0;
 	while (result && result[i])
 		i++;
 	new = malloc(sizeof(char *) * (i + 2));
@@ -52,7 +53,6 @@ char	**add_array(char **result, char *file)
 	new[i] = ft_strdup(file);
 	new[i + 1] = NULL;
 	free(result);
-	//printf("ajout : %s\n", file);
 	return (new);
 }
 

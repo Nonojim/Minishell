@@ -6,11 +6,57 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 16:17:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:37:33 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+	
+void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
+{
+	int	wildcard_index;
+	int	len_argv;
+	int	len_result;
+	char	**new_argv;
+	int	i;
+	int	j;
+	int	k;
+
+	wildcard_index = 0;
+	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
+		wildcard_index++;
+	len_argv = 0;
+	while (node->argv[len_argv])
+		len_argv++;
+	len_result = 0;
+	while (result[len_result])
+		len_result++;
+	new_argv = malloc(sizeof(char *) * (len_argv + len_result));
+	if (!new_argv)
+		return ;
+	i = 0;
+	while (i < wildcard_index)
+	{
+		new_argv[i] = ft_strdup(node->argv[i]);
+		i++;
+	}
+	j = 0;
+	while (result[j])
+	{
+		new_argv[i + j] = result[j];
+		j++;
+	}
+	k = wildcard_index + 1;
+	while (k < len_argv)
+	{
+		new_argv[i + j] = ft_strdup(node->argv[k]);
+		k++;
+		j++;
+	}
+	new_argv[i + j] = NULL;
+	free_wildcard(psm, result, node);
+	node->argv = new_argv;
+}
 
 char	*expand_wildcard(char *str, t_treenode *node)
 {
@@ -22,32 +68,14 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	if (!psm)
     return (NULL);
 	psm->prefix = NULL;
-	//psm->middle = NULL;
 	psm->suffix = NULL;
 	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
 	if (!dir)
 		return (str);
 	result = NULL;
 	create_prefix_middle_suffix(str, psm);
-	//printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
-	//printf("middle : ");
-	if (psm->middle)
-	{
-		int i = 0;
-		while (psm->middle[i])
-		{
-			printf("%s", psm->middle[i]);
-			if (psm->middle[i + 1])
-				printf(", ");
-			i++;
-		}
-	}
-	else
-		printf("\n");
-
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{
-
 		if (entry->d_name[0] == '.') //on ignore les files caché (ex .git)
 			continue;
 		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix)) &&
@@ -61,170 +89,9 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		free_wildcard(psm, result, NULL);
 		return (NULL);
 	}
-	int	wildcard_index = 0;
-	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
-		wildcard_index++;
-	int len_argv = 0;
-	while (node->argv[len_argv])
-		len_argv++;
-	int len_result = 0;
-	while (result[len_result])
-		len_result++;
-	char **new_argv = malloc(sizeof(char *) * (len_argv + len_result));
-	if (!new_argv)
-		return (NULL);
-	int i = 0;
-	while (i < wildcard_index)
-	{
-		new_argv[i] = ft_strdup(node->argv[i]);
-		i++;
-	}
-	int j = 0;
-	while (result[j])
-	{
-		new_argv[i + j] = result[j];
-		j++;
-	}
-	int k = wildcard_index + 1;
-	while (k < len_argv)
-	{
-		new_argv[i + j] = ft_strdup(node->argv[k]);
-		k++;
-		j++;
-	}
-	new_argv[i + j] = NULL;
-	free_wildcard(psm, result, node);
-	node->argv = new_argv;
+	create_new_argv(result, node, psm);
 	return (NULL);
 }
-
-
-
-void	create_prefix_middle_suffix(char *str, t_wildcard *psm)
-{
-	int	i;
-	int	start;
-	int middle_wildcard;
-	int	j;
-
-	i = 0;
-	j = 0;
-	middle_wildcard = count_middle_wildcard(str);
-	///PREFIX
-	if (str[i] && str[i] != '*')
-	{
-		start = 0;
-		while (str[i] && str[i] != '*')
-			i++;
-		psm->prefix = ft_substr(str, start, i - start);
-	}
-	if (middle_wildcard > 0)
-	{
-		psm->middle = malloc(sizeof(char *) * (middle_wildcard + 1));
-		if (!psm->middle)
-			return ;
-	}
-	else 
-		psm->middle = NULL;
-	//MIDDLE
-	while (str[i])
-	{
-		while (str[i] == '*')
-			i++;
-		start = i;
-		while (str[i] && str[i] != '*')
-			i++;
-		if (str[i] == '*' && i > start)
-		{
-				psm->middle[j] = ft_substr(str, start, i - start);
-				j++;
-		}
-		else if(!str[i] && i > start)
-				psm->suffix = ft_substr(str, start, i - start);
-	}
-	if (psm->middle)
-		psm->middle[j] = NULL;
-}
-
-
-int	ft_strnstr_for_wildcard(char *str,	char **middle, int len_str)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-
-	while (middle[j])
-	{
-		while (i < len_str)
-		{
-			k = 0;
-			while (str[i + k] && middle[j][k] && str[i + k] == middle[j][k]) //permet de trouver dans l'ordre des middles
-				k++;
-			if (middle[j][k] == '\0')
-			{
-				i = i + k;
-				break;
-			}
-			i++;
-		}
-		if (i >= len_str)
-			return (1);
-		j++;
-	}
-	return (0);
-}
-
-int	match_middle(char *str, char **middle)
-{
-	int	match;
-	int	len_str;
-	int	i = 0;
-
-	while (middle[i])
-	{
-		len_str = ft_strlen(str);
-		match = ft_strnstr_for_wildcard(str, middle, len_str);
-		if (match == 0)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-//verif que str comment par le prefix
-int	match_prefix(char *str, char *prefix)
-{
-	int	match;
-	int	len_prefix;
-	
-	len_prefix = ft_strlen(prefix);
-	match = ft_strncmp(str, prefix, len_prefix);
-	if (match == 0)
-		return (1);
-	return (0);
-}
-
-
-//verif que str finit par le suffix
-int	match_suffix(char *str, char *suffix)
-{
-	int	len_str;
-	int	len_suffix;
-	int	match;
-
-	len_str = ft_strlen(str);
-	len_suffix = ft_strlen(suffix);
-	match = ft_strcmp(str + len_str - len_suffix, suffix);
-	if (match == 0)
-		return (1);
-	return (0);
-}
-
-
 
 /* = Glob 
  * PREFIXE***SUFFIXE 

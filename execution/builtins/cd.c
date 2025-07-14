@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 16:56:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/14 12:40:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 	char		*oldpwd;
 	char		*newpwd;
 	char		*target;
+	char		*home;
+	char		*old;
 	struct stat	info;
 
 	oldpwd = getcwd(NULL, 0);
@@ -26,7 +28,7 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 		target = ft_getenv("HOME", ctx);
 	if (!node->argv[1])
 	{
-		char *home = ft_getenv("HOME", ctx);
+		home = ft_getenv("HOME", ctx);
 		if (!home || home[0] == '\0')
 		{
 			fprintf(stderr, "minishell: cd: HOME not set\n");
@@ -37,7 +39,7 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 	}	
 	else if (ft_strcmp(node->argv[1], "-") == 0)
 	{
-		char *old = ft_getenv("OLDPWD", ctx);
+		old = ft_getenv("OLDPWD", ctx);
 		if (!old || old[0] == '\0')
 		{
 			fprintf(stderr, "minishell: cd: OLDPWD not set\n");
