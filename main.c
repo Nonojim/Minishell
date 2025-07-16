@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/13 10:34:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/14 11:24:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(void)
 		//}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
-		//print_token_list(token);
+		print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);
