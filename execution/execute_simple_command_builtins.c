@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:55:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 13:12:09 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/15 11:13:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	execute_builtin_command(t_treenode *node, char *line, t_ctx *ctx)
 
 	cmd = node->argv[0];
 	if (ft_strcmp(cmd, "echo") == 0)
-		return (ft_echo(node));
+		return (ft_echo(node, ctx));
 	if (ft_strcmp(cmd, "pwd") == 0)
 		return (ft_pwd(ctx));
 	if (ft_strcmp(cmd, "cd") == 0)

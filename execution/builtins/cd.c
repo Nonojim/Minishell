@@ -37,6 +37,12 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 		}
 		target = ft_strdup(home);
 	}	
+	if (node->argv[1] && node->argv[2])
+	{
+		fprintf(stderr, "minishell: cd: too many arguments\n");
+		free(oldpwd);
+		return(ctx->exit_code = 1);
+	}
 	else if (ft_strcmp(node->argv[1], "-") == 0)
 	{
 		old = ft_getenv("OLDPWD", ctx);
