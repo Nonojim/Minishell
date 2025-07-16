@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 16:17:17 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:09:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 	pid_t	pid;
 	char	*cmd_path;
 	char	*cmd;
+	struct stat entry;
 
 	cmd = node->argv[0];
 	pid = fork();
@@ -80,6 +81,17 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			free_treenode(ctx->root);
 			free_env_list(ctx->env);
 			exit(127);
+		}
+		if (stat(cmd_path, &entry) == 0)
+		{
+			if (S_ISDIR(entry.st_mode))
+			{
+			fprintf(stderr, "minishell: %s: Is a directory\n", cmd_path);
+			free_treenode(ctx->root);
+			free_env_list(ctx->env);
+			free(cmd_path);
+			exit(126);
+			}
 		}
 		if (access(cmd_path, F_OK) != 0)
 		{
@@ -115,7 +127,6 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
-
 
 	signal(SIGINT, SIG_IGN); //ignore le ctrl+C (permet de ne pas quit)
 	waitpid(pid, &status, 0);

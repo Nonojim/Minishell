@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/08 15:16:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/15 11:12:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_echo(t_treenode *node)
+int	ft_echo(t_treenode *node, t_ctx *ctx)
 {
 	int	i;
 	int	n;
@@ -39,7 +39,8 @@ int	ft_echo(t_treenode *node)
 	}
 	if (n == 0)
 		printf("\n");
-	return (0);
+	ctx->exit_code = 0;
+	return (ctx->exit_code);
 }
 
 //If there are "-nnnnnnnnnnnnnnnnnnnnnnnnnnn or -n -n -n"

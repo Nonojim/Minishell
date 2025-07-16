@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 09:42:43 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:45:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 	create_prefix_middle_suffix(str, psm);
 	//printf("prefix : %s, suffix : %s \n", psm->prefix, psm->suffix);
 	//printf("middle : ");
-	if (psm->middle)
+/*	if (psm->middle)
 	{
 		int i = 0;
 		while (psm->middle[i])
@@ -43,7 +43,7 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		}
 	}
 	else
-		printf("\n");
+		printf("\n");*/
 	//printf si dessus cause bug avec echo "*"
 	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
 	{

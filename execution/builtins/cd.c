@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 16:56:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/14 18:55:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 		}
 		target = ft_strdup(home);
 	}	
+	if (node->argv[1] && node->argv[2])
+	{
+		fprintf(stderr, "minishell: cd: too many arguments\n");
+		free(oldpwd);
+		return(ctx->exit_code = 1);
+	}
 	else if (ft_strcmp(node->argv[1], "-") == 0)
 	{
 		char *old = ft_getenv("OLDPWD", ctx);
