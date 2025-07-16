@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 17:47:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/14 11:04:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 
 	if (!node)
 		return ;
+
 	if (node->type == HERE_DOCUMENT)
 	{
 		if (node->str && (node->str[0] == '\'' || node->str[0] == '"'))
 			return ;
 		if (node->right && node->right->str)
 		{
-			char *expanded = expand_string(node->right->str, node, ctx);
+			expanded = expand_string(node->right->str, node, ctx);
 			free(node->right->str);
 			node->right->str = expanded;
 		}
@@ -58,10 +59,6 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			i++;
 		}
 	}
-//	if(node->left)
-//		expanse_ast(node->left, ctx);
-//	if(node->right)
-//		expanse_ast(node->right, ctx);
 }
 
 /*
@@ -192,7 +189,7 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 
 	if (str[i + 1] == '?')
 	{
-			printf("Expansion : $?= %d\n", ctx->exit_code);
+			//printf("Expansion : $?= %d\n", ctx->exit_code);
 		expanse = ft_itoa(ctx->exit_code);
 		tmp = *result;
 		*result = ft_strjoin(tmp, expanse);
