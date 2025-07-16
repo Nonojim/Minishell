@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/15 11:12:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:10:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_echo(t_treenode *node, t_ctx *ctx)
 	n = 0;
 	if (node->argv[i + 1] == NULL)
 	{
-		printf("\n");
+		ft_fprintf(1, "\n");
 		return (0);
 	}
 	i++;
@@ -32,13 +32,13 @@ int	ft_echo(t_treenode *node, t_ctx *ctx)
 	}
 	while (node->argv[i])
 	{
-		printf("%s", node->argv[i]);
+		ft_fprintf(1,"%s", node->argv[i]);
 		if (node->argv[i + 1])
-			printf(" ");
+			ft_fprintf(1, " ");
 		i++;
 	}
 	if (n == 0)
-		printf("\n");
+		ft_fprintf(1, "\n");
 	ctx->exit_code = 0;
 	return (ctx->exit_code);
 }

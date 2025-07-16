@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/15 10:22:21 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:07:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ int	execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx)
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
-	ctx->exit_code = status;
-	return (ctx->exit_code);
+	return (status);
 }
 
 int	redir_input(t_treenode *node, char *line, t_ctx *ctx)
@@ -49,7 +48,7 @@ int	redir_input(t_treenode *node, char *line, t_ctx *ctx)
 	fd = open(node->right->str, O_RDONLY);
 	if (fd < 0)
 	{
-		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ft_fprintf(2, "minishell: %s: %s\n", node->right->str, strerror(errno));
 		ctx->exit_code = 1;
 		return (1);
 	}
@@ -62,10 +61,11 @@ int	redir_output(t_treenode *node, char *line, t_ctx *ctx)
 {
 	int	fd;
 
+
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ft_fprintf(2, "minishell: %s: %s\n", node->right->str, strerror(errno));
 		ctx->exit_code = 1;
 		return (1);
 	}
@@ -81,7 +81,7 @@ int	redir_append(t_treenode *node, char *line, t_ctx *ctx)
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		fprintf(stderr, "minishell: %s: %s\n", node->right->str, strerror(errno));
+		ft_fprintf(2, "minishell: %s: %s\n", node->right->str, strerror(errno));
 		ctx->exit_code = 1;
 		return (1);
 	}
