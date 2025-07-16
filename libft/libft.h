@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:21:01 by npederen          #+#    #+#             */
-/*   Updated: 2025/06/11 09:58:27 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/16 19:55:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include "get_next_line/get_next_line.h"
+# include "ft_fprintf/ft_printf.h"
 
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);

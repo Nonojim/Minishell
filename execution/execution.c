@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/15 10:46:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:06:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ int	execute_node(t_treenode *node, char *line, t_ctx *ctx)
 		|| node->type == SUBSHELL)
 		return (execute_node_redir(node, line, ctx));
 	else
-	{
-		printf("unknown node type %d\n", node->type);
 		return (1);
-	}
 }
 
 int	execute_node_simple(t_treenode *node, char *line, t_ctx *ctx)

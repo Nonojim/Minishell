@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_printchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 19:04:30 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:13:08 by lduflot          ###   ########.fr       */
+/*   Created: 2024/12/03 13:56:40 by lduflot           #+#    #+#             */
+/*   Updated: 2025/07/16 19:42:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "ft_printf.h"
 
-int	ft_pwd(t_ctx *ctx)
+int	ft_printchar(char c, int fd)
 {
-	char	*pwd;
-
-	pwd = ft_getenv("PWD", ctx);
-	if (!pwd)
-	{
-		perror("pwd");
-		ctx->exit_code = 1;
-		return (1);
-	}
-	ft_fprintf(1, "%s\n", pwd);
-	return (0);
+	write(fd, &c, 1);
+	return (1);
 }

@@ -3,7 +3,15 @@ SRC = ft_strlen.c ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint
 ft_memmove.c ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c ft_strrchr.c ft_strncmp.c ft_strnstr.c \
 ft_memchr.c ft_memcmp.c ft_atoi.c ft_calloc.c ft_sort_int_tab.c ft_strdup.c ft_substr.c ft_strtrim.c ft_strmapi.c ft_striteri.c \
 ft_strjoin.c ft_split.c ft_itoa.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_strcmp.c \
-get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
+ft_fprintf/ft_fprintf.c \
+ft_fprintf/ft_printadress.c \
+ft_fprintf/ft_printhexamaj.c \
+ft_fprintf/ft_printhexaminus.c \
+ft_fprintf/ft_printnbr.c \
+ft_fprintf/ft_printchar.c \
+ft_fprintf/ft_printstr.c \
+ft_fprintf/ft_printnbrunsigned.c
 #append .o to each .c files in the SRC
 #OBJS := $(SRC:%.c=%.o)
 OBJS = ${SRC:.c=.o}
