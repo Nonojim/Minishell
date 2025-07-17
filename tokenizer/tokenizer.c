@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 10:48:18 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 13:46:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token, t_ctx *ctx)
 	else if (is_operator_logical(line[*i]) == line[*i] && line[*i])
 		token_logical_operator(i, start, line, token);
 	else if (line[*i] != '\0' && is_word(line[*i]) == 1)
-		token_word(i, start, line, token);
+		line = token_word(i, start, line, token);
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 10:29:46 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:28:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		type_token(char *str);
 int		type_token_double_operator(char *str);
 //Token_word
 int		is_word(int c);
-void	token_word(int *i, int start, char *line, t_token **token);
+char	*token_word(int *i, int start, char *line, t_token **token);
 //Token_operator
 int		is_operator_logical(char c);
 int		is_ok_double(char c);
