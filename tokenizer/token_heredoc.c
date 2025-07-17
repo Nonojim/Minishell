@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 10:48:30 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 14:09:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 	start = *i;
 	if (line[*i] == '\0' || is_word(line[*i]) == 0)
 		return (line);
-	while (line[*i] != '\0' && is_word(line[*i]) == 1)
+	while (line[*i] != '\0' && is_word(line[*i]) == 1 && line[*i] != ' ')
 		(*i)++;
 	token_doc = ft_substr(line, start, *i - start);
 	if (!token_doc)
@@ -49,6 +49,7 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 		return (NULL);
 	}
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
+
 	//printf("line : [%s]\n", line);
 	return (line);
 }
