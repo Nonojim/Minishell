@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 10:57:47 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 11:10:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ int	is_ascii_printable(const char *str)
 	return (0);
 }
 
+
+/*
+\033 = ASCII = ESC 
+\033[2J = Efface contenu de l'ecran (2: tout l'écran)
+\033[H = Replace curseur position ligne 1, collone 1
+*/
+void	clear_screen(void)
+{
+	write(STDOUT_FILENO, "\033[2J\033[H", 7);
+}
+
+/*void	start_message(void)
+{
+	ft_fprintf(1, " en travaux ... \n");
+	ft_fprintf(1, "\n");
+}*/
+
 int	main(void)
 {
 	char		*line;
@@ -32,6 +49,8 @@ int	main(void)
 	t_treenode	*ast;
 	t_ctx		ctx;
 	
+	clear_screen();
+	//start_message();
 	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.root = NULL;
@@ -40,7 +59,7 @@ int	main(void)
 	{
 		setup_signals();
 		token = NULL;
-		line = readline("Minishell$ ");
+		line = readline("\001\033[1;34m\002Minishell$ \001\033[0m\002");
 		if (line == NULL)
 			break ;
 		if (g_signum == 1)
@@ -61,11 +80,13 @@ int	main(void)
 		//}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
-		//print_token_list(token);
+		print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);
 		ast = parse_line_node(&token);
+		if (parse_error(-1))
+			ctx.exit_code = 2;
 	//	astreeprint(ast, 0);
 		ctx.root = ast;
 		token_not_empty(&token, &ast);
