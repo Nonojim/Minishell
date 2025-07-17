@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/15 11:10:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 15:47:15 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ int	execute_simple_command(t_treenode *node, char *line, t_ctx *ctx)
 	if (is_builtin(node->argv[0]))
 		ctx->exit_code = execute_builtin_command(node, line, ctx);
 	else
-		ctx->exit_code = execute_external_command(node, ctx);
+		ctx->exit_code = execute_external_command(node, ctx, line);
 	return (ctx->exit_code);
 }

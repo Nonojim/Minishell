@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 21:29:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 14:24:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@
 * Extract the token word and add to the token_list
 * Word is defined as sequence of the characters who are not a special token
  */
-void	token_word(int *i, int start, char *line, t_token **token)
+char	*token_word(int *i, int start, char *line, t_token **token)
 {
 	char	*str;
 	int		inquote = -1;
 	char	quote;
-	int		diff = 0;
+	//int		diff = 0;
 
 	quote = '\0';
-	while (line[*i] != '\0' && is_word(line[*i]) == 1)
+	while (line[*i] != '\0' && (is_word(line[*i]) == 1 || line[*i] == '\n'))
 	{
 		if((line[*i] == '"' || line[*i] == '\'' ) && quote == '\0')
 			quote = line[*i];
@@ -57,18 +57,23 @@ void	token_word(int *i, int start, char *line, t_token **token)
 	}
 	if (inquote == 1 && line[*i] == '\0')
 	{
-		str = ft_strdup(line);
-		str = read_until_quote_closed(str, quote);
-		diff = ft_strlen(str) - *i;
-		if (diff < 0)
-			diff *= -1;
-		*i += diff;
+		//setup_signal_heredoc();
+		line = read_until_quote_closed(line, quote);
+		//setup_signals();
+		*i = start;
+		return (line);
+		//str = ft_strdup(line);
+		//str = read_until_quote_closed(str, quote);
+		//diff = ft_strlen(str) - *i;
+		//if (diff < 0)
+		//	diff *= -1;
+		//*i += diff;
 	}	
 	else
 		str = ft_substr(line, start, *i - start);
-	//printf("ICI [%s]\n", str);
 	if (!str)
-		return ;
+		return (NULL);
+		//printf("ICI [%s]\n", str);
 	if (is_word(*str) == 1)
 	{
 		add_token_end(token, create_token(WORD, str));
@@ -79,6 +84,6 @@ void	token_word(int *i, int start, char *line, t_token **token)
 		(*i)++;
 		free (str);
 	}
-
+	return (line);
 }
 

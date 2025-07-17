@@ -87,7 +87,7 @@ int	main(void)
 		ast = parse_line_node(&token);
 		if (parse_error(-1))
 			ctx.exit_code = 2;
-	//	astreeprint(ast, 0);
+		//astreeprint(ast, 0);
 		ctx.root = ast;
 		token_not_empty(&token, &ast);
 		free_token(tmp);

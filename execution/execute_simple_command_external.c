@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:04:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 15:48:29 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char **list_to_dynamiccarray(t_ctx *ctx)
 	return (array);
 }
 
-int    execute_external_command(t_treenode *node, t_ctx *ctx)
+int    execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 {
 	pid_t	pid;
 	char	*cmd_path;
@@ -68,6 +68,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		if(cmd[0] == '\0')
 		{
 			free_treenode(node);
+			free(line);
 			free_env_list(ctx->env);
 			exit(0);
 		}
@@ -79,6 +80,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		{
 			ft_fprintf(2, "minishell: %s: command not found\n", cmd);
 			free_treenode(ctx->root);
+			free(line);
 			free_env_list(ctx->env);
 			exit(127);
 		}
@@ -89,6 +91,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			ft_fprintf(2, "minishell: %s: Is a directory\n", cmd_path);
 			free_treenode(ctx->root);
 			free_env_list(ctx->env);
+			free(line);
 			free(cmd_path);
 			exit(126);
 			}
@@ -98,6 +101,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			ft_fprintf(2, "minishell: %s: No such file or directory\n", cmd_path);
 			free_treenode(ctx->root);
 			free_env_list(ctx->env);
+			free(line);
 			free(cmd_path);
 			exit(127);
 		}
@@ -106,6 +110,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 			ft_fprintf(2, "minishell: %s: Permission denied\n", cmd_path);
 			free_treenode(ctx->root);
 			free_env_list(ctx->env);
+			free(line);
 			free(cmd_path);
 			exit(126);
 		}
@@ -114,6 +119,7 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx)
 		ft_fprintf(2, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free_split(array);
 		free(cmd_path);
+		free(line);
 		free_treenode(ctx->root);
 		free_env_list(ctx->env);
 		if (errno == ENOENT)

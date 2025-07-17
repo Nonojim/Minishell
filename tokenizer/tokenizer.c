@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 10:48:18 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:33:16 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 	line = *line_ptr;
 	i = 0;
 	start = 0;
-	while (line && line[i] != '\0')
+	while (line && line[i] != '\0' && line[i + 1] != '#')
 	{
 		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '\t'
 				|| line[i] == '\n'))
@@ -51,6 +51,6 @@ char	*tokenize2(int	*i, int start, char *line, t_token **token, t_ctx *ctx)
 	else if (is_operator_logical(line[*i]) == line[*i] && line[*i])
 		token_logical_operator(i, start, line, token);
 	else if (line[*i] != '\0' && is_word(line[*i]) == 1)
-		token_word(i, start, line, token);
+		line = token_word(i, start, line, token);
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 21:05:35 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 14:26:07 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 */
 char	*read_until_quote_closed(char *line, char quote)
 {
-	char	*next_line;
+	char	*next_line = NULL;
 	char	*tmp;
 
 	while (1)
