@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 15:54:35 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:56:45 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,18 @@
 
 int	is_valid_export(char *arg)
 {
-	int	i = 0;
-
-	while (arg[i] && arg[i] != '=')
+	int	i = 1;
+	if (ft_isalpha(arg[0]) || arg[0] == '_')
 	{
-		if (!arg || (!ft_isalpha(arg[i]) && arg[i] != '-' && arg[0] != '~'))
-			return (0);
-		i++;
+		while (arg[i] && arg[i] != '=')
+		{
+			if (!arg || (!ft_isalnum(arg[i]) && arg[i]!= '_'))
+				return (0);
+			i++;
+		}
 	}
-	
+	else
+		return (0);
 	return (1);
 }
 
