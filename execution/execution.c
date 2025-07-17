@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 10:53:20 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/16 20:06:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ int	execute_node(t_treenode *node, char *line, t_ctx *ctx)
 		|| node->type == SUBSHELL)
 		return (execute_node_redir(node, line, ctx));
 	else
-	{
-		printf("unknown node type %d\n", node->type);
 		return (1);
-	}
 }
 
 int	execute_node_simple(t_treenode *node, char *line, t_ctx *ctx)
@@ -67,21 +64,25 @@ int	execute_node_logical(t_treenode *node, char *line, t_ctx *ctx)
 	if (node->type == LOGICAL_AND)
 	{
 		if (execute_node(node->left, line, ctx) == 0)
-			return (execute_node(node->right, line, ctx));
-		return (1);
+		{
+			ctx->exit_code = execute_node(node->right, line, ctx);
+			return(ctx->exit_code);
+		}
 	}
 	else if (node->type == LOGICAL_OR)
 	{
-		if (execute_node(node->left, line, ctx) == 0)
-			return (0);
-		return (execute_node(node->right, line, ctx));
+		if (execute_node(node->left, line, ctx) != 0)
+			ctx->exit_code = execute_node(node->right, line, ctx);
+		return (ctx->exit_code);
 	}
 	else if (node->type == SEMICOLON)
 	{
 		execute_node(node->left, line, ctx);
-		return (execute_node(node->right, line, ctx));
+		ctx->exit_code = execute_node(node->right, line, ctx);
+		return (ctx->exit_code);
 	}
-	return (1);
+	ctx->exit_code = 1;
+	return (ctx->exit_code);
 }
 
 int	execute_node_redir(t_treenode *node, char *line, t_ctx *ctx)

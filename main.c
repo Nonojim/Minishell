@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/13 10:34:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 10:57:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	main(void)
 		add_history(line);
 		parse_error(0);
 		ast = parse_line_node(&token);
+	//	astreeprint(ast, 0);
 		ctx.root = ast;
 		token_not_empty(&token, &ast);
 		free_token(tmp);
