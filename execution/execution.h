@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/12 20:14:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 15:48:52 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	execute_tree(t_treenode *tree, char *line, t_ctx *ctx);
 // Exe_Simple_Command
 int		is_builtin(char *cmd);
 int		execute_simple_command(t_treenode *node, char *line, t_ctx *ctx);
-int		execute_external_command(t_treenode *node, t_ctx *ctx);
+int		execute_external_command(t_treenode *node, t_ctx *ctx, char *line);
 int		execute_builtin_command(t_treenode *node, char *line, t_ctx *ctx);
 int		external_command_status(t_ctx *ctx, pid_t pid);
 char	*find_cmd_path(char *cmd, t_env *env_list);

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 10:19:28 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/17 15:54:35 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@ int	is_valid_export(char *arg)
 {
 	int	i = 0;
 
-	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
-		return (0);
 	while (arg[i] && arg[i] != '=')
 	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[i] != '~')
+		if (!arg || (!ft_isalpha(arg[i]) && arg[i] != '-' && arg[0] != '~'))
 			return (0);
 		i++;
 	}
+	
 	return (1);
 }
 
@@ -55,12 +54,6 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 
 	j = 0;
 	if (!is_valid_export(arg))
-	{
-		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", arg);
-		ctx->exit_code = 1;
-		return;
-	}
-	if (!ft_isalpha(arg[0]))
 	{
 		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", arg);
 		ctx->exit_code = 1;
