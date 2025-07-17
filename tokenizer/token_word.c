@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 18:09:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/14 21:29:25 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
     if (uc == '|' || uc == '<' || uc == '>' || uc == ';'
         || uc == '(' || uc == ')')
         return (0);
-    if ((uc >= 33 && uc <= 126) || uc == '\\' || uc == '"' || uc == '\'')
+    if ((uc >= 32 && uc <= 126) || uc == '\\' || uc == '"' || uc == '\'')
         return (1);
     return (0);
 } 
@@ -38,15 +38,35 @@
 void	token_word(int *i, int start, char *line, t_token **token)
 {
 	char	*str;
+	int		inquote = -1;
+	char	quote;
+	int		diff = 0;
 
+	quote = '\0';
 	while (line[*i] != '\0' && is_word(line[*i]) == 1)
 	{
+		if((line[*i] == '"' || line[*i] == '\'' ) && quote == '\0')
+			quote = line[*i];
+		if (quote == line[*i])
+			inquote *= -1;
 		if ((line[*i] == '&' && line[*i + 1] == '&'))
 			break;
 		(*i)++;
+		if(line[*i] == ' ' && inquote == -1)
+			break;
 	}
-
-	str = ft_substr(line, start, *i - start);
+	if (inquote == 1 && line[*i] == '\0')
+	{
+		str = ft_strdup(line);
+		str = read_until_quote_closed(str, quote);
+		diff = ft_strlen(str) - *i;
+		if (diff < 0)
+			diff *= -1;
+		*i += diff;
+	}	
+	else
+		str = ft_substr(line, start, *i - start);
+	//printf("ICI [%s]\n", str);
 	if (!str)
 		return ;
 	if (is_word(*str) == 1)

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 10:48:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/14 21:05:35 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ char	*read_until_quote_closed(char *line, char quote)
 		tmp = ft_strjoin(line, next_line);
 		free(line);
 		line = tmp;
-		free(next_line);
-		if (ft_strchr(line, quote))
+		if (ft_strchr(next_line, quote))
+		{
+			free(next_line);
 			break ;
+		}
+		else
+			free(next_line);
 	}
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:12:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/14 10:19:28 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	ft_export(t_treenode *node, t_ctx *ctx)
 	i = 1;
 	while (node->argv[i])
 	{
+		//printf("%s\n", node->argv[i]);
 		add_export_variable(ctx, node->argv[i]);
 		i++;
 	}
