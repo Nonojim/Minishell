@@ -56,13 +56,13 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 	j = 0;
 	if (!is_valid_export(arg))
 	{
-		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", arg);
 		ctx->exit_code = 1;
 		return;
 	}
 	if (!ft_isalpha(arg[0]))
 	{
-		fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", arg);
+		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", arg);
 		ctx->exit_code = 1;
 		return;
 	}
@@ -95,9 +95,9 @@ void	print_export(t_env *env)
 		if (tmp->key && ft_strcmp(tmp->key, "?") != 0 && ft_strcmp(tmp->key, "LINES") != 0 && ft_strcmp(tmp->key, "COLUMNS") != 0 && ft_strcmp(tmp->key, "_") != 0)
 		{
 			if (tmp->value == NULL)
-				printf("declare -x %s\n", tmp->key);
+				ft_fprintf(1, "declare -x %s\n", tmp->key);
 			else
-				printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+				ft_fprintf(1, "declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		}
 		tmp = tmp->next;
 	}

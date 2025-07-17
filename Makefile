@@ -35,6 +35,8 @@ FILES = tokenizer/tokenizer.c \
 				expansion/expansion.c \
 				expansion/expansion_utils.c \
 				expansion/expansion_wildcard.c \
+				expansion/expansion_wilcard_psm.c \
+				expansion/expansion_wildcard_match.c \
 				expansion/expansion_wildcard_utils.c \
 				execution/execution.c \
 				execution/execute_heredoc.c \
@@ -65,6 +67,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 
+	@make -C libft/
 	@echo "\033[1;32m"
 	@echo " 🐚 Welcome to																	"
 	@echo "▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▖ ▗▖▗▄▄▄▖▗▖   ▗▖   "
@@ -73,19 +76,18 @@ $(NAME): $(OBJS)
 	@echo "▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖▗▄▄▞▘▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▄▖"
 	@echo "                                               "
 	@echo " Run with : ./minishell 🪼🐙										"
-	@echo "                                               "
-	@make -C libft/
+	@echo "\033[0m"
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@echo "\033[1;32m" "Cleaning .o"
+	@echo "\033[1;32m" "Cleaning .o \033[0m"
 	@rm -f $(OBJS)
 	@make -C libft/ clean
 
 fclean: clean
-	@echo "\033[1;32m" "Cleaning program"
+	@echo "\033[1;32m" "Cleaning program \033[0m"
 	@rm -f $(NAME)
 	@make -C libft/ fclean
 

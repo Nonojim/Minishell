@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 17:21:08 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/16 20:08:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_env	*init_env_list()
 		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
 	if (find_usrvar(env_list, "PATH") == NULL)
 	{
-		printf("No PATH found a standard unix PATH will be exported\n");
+		ft_fprintf(1, "No PATH found a standard unix PATH will be exported\n");
 		export_to_env(&env_list, "PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	}
 	return (env_list);

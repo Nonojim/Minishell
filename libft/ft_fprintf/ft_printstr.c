@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_printstr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/26 14:51:50 by npederen          #+#    #+#             */
-/*   Updated: 2024/11/26 18:12:24 by npederen         ###   ########.fr       */
+/*   Created: 2024/12/03 13:51:05 by lduflot           #+#    #+#             */
+/*   Updated: 2025/07/16 19:45:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <unistd.h>
+#include "ft_printf.h"
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_printstr(char *str, int fd)
 {
-	long	nbr;
-	char	c;
+	int	count;
 
-	nbr = n;
-	if (nbr < 0)
+	count = 0;
+	if (str == NULL)
 	{
-		write(fd, "-", 1);
-		nbr *= -1;
+		write(fd, "(null)", 6);
+		count = count + 6;
+		return (count);
 	}
-	if (nbr > 9)
+	while (str[count] != '\0')
 	{
-		ft_putnbr_fd(nbr / 10, fd);
+		ft_printchar(str[count], fd);
+		count++;
 	}
-	c = (nbr % 10 + '0');
-	write(fd, &c, 1);
+	return (count);
 }

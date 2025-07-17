@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/12 20:28:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:07:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line)
 	}
 	if (WIFSIGNALED(status))
 	{
-		printf("CTRL+C");
 	//	free_treenode(node);
 //		free_env_list(ctx->env);
 	//	free(line);

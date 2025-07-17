@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   ft_printchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 15:09:10 by npederen          #+#    #+#             */
-/*   Updated: 2024/11/25 19:20:09 by npederen         ###   ########.fr       */
+/*   Created: 2024/12/03 13:56:40 by lduflot           #+#    #+#             */
+/*   Updated: 2025/07/16 19:42:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int	ft_isdigit(int c)
+int	ft_printchar(char c, int fd)
 {
-	if (c >= 48 && c <= 57)
-		return (1);
-	return (0);
+	write(fd, &c, 1);
+	return (1);
 }
