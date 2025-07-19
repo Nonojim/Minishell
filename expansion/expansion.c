@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/19 10:47:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/19 11:44:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 
 	if (!node)
 		return ;
-
 	if (node->type == HERE_DOCUMENT)
 	{
 		if (node->str && (node->str[0] == '\'' || node->str[0] == '"'))
@@ -33,9 +32,9 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 		}
 		return ;
 	}
-if (node->type == INPUT_REDIRECTION
+	if (node->type == INPUT_REDIRECTION
 		|| node->type == OUTPUT_REDIRECTION
-		|| node->type == APPEND_OUTPUT_REDIRECTION)
+			|| node->type == APPEND_OUTPUT_REDIRECTION)
 	{
 		if (node->right && node->right->str)
 		{
@@ -46,20 +45,12 @@ if (node->type == INPUT_REDIRECTION
 				free(node->right->str);
 				node->right->str = clean;
 			}
-			else
+			if (expanded != NULL && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
 			{
-				if (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"'))
-				{
-					clean = remove_quotes_after_expansion(expanded);
-					free(expanded);
-					free(node->right->str);
-					node->right->str = clean;
-				}
-				else
-				{
-					free(node->right->str);
-					node->right->str = expanded;
-				}
+				clean = remove_quotes_after_expansion(expanded);
+				free(node->right->str);
+				free(expanded);
+				node->right->str = clean;
 			}
 		}
 	}
@@ -89,8 +80,8 @@ if (node->type == INPUT_REDIRECTION
 			i++;
 		}
 	}
-	expanse_ast(node->right, ctx);
-	expanse_ast(node->left, ctx);
+//	expanse_ast(node->right, ctx);
+//	expanse_ast(node->left, ctx);
 }
 
 /*
