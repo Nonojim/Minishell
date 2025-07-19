@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 11:04:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:47:26 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,36 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			node->right->str = expanded;
 		}
 		return ;
+	}
+if (node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		if (node->right && node->right->str)
+		{
+			expanded = expand_string(node->right->str, node, ctx);
+			if (expanded == NULL)
+			{
+				clean = remove_quotes_after_expansion(node->right->str);
+				free(node->right->str);
+				node->right->str = clean;
+			}
+			else
+			{
+				if (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"'))
+				{
+					clean = remove_quotes_after_expansion(expanded);
+					free(expanded);
+					free(node->right->str);
+					node->right->str = clean;
+				}
+				else
+				{
+					free(node->right->str);
+					node->right->str = expanded;
+				}
+			}
+		}
 	}
 	if (node->argv)
 	{
@@ -59,6 +89,8 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			i++;
 		}
 	}
+	expanse_ast(node->right, ctx);
+	expanse_ast(node->left, ctx);
 }
 
 /*

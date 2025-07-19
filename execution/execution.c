@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:06:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 17:04:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,10 @@ int	execute_node_redir(t_treenode *node, char *line, t_ctx *ctx)
 	else if (node->type == INPUT_REDIRECTION
 		|| node->type == OUTPUT_REDIRECTION
 		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		expanse_ast(node, ctx);
 		return (execute_redirection_chain(node, line, ctx));
+	}
 	else if (node->type == SUBSHELL)
 		return (execute_subshell_node(node, line, ctx));
 	return (1);
