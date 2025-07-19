@@ -20,6 +20,8 @@ void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
 	int	j;
 	int	k;
 
+	if (!node || !node->argv)
+		return ;
 	wildcard_index = 0;
 	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
 		wildcard_index++;
@@ -87,7 +89,26 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		free_wildcard(psm, result, NULL);
 		return (NULL);
 	}
-	create_new_argv(result, node, psm);
+	if (node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		if (result [1] != NULL)
+		{
+		//	ctx->exit_code = 1; A DECLARER DANS LA FONCTION
+			ft_fprintf(2, "minishell: ambiguous redirection\n");
+			free_split(result);
+			free_wildcard(psm, NULL, NULL);
+			return (NULL);
+		}
+		free(node->right->str);
+		node->right->str = ft_strdup(result[0]);
+		free_split(result);
+		free_wildcard(psm, NULL, NULL);
+		return (NULL);
+	}
+	else
+		create_new_argv(result, node, psm);
 	return (NULL);
 }
 
