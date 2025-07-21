@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:07:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/21 10:55:46 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 	int	pipefd[2];
 	int	pid;
 
+	if (!node->left) //corrige le segfault si pas de left (<< EOF)
+	{
+		ctx->exit_code = 0;
+		return (0);
+	}
 	pipe(pipefd);
 	write(pipefd[1], node->right->str, ft_strlen(node->right->str));
 	close(pipefd[1]);
@@ -55,9 +60,6 @@ int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line)
 	}
 	if (WIFSIGNALED(status))
 	{
-	//	free_treenode(node);
-//		free_env_list(ctx->env);
-	//	free(line);
 		ctx->exit_code = 130;
 	}
 	else if (WIFEXITED(status))
