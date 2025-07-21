@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 11:10:44 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/21 11:46:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	is_ascii_printable(const char *str)
 	return (0);
 }
 
-
 /*
 \033 = ASCII = ESC 
 \033[2J = Efface contenu de l'ecran (2: tout l'écran)
@@ -35,11 +34,20 @@ void	clear_screen(void)
 	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 }
 
-/*void	start_message(void)
+void	start_message(void)
 {
-	ft_fprintf(1, " en travaux ... \n");
+	ft_fprintf(1, "\033[1;34m╔════════════════════════════════════════════╗\n");
+	usleep(200000);
+	ft_fprintf(1, "║        Welcome to Minishell — enjoy!       ║\n");
+	usleep(200000);
+	ft_fprintf(1, "║                                            ║\n");
+	usleep(200000);
+	ft_fprintf(1, "║         \033[3;90mby Nonojim and Zephyre-ls\033[0;34m          ║\n");
+	usleep(200000);
+	ft_fprintf(1, "╚════════════════════════════════════════════╝\033[0m\n");
+	usleep(200000);
 	ft_fprintf(1, "\n");
-}*/
+}
 
 int	main(void)
 {
@@ -50,7 +58,7 @@ int	main(void)
 	t_ctx		ctx;
 	
 	clear_screen();
-	//start_message();
+	start_message();
 	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.root = NULL;
@@ -72,22 +80,16 @@ int	main(void)
 				continue;
 			}
 		}
-		//if (is_ascii_printable(line))
-		//{
-		//	fprintf(stderr, "minishell: unrecognized character\n");
-		//	free(line);
-		//	continue ;
-		//}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
-		print_token_list(token);
+	//	print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);
 		ast = parse_line_node(&token);
 		if (parse_error(-1))
 			ctx.exit_code = 2;
-		//astreeprint(ast, 0);
+	//	astreeprint(ast, 0);
 		ctx.root = ast;
 		token_not_empty(&token, &ast);
 		free_token(tmp);

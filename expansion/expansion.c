@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/19 11:44:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/21 10:17:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 
 	i = 0;
 	if (!ft_strchr(str, '$') && !ft_strchr(str, '*') && str[0] != '~')
-		return (ft_strdup(str));
+		return (NULL);
 	if (str[0] == '~' && str[i + 1] == '\0')
 	{
 		tmp = expand_tilde(str, ctx);
@@ -128,42 +128,6 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	}
 	return (result);
 }
-	/*while (str[i])
-	{
-		if (toggle_quote(str, &i, &q, &result))
-			continue ;
-		if (!q.in_single_quote && !q.in_double_quote && str[0] == '~' && str[1] == '\0')
-		{
-			tmp = expand_tilde(str, ctx);
-			if (tmp)
-			{
-				free(result);
-				return (tmp);
-			}
-		}
-		if (!q.in_single_quote && !q.in_double_quote && ft_strchr(str,'*'))
-		{
-			tmp = expand_wildcard(str, node);
-			free(result);
-			return(tmp);
-			if (tmp)
-			{
-				free(result);
-				return (tmp);
-			}
-		}
-		if (!q.in_single_quote && str[i] == '$'
-			&& (ft_isalpha(str[i + 1])
-				|| str[i + 1] == '_' || str[i + 1] == '?'))
-		{
-			i = expand_variable(str, i, &result, ctx);
-			continue ;
-		}
-		//LOGIQUE A REVOIR ! Renvoi la même string si pas d'expansion !!!
-		add_char_to_string(&result, str[i]);
-		i++;
-	}
-	return (result);*/
 
 void	add_char_to_string(char **result, char c)
 {
