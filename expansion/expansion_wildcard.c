@@ -3,27 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_wildcard.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 12:25:35 by lduflot           #+#    #+#             */
+/*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
+/*   Updated: 2025/07/22 17:49:56 by lduflot          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
-	
+
 void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
 {
-	int	wildcard_index;
-	int	len_argv;
-	int	len_result;
+	int		wildcard_index;
+	int		len_argv;
+	int		len_result;
 	char	**new_argv;
-	int	i;
-	int	j;
-	int	k;
+	int		i;
+	int		j;
+	int		k;
 
 	if (!node || !node->argv)
 		return ;
 	wildcard_index = 0;
-	while (node->argv[wildcard_index] && ft_strchr(node->argv[wildcard_index], '*') == NULL)
+	while (node->argv[wildcard_index]
+		&& ft_strchr(node->argv[wildcard_index], '*') == NULL)
 		wildcard_index++;
 	len_argv = 0;
 	while (node->argv[len_argv])
@@ -31,7 +34,7 @@ void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
 	len_result = 0;
 	while (result[len_result])
 		len_result++;
-	new_argv = malloc(sizeof(char *) * (len_argv + len_result));
+	new_argv = malloc(sizeof(char *) * (len_argv + len_result + 1));
 	if (!new_argv)
 		return ;
 	i = 0;
@@ -58,29 +61,30 @@ void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
 	node->argv = new_argv;
 }
 
-char	*expand_wildcard(char *str, t_treenode *node)
+char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx)
 {
-	DIR				*dir; //dossier ouvert = opendir
+	DIR				*dir;
 	struct dirent	*entry;
-	char			**result;
-	t_wildcard *psm = malloc(sizeof(t_wildcard));
+	char		**result;
+	t_wildcard	*psm;
 
+	psm = malloc(sizeof(t_wildcard));
 	if (!psm)
-    return (NULL);
+		return (NULL);
 	psm->prefix = NULL;
 	psm->suffix = NULL;
-	dir = opendir("."); //ouverture du dossier courant "." = rep courant, ".." = dossier parent
+	dir = opendir(".");
 	if (!dir)
 		return (str);
 	result = NULL;
 	create_prefix_middle_suffix(str, psm);
-	while ((entry = readdir(dir)) != NULL) //lecture des fichiers du rep courant
+	while ((entry = readdir(dir)) != NULL)
 	{
-		if (entry->d_name[0] == '.') //on ignore les files caché (ex .git)
-			continue;
-		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix)) &&
-				(psm->middle == NULL || match_middle(entry->d_name, psm->middle)) &&
-				(psm->suffix == NULL || match_suffix(entry->d_name, psm->suffix)))
+		if (entry->d_name[0] == '.')
+			continue ;
+		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix))
+			&& (psm->middle == NULL || match_middle(entry->d_name, psm->middle))
+			&& (psm->suffix == NULL || match_suffix(entry->d_name, psm->suffix)))
 			result = add_array(result, entry->d_name);
 	}
 	closedir(dir);
@@ -93,9 +97,9 @@ char	*expand_wildcard(char *str, t_treenode *node)
 		|| node->type == OUTPUT_REDIRECTION
 		|| node->type == APPEND_OUTPUT_REDIRECTION)
 	{
-		if (result [1] != NULL)
+		if (result[1] != NULL)
 		{
-		//	ctx->exit_code = 1; A DECLARER DANS LA FONCTION
+			ctx->exit_code = 1;
 			ft_fprintf(2, "minishell: ambiguous redirection\n");
 			free_split(result);
 			free_wildcard(psm, NULL, NULL);
@@ -120,26 +124,30 @@ char	*expand_wildcard(char *str, t_treenode *node)
  * mai*.c = affiche fichier avec mai en préfixe et .c en suffixe donc main.c 
  * *test* = affichage ou il y a test dedans
  * ls * ⁼ affichage dossier et fichiers à l'intérieur 
- * ls ** = même chose sauf si l'ont active : shopt -s globstar (mais désactivité automatiquement)
+ * ls ** = même chose sauf si l'ont active 
+ * : shopt -s globstar (mais désactivité automatiquement)
  * ls .* = affiche les fichiers cachés 
  * echo * = affiche files 
  * cat * = affiche l'intérieur des fichiers 
- * si * est entre simple/double quote = on affiche litteralement avec echo ou on renvoie une erreur direct 
+ * si * est entre simple/double quote 
+ * = on affiche litteralement avec echo ou on renvoie une erreur direct 
  * si pas de correspondance trouvé avec echo on renvoie la demande *.md 
 
  */
 /*Fonctions utile :
-getcwd 	char *getcwd(char *buf, size_t size); 	Récupère le chemin absolu du répertoire courant
+getcwd 	char *getcwd(char *buf, size_t size); 	
+Récupère le chemin absolu du répertoire courant
 chdir 	int chdir(const char *path); 	Change le répertoire de travail courant.
-stat 	int stat(const char *pathname, struct stat *statbuf); 	Récupère des informations sur un fichier ou un dossier.
+stat 	int stat(const char *pathname, struct stat *statbuf);
+Récupère des informations sur un fichier ou un dossier.
 opendir 	DIR *opendir(const char *name); 	Ouvre un répertoire pour lecture
 closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
 */
 
 /*
 * DIR *dir = représente le dossier ouvert, obtenu avec opendir
-* Lecture de ce dossier avec readdir, readdir envoir un pointeur dans structdirent
-*
+* Lecture de ce dossier avec readdir, 
+* readdir envoir un pointeur dans structdirent
 * structure qui représente l'entrée d'un dossier. 
 * struct dirent {
 	ino_t          d_ino;       // numéro d'inode (peu utile ici)
@@ -147,8 +155,7 @@ closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
 	unsigned short d_reclen;    // longueur de cette entrée
 	unsigned char  d_type;      // type (fichier, dossier, etc.)
 	// type : DT_REG (fichier normal), DT_DIR(dossier))
-	char           d_name[256]; // nom du fichier/dossier _ utile pour wildcard };
-* 
-* closedir(dir) = a la fin de la lecture on ferme le dossier pour free les ressources
-*h
+	char        d_name[256]; // nom du fichier/dossier_utile pour wildcard };
+* closedir(dir) = 
+* a la fin de la lecture on ferme le dossier pour free les ressources
 */

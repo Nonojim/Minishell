@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:49:03 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/16 20:10:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 14:58:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	ft_env(t_treenode *node, t_ctx *ctx)
 
 	if (node->argv[1] != NULL)
 	{
-		ft_fprintf(2, "minishell: env: ‘%s’: No such file or directory\n", node->argv[1]);
+		ft_fprintf(2, "minishell: env: ‘%s’: No such file or directory\n", \
+			node->argv[1]);
 		ctx->exit_code = 127;
 		return (127);
 	}
@@ -31,19 +32,3 @@ int	ft_env(t_treenode *node, t_ctx *ctx)
 	}
 	return (0);
 }
-
-//void	print_env_reverse(t_env *node)
-//{
-//	if (!node)
-//		return;
-//	print_env_reverse(node->next);
-//	if (node->value && ft_strcmp(node->key, "?") != 0)
-//		printf("%s=%s\n", node->key, node->value);
-//}
-//
-//int	ft_env(t_env *env_list)
-//{
-//	//env_list = env_list->next;
-//	print_env_reverse(env_list);
-//	return (0);
-//}

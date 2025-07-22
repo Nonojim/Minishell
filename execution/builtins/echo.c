@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:55:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:10:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 14:57:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int	ft_echo(t_treenode *node, t_ctx *ctx)
 	i = 0;
 	n = 0;
 	if (node->argv[i + 1] == NULL)
-	{
-		ft_fprintf(1, "\n");
-		return (0);
-	}
+		return (ft_fprintf(1, "\n"), 0);
 	i++;
 	while (node->argv[i] && ft_echo_n(node->argv[i]) == 1)
 	{
@@ -32,7 +29,7 @@ int	ft_echo(t_treenode *node, t_ctx *ctx)
 	}
 	while (node->argv[i])
 	{
-		ft_fprintf(1,"%s", node->argv[i]);
+		ft_fprintf(1, "%s", node->argv[i]);
 		if (node->argv[i + 1])
 			ft_fprintf(1, " ");
 		i++;

@@ -6,17 +6,15 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 12:50:51 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/11 13:13:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 14:33:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-
 int	ft_whale(t_treenode *node)
 {
 	(void)node;
-	
 	printf("       .\n");
 	printf("      \":\"\n");
 	printf("    ___:____     |\"\\/\"|\n");

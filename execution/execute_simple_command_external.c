@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 15:48:29 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:21:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,28 @@
 
 extern char	**environ;
 
-char **list_to_dynamiccarray(t_ctx *ctx)
+char	**list_to_dynamiccarray(t_ctx *ctx)
 {
-	int	i = 0;
+	int		i;
 	char	**array;
-	t_env *tmp = ctx->env;
+	t_env	*tmp;
+	char	*key_eq;
+
+	i = 0;
+	tmp = ctx->env;
 	while (tmp)
 	{
-		i++;	
+		i++;
 		tmp = tmp->next;
 	}
 	array = malloc(sizeof(char *) * (i + 1));
 	if (!array)
-		return(NULL);
+		return (NULL);
 	tmp = ctx->env;
 	i = 0;
 	while (tmp)
 	{
-		char *key_eq = ft_strdup(tmp->key);
+		key_eq = ft_strdup(tmp->key);
 		if (tmp->value)
 		{
 			free(key_eq);
@@ -48,13 +52,31 @@ char **list_to_dynamiccarray(t_ctx *ctx)
 	return (array);
 }
 
-int    execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
+void	free_execve(t_treenode *node, char *line, t_ctx *ctx, char *cmd_path)
 {
-	pid_t	pid;
-	char	*cmd_path;
-	char	*cmd;
-	struct stat entry;
+	if (node)
+		free_treenode(node);
+	if (line)
+		free(line);
+	if (ctx)
+		free_env_list(ctx->env);
+	if (cmd_path)
+		free(cmd_path);
+}
 
+int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
+{
+	pid_t		pid;
+	char		*cmd_path;
+	char		*cmd;
+	char		**array;
+	struct stat	entry;
+
+	if (!node->argv || !node->argv[0])
+	{
+		ctx->exit_code = 0;
+		return (0);
+	}
 	cmd = node->argv[0];
 	pid = fork();
 	if (pid == -1)
@@ -65,11 +87,9 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 	}
 	if (pid == 0)
 	{
-		if(cmd[0] == '\0')
+		if (!cmd || cmd[0] == '\0')
 		{
-			free_treenode(node);
-			free(line);
-			free_env_list(ctx->env);
+			free_execve(node, line, ctx, NULL);
 			exit(0);
 		}
 		if (cmd[0] == '.' || cmd[0] == '/')
@@ -79,49 +99,36 @@ int    execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 		if (!cmd_path)
 		{
 			ft_fprintf(2, "minishell: %s: command not found\n", cmd);
-			free_treenode(ctx->root);
-			free(line);
-			free_env_list(ctx->env);
+			free_execve(ctx->root, line, ctx, NULL);
 			exit(127);
 		}
 		if (stat(cmd_path, &entry) == 0)
 		{
 			if (S_ISDIR(entry.st_mode))
 			{
-			ft_fprintf(2, "minishell: %s: Is a directory\n", cmd_path);
-			free_treenode(ctx->root);
-			free_env_list(ctx->env);
-			free(line);
-			free(cmd_path);
-			exit(126);
+				ft_fprintf(2, "minishell: %s: Is a directory\n", cmd_path);
+				free_execve(ctx->root, line, ctx, cmd_path);
+				exit(126);
 			}
 		}
 		if (access(cmd_path, F_OK) != 0)
 		{
 			ft_fprintf(2, "minishell: %s: No such file or directory\n", cmd_path);
-			free_treenode(ctx->root);
-			free_env_list(ctx->env);
-			free(line);
-			free(cmd_path);
+			
+			free_execve(ctx->root, line, ctx, cmd_path);
 			exit(127);
 		}
 		if (access(cmd_path, X_OK) != 0)
 		{
 			ft_fprintf(2, "minishell: %s: Permission denied\n", cmd_path);
-			free_treenode(ctx->root);
-			free_env_list(ctx->env);
-			free(line);
-			free(cmd_path);
+			free_execve(ctx->root, line, ctx, cmd_path);
 			exit(126);
 		}
-		char **array = list_to_dynamiccarray(ctx);
+		array = list_to_dynamiccarray(ctx);
 		execve(cmd_path, node->argv, array);
 		ft_fprintf(2, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		free_split(array);
-		free(cmd_path);
-		free(line);
-		free_treenode(ctx->root);
-		free_env_list(ctx->env);
+		free_execve(ctx->root, line, ctx, cmd_path);
 		if (errno == ENOENT)
 			exit(127);
 		exit(126);
@@ -134,7 +141,7 @@ int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
 
-	signal(SIGINT, SIG_IGN); //ignore le ctrl+C (permet de ne pas quit)
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	setup_signals();
 
