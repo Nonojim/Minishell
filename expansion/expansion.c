@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/14 11:04:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/21 10:17:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 
 	if (!node)
 		return ;
-
 	if (node->type == HERE_DOCUMENT)
 	{
 		if (node->str && (node->str[0] == '\'' || node->str[0] == '"'))
@@ -32,6 +31,28 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			node->right->str = expanded;
 		}
 		return ;
+	}
+	if (node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+			|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		if (node->right && node->right->str)
+		{
+			expanded = expand_string(node->right->str, node, ctx);
+			if (expanded == NULL)
+			{
+				clean = remove_quotes_after_expansion(node->right->str);
+				free(node->right->str);
+				node->right->str = clean;
+			}
+			if (expanded != NULL && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
+			{
+				clean = remove_quotes_after_expansion(expanded);
+				free(node->right->str);
+				free(expanded);
+				node->right->str = clean;
+			}
+		}
 	}
 	if (node->argv)
 	{
@@ -59,6 +80,8 @@ void	expanse_ast(t_treenode *node, t_ctx *ctx)
 			i++;
 		}
 	}
+//	expanse_ast(node->right, ctx);
+//	expanse_ast(node->left, ctx);
 }
 
 /*
@@ -75,7 +98,7 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 
 	i = 0;
 	if (!ft_strchr(str, '$') && !ft_strchr(str, '*') && str[0] != '~')
-		return (ft_strdup(str));
+		return (NULL);
 	if (str[0] == '~' && str[i + 1] == '\0')
 	{
 		tmp = expand_tilde(str, ctx);
@@ -105,42 +128,6 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	}
 	return (result);
 }
-	/*while (str[i])
-	{
-		if (toggle_quote(str, &i, &q, &result))
-			continue ;
-		if (!q.in_single_quote && !q.in_double_quote && str[0] == '~' && str[1] == '\0')
-		{
-			tmp = expand_tilde(str, ctx);
-			if (tmp)
-			{
-				free(result);
-				return (tmp);
-			}
-		}
-		if (!q.in_single_quote && !q.in_double_quote && ft_strchr(str,'*'))
-		{
-			tmp = expand_wildcard(str, node);
-			free(result);
-			return(tmp);
-			if (tmp)
-			{
-				free(result);
-				return (tmp);
-			}
-		}
-		if (!q.in_single_quote && str[i] == '$'
-			&& (ft_isalpha(str[i + 1])
-				|| str[i + 1] == '_' || str[i + 1] == '?'))
-		{
-			i = expand_variable(str, i, &result, ctx);
-			continue ;
-		}
-		//LOGIQUE A REVOIR ! Renvoi la même string si pas d'expansion !!!
-		add_char_to_string(&result, str[i]);
-		i++;
-	}
-	return (result);*/
 
 void	add_char_to_string(char **result, char c)
 {
