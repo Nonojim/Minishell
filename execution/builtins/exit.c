@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 14:49:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 19:47:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 		ctx->exit_code = 0;
 	free(line);
 	free_env_list(ctx->env);
-	free_treenode(ast);
+	free_treenode(ctx->root);
 	rl_clear_history();
 	exit(ctx->exit_code);
 }
