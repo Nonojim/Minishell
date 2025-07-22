@@ -12,18 +12,6 @@
 
 #include "minishell.h"
 
-int	is_ascii_printable(const char *str)
-{
-	int	i = 0;
-	while(str[i])
-	{
-		if ((unsigned char)str[i] < 1 || (unsigned char)str[i] > 126)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 /*
 \033 = ASCII = ESC 
 \033[2J = Efface contenu de l'ecran (2: tout l'écran)
@@ -70,7 +58,7 @@ int	main(void)
 		line = readline("\001\033[1;34m\002Minishell$ \001\033[0m\002");
 		if (line == NULL)
 			break ;
-		if (g_signum == 1)
+		if (g_signum == 2)
 		{
 			ctx.exit_code = 130;
 			if (line[0] == '\0')
@@ -82,7 +70,7 @@ int	main(void)
 		}
 		g_signum = 0;
 		token = tokenize(token, &line, &ctx);
-	//	print_token_list(token);
+		//print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);

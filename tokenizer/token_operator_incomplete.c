@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/30 19:21:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/17 17:25:09 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,12 @@ char	*token_logical_unclose(int *i, int start, char *line, t_token **token)
 	{
 		while (1)
 		{
-			next_line = readline(" > ");
+			next_line = readline("> ");
 			if (!next_line)
-				break ;
+			{
+				free(next_line);
+				return(NULL);
+			}
 			tmp = ft_strjoin(line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
 			free (tmp);
@@ -93,9 +96,12 @@ char	*token_pipe_unclose(int *i, int start, char *line, t_token **token)
 	{
 		while (1)
 		{
-			next_line = readline(" > ");
+			next_line = readline("> ");
 			if (!next_line)
-				break ;
+			{
+				free(next_line);
+				return (NULL);
+			}
 			tmp = ft_strjoin(line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
 			free (tmp);
