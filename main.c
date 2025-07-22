@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/21 11:46:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 17:47:15 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	main(void)
 	t_treenode	*ast;
 	t_ctx		ctx;
 	
-	clear_screen();
-	start_message();
+//	clear_screen();
+//	start_message();
 	ctx.env = NULL;
 	ctx.exit_code = 0;
 	ctx.root = NULL;

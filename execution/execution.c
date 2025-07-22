@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 17:04:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 15:09:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	execute_node_logical(t_treenode *node, char *line, t_ctx *ctx)
 		if (execute_node(node->left, line, ctx) == 0)
 		{
 			ctx->exit_code = execute_node(node->right, line, ctx);
-			return(ctx->exit_code);
+			return (ctx->exit_code);
 		}
 	}
 	else if (node->type == LOGICAL_OR)

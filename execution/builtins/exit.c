@@ -6,21 +6,17 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/16 20:11:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 14:49:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
 /*
-Add command exit for quit programm properly during the test ./minishell
-*/
-/*
 	* exit [n]
 	* Si n == NULL quitte avec code actuel $?
 	* Si n == non num = numeric argument required exit : 2
 	* Si n + 1 != NULL = too many arguments ne quitte pas return 1
-	*
 code_error = ft_atoi(ast->argv[1]) % 256; 
 //quand on fait exit 1000 error = 232 donc 1000 % 256. 
 Le code de sortie étant limité à 8 bits = 255 max. 
@@ -29,6 +25,7 @@ Bash fait un modulo de 256 pour avoir un affichage correct.
 
 int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
+	printf("exit\n");
 	if (ast->argv[1])
 	{
 		if (!is_numeric_exit(ast->argv[1]))
@@ -54,7 +51,8 @@ int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 void	error_numeric_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
 	printf("exit\n");
-	ft_fprintf(2, "Minishell: exit: %s: numeric argument required\n", ast->argv[1]);
+	ft_fprintf(2, "Minishell: exit: %s: numeric argument required\n", \
+						ast->argv[1]);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);
@@ -113,4 +111,3 @@ int	compar_long_limits(char *nb, char sign)
 	}
 	return (1);
 }
-

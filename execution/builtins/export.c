@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 16:56:45 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:01:45 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 int	is_valid_export(char *arg)
 {
-	int	i = 1;
+	int	i;
+
+	i = 1;
 	if (ft_isalpha(arg[0]) || arg[0] == '_')
 	{
 		while (arg[i] && arg[i] != '=')
 		{
-			if (!arg || (!ft_isalnum(arg[i]) && arg[i]!= '_'))
+			if (!arg || (!ft_isalnum(arg[i]) && arg[i] != '_'))
 				return (0);
 			i++;
 		}
@@ -32,6 +34,7 @@ int	is_valid_export(char *arg)
 int	ft_export(t_treenode *node, t_ctx *ctx)
 {
 	int		i;
+
 	i = 0;
 	if (node->argv[i + 1] == NULL)
 	{
@@ -41,7 +44,6 @@ int	ft_export(t_treenode *node, t_ctx *ctx)
 	i = 1;
 	while (node->argv[i])
 	{
-		//printf("%s\n", node->argv[i]);
 		add_export_variable(ctx, node->argv[i]);
 		i++;
 	}
@@ -60,7 +62,7 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 	{
 		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", arg);
 		ctx->exit_code = 1;
-		return;
+		return ;
 	}
 	while (arg[j] && arg[j] != '=')
 		j++;
@@ -80,15 +82,20 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 
 void	print_export(t_env *env)
 {
-	t_env	*tmp = NULL;
-	t_env	*copy = NULL;
+	t_env	*tmp;
+	t_env	*copy;
 
+	tmp = NULL;
+	copy = NULL;
 	copy = copy_env(env);
 	ft_sort_env_list(copy);
 	tmp = copy;
 	while (tmp)
 	{
-		if (tmp->key && ft_strcmp(tmp->key, "?") != 0 && ft_strcmp(tmp->key, "LINES") != 0 && ft_strcmp(tmp->key, "COLUMNS") != 0 && ft_strcmp(tmp->key, "_") != 0)
+		if (tmp->key && ft_strcmp(tmp->key, "?") != 0
+			&& ft_strcmp(tmp->key, "LINES") != 0
+			&& ft_strcmp(tmp->key, "COLUMNS") != 0
+			&& ft_strcmp(tmp->key, "_") != 0)
 		{
 			if (tmp->value == NULL)
 				ft_fprintf(1, "declare -x %s\n", tmp->key);
@@ -102,10 +109,12 @@ void	print_export(t_env *env)
 
 t_env	*copy_env(t_env *env)
 {
-	t_env	*new = NULL;
-	t_env	*tmp = env;
+	t_env	*new;
+	t_env	*tmp;
 	t_env	*node;
 
+	new = NULL;
+	tmp = env;
 	while (tmp)
 	{
 		node = malloc(sizeof(t_env));
@@ -127,11 +136,11 @@ void	ft_env_add_back(t_env **lst, t_env *new)
 	t_env	*tmp;
 
 	if (!lst || !new)
-		return;
+		return ;
 	if (!*lst)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	tmp = *lst;
 	while (tmp->next)
@@ -147,8 +156,7 @@ void	ft_sort_env_list(t_env *env)
 	char	*value_tmp;
 
 	if (!env)
-		return;
-
+		return ;
 	start = env;
 	tmp = env;
 	while (tmp && tmp->next)
