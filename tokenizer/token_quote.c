@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 19:04:54 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/22 15:17:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	*read_until_quote_closed(char *line, char quote)
 		if (!next_line)
 		{
 			free(next_line);
+			printf("bash: unexpected EOF while looking for matching `\"'\nexit\n");
 			return(NULL);
 		}
 		tmp = ft_strjoin(line, "\n");
