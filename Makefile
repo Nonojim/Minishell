@@ -44,6 +44,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/execute_pipe.c \
 				execution/execute_subshell.c \
 				execution/execute_redirection.c \
+				execution/execute_redirection_utils.c \
 				execution/execute_simple_command.c \
 				execution/execute_simple_command_builtins.c \
 				execution/execute_simple_command_external.c \
