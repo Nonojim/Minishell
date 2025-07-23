@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/07 10:22:04 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:08:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int			is_redirection(int type);
 int			is_word_type(int type);
 int			is_op_logique(int type);
 int			is_bracket(int type);
+int			is_redirection_without_here_doc(int type);
 t_treenode	*free_settoken_thenreturn(t_treenode *nodetofree,
 				t_token **tokenstoset, t_token *setting);
 t_treenode	*printerror_then_return_null(t_token **tokens);

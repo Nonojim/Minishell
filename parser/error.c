@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:36:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/15 10:50:37 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/22 19:58:58 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,26 @@ void	print_error(t_token *tokens)
 	if (tokens == NULL)
 	{
 		parse_error(1);
-		fprintf(stderr, "minishell: syntax error near unexpected token `newline'\n");
+		ft_fprintf(2, \
+			"minishell: syntax error near unexpected token `newline'\n");
 		return ;
 	}
 	parse_error(1);
 	if (is_op_logique(tokens->type) || is_word_type(tokens->type))
-		fprintf(stderr, "minishell: syntax error near unexpected token '%s'\n",
+		ft_fprintf(2, "minishell: syntax error near unexpected token '%s'\n",
 			tokens->str);
 	if (is_redirection(tokens->type) && tokens->next != NULL
 		&& is_redirection(tokens->next->type))
 	{
-		fprintf(stderr, "minishell: syntax error near unexpected token '%s'\n",
+		ft_fprintf(2, "minishell: syntax error near unexpected token '%s'\n",
 			tokens->next->str);
 		return ;
 	}
 	if (is_redirection(tokens->type))
-		fprintf(stderr, "minishell: syntax error near unexpected token `newline'\n");
+		ft_fprintf(2, \
+			"minishell: syntax error near unexpected token `newline'\n");
 	if (is_bracket(tokens->type))
-		fprintf(stderr, "minishell: syntax error near unexpected token '%s'\n",
+		ft_fprintf(2, "minishell: syntax error near unexpected token '%s'\n",
 			tokens->str);
 }
 

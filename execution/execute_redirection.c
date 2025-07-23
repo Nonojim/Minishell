@@ -6,118 +6,14 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 17:53:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 10:47:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-
-t_treenode	*find_command_node(t_treenode *node);
-
-/*Récupère les argv en trop d'une redirection 
-* Les attributs au argv de la commande */
-void	new_argv_cmd(t_treenode *redir_node)
-{
-	t_treenode	*cmd_node;
-	t_treenode	*node;
-	int			cmd_argc;
-	int			total_argc;
-	int			i;
-	char		**new_argv;
-
-	cmd_node = find_command_node(redir_node);
-	if (!cmd_node || !cmd_node->argv)
-		return ;
-	cmd_argc = 0;
-	while (cmd_node->argv[cmd_argc])
-		cmd_argc++;
-	total_argc = cmd_argc;
-	node = redir_node;
-	while (node && (node->type == INPUT_REDIRECTION
-			|| node->type == OUTPUT_REDIRECTION
-			|| node->type == APPEND_OUTPUT_REDIRECTION))
-	{
-		i = 1;
-		if (node->right && node->right->argv)
-		{
-			while (node->right->argv[i])
-			{
-				total_argc++;
-				i++;
-			}
-		}
-		node = node->left;
-	}
-	new_argv = malloc(sizeof(char *) * (total_argc + 1));
-	if (!new_argv)
-		return ;
-	i = 0;
-	while (cmd_node->argv[i])
-	{
-		new_argv[i] = cmd_node->argv[i];
-		i++;
-	}
-	node = redir_node;
-	while (node && (node->type == INPUT_REDIRECTION
-			|| node->type == OUTPUT_REDIRECTION
-			|| node->type == APPEND_OUTPUT_REDIRECTION))
-	{
-		int j = 1;
-		if (node->right && node->right->argv)
-		{
-			while (node->right->argv[j])
-			{
-				new_argv[i++] = node->right->argv[j];
-				j++;
-			}
-			node->right->argv[1] = NULL;
-		}
-		node = node->left;
-	}
-	new_argv[i] = NULL;
-	free(cmd_node->argv);
-	cmd_node->argv = new_argv;
-}
-
-
-t_treenode	*find_command_node(t_treenode *node)
-{
-	while (node && (node->type == OUTPUT_REDIRECTION
-			|| node->type == APPEND_OUTPUT_REDIRECTION
-			|| node->type == INPUT_REDIRECTION))
-		node = node->left;
-	return (node);
-}
-
-int	apply_redirections(t_treenode *node, char *line, t_ctx *ctx)
-{
-	int	status;
-
-	status = 0;
-	if (!node)
-		return (1);
-	if (node->left)
-		status = apply_redirections(node->left, line, ctx);
-	if (status != 0)
-		return (status);
-	if (node->type == INPUT_REDIRECTION)
-		return (redir_input(node, line, ctx));
-	else if (node->type == OUTPUT_REDIRECTION)
-		return (redir_output(node, line, ctx));
-	else if (node->type == APPEND_OUTPUT_REDIRECTION)
-		return (redir_append(node, line, ctx));
-	return (0);
-}
-
-void	dup_and_close(int	saved_stdin, int saved_stdout)
-{
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
-}
-
+/*Applique toutes les redirs de l'AST,
+Exe la cmd, et save les entrées/sortie.*/
 int	execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx)
 {
 	int			saved_stdin;
@@ -146,11 +42,33 @@ int	execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx)
 	return (status);
 }
 
-int	redir_input(t_treenode *node, char *line, t_ctx *ctx)
+/*Parcours les node de redirs de manière récursive de gauche à droite*/
+int	apply_redirections(t_treenode *node, char *line, t_ctx *ctx)
+{
+	int	status;
+
+	status = 0;
+	if (!node)
+		return (1);
+	if (node->left)
+		status = apply_redirections(node->left, line, ctx);
+	if (status != 0)
+		return (status);
+	if (node->type == INPUT_REDIRECTION)
+		return (redir_input(node, ctx));
+	else if (node->type == OUTPUT_REDIRECTION)
+		return (redir_output(node, ctx));
+	else if (node->type == APPEND_OUTPUT_REDIRECTION)
+		return (redir_append(node, ctx));
+	return (0);
+}
+
+/* Gestion de : <
+Ouvre le fichier en lecture seul et le met à l'entrée standard*/
+int	redir_input(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
 
-	(void)line;
 	fd = open(node->right->str, O_RDONLY);
 	if (fd < 0)
 	{
@@ -163,11 +81,13 @@ int	redir_input(t_treenode *node, char *line, t_ctx *ctx)
 	return (0);
 }
 
-int	redir_output(t_treenode *node, char *line, t_ctx *ctx)
+/*Gestion : >
+Ouvre ou crée le file en écriture et le met à la sortie standard
+Supprime son contenu avec O_TRUNC*/
+int	redir_output(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
 
-	(void)line;
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
@@ -180,11 +100,13 @@ int	redir_output(t_treenode *node, char *line, t_ctx *ctx)
 	return (0);
 }
 
-int	redir_append(t_treenode *node, char *line, t_ctx *ctx)
+/* Gestion de : >>
+Ouvre ou crée le file et le met à la sortie standard
+Ajoute du contenue à la fin avec O_APPEND*/
+int	redir_append(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
 
-	(void)line;
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{

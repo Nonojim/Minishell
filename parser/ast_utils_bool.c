@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 14:34:40 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 10:46:05 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:08:09 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,11 @@ int	is_bracket(int type)
 {
 	return (type == BRACKETS_R
 		|| type == BRACKETS_L);
+}
+
+int	is_redirection_without_here_doc(int type)
+{
+	return (type == INPUT_REDIRECTION
+		|| type == OUTPUT_REDIRECTION
+		|| type == APPEND_OUTPUT_REDIRECTION);
 }

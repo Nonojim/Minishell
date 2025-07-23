@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/13 15:33:07 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/22 19:55:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	add_node(t_treenode *parent_node, t_treenode *new_child, int dir)
 
 void	free_treenode(t_treenode *node)
 {
+	int	i;
 
 	if (!node)
 		return ;
@@ -50,7 +51,7 @@ void	free_treenode(t_treenode *node)
 	free_treenode(node->right);
 	if (node->argv)
 	{
-		int i = 0;
+		i = 0;
 		while (node->argv[i])
 			free(node->argv[i++]);
 		free(node->argv);

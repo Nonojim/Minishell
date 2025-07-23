@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 15:48:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/23 11:37:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_ctx
 
 //list to char**
 char	**list_to_dynamiccarray(t_ctx *ctx);
+
 // Exe
 int		execute_node(t_treenode *node, char *line, t_ctx *ctx);
 int		execute_node_simple(t_treenode *node, char *line, t_ctx *ctx);
@@ -61,11 +62,18 @@ int		subshell_status(t_ctx *ctx, pid_t pid);
 // Exe_HereDoc
 int		execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx);
 int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
+
 // Exe_Redirection
 int		execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx);
-int		redir_input(t_treenode *node, char *line, t_ctx *ctx);
-int		redir_output(t_treenode *node, char *line, t_ctx *ctx);
-int		redir_append(t_treenode *node, char *line, t_ctx *ctx);
+int		redir_input(t_treenode *node, t_ctx *ctx);
+int		redir_output(t_treenode *node, t_ctx *ctx);
+int		redir_append(t_treenode *node, t_ctx *ctx);
+int		apply_redirections(t_treenode *node, char *line, t_ctx *ctx);
+void	dup_and_close(int saved_stdin, int saved_stdout);
+void	new_argv_cmd(t_treenode *redir_node);
+char	**create_new_array_cmd(t_treenode *redir_node, t_treenode *cmd);
+void	create_new_argv_cmd(char **new_argv, int *i, t_treenode *node);
+t_treenode	*find_command_node(t_treenode *node);
 
 // Env
 t_env	*init_env_list(void);
