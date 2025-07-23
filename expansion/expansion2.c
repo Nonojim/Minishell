@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:12:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 14:13:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:28:30 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,27 @@ char	*expand_string(char *str, t_treenode *node, t_ctx *ctx)
 	return (result);
 }
 
-void	add_char_to_string(char **result, char c)
+char	*expand_heredoc(char	*str, t_ctx *ctx)
 {
-	char	*tmp;
-	size_t	len;
+	char	*result;
+	int		i;
 
-	if (!result)
-		return ;
-	len = ft_strlen(*result);
-	tmp = malloc(len + 2);
-	if (!tmp)
-		return ;
-	ft_memcpy(tmp, *result, len);
-	tmp[len] = c;
-	tmp[len + 1] = '\0';
-	if (result != NULL)
-		free(*result);
-	*result = tmp;
+	if (!ft_strchr(str, '$'))
+		return (ft_strdup(str));
+	result = ft_strdup("");
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && (ft_isalpha(str[i + 1])
+				|| str[i + 1] == '_' || str[i + 1] == '?'))
+		{
+			i = expand_variable(str, i, &result, ctx);
+			continue ;
+		}
+		add_char_to_string(&result, str[i]);
+		i++;
+	}
+	return (result);
 }
 
 char	*expand_tilde(char *str, t_ctx *ctx)
