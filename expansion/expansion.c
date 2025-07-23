@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 17:51:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:21:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	expanse_heredoc(t_treenode *node, t_ctx *ctx)
 		return ;
 	if (node->right && node->right->str)
 	{
-		expanded = expand_string(node->right->str, node, ctx);
+		expanded = expand_heredoc(node->right->str, ctx);
 		free(node->right->str);
 		node->right->str = expanded;
 	}
@@ -57,7 +57,8 @@ void	expanse_redir(t_treenode *node, t_ctx *ctx)
 			free(node->right->str);
 			node->right->str = clean;
 		}
-		if (expanded != NULL && (ft_strchr(expanded, '\'') || ft_strchr(expanded, '"')))
+		if (expanded != NULL && (ft_strchr(expanded, '\'')
+				|| ft_strchr(expanded, '"')))
 		{
 			clean = remove_quotes_after_expansion(expanded);
 			free(node->right->str);

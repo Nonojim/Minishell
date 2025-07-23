@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 13:18:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:19:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,23 @@ char	*remove_quotes_after_expansion(const char *str)
 	}
 	new[j] = '\0';
 	return (new);
+}
+
+void	add_char_to_string(char **result, char c)
+{
+	char	*tmp;
+	size_t	len;
+
+	if (!result)
+		return ;
+	len = ft_strlen(*result);
+	tmp = malloc(len + 2);
+	if (!tmp)
+		return ;
+	ft_memcpy(tmp, *result, len);
+	tmp[len] = c;
+	tmp[len + 1] = '\0';
+	if (result != NULL)
+		free(*result);
+	*result = tmp;
 }

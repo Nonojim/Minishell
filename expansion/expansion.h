@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 14:16:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:20:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ void	expanse_heredoc(t_treenode *node, t_ctx *ctx);
 
 //expansion2
 char	*expand_tilde(char *str, t_ctx *ctx);
-void	add_char_to_string(char **result, char c);
-char	*remove_quotes_after_expansion(const char *str);
-int		toggle_quote(char *str, int *i, t_quote_state *q, char **result);
 char	*expand_string(char *str, t_treenode *node, t_ctx *ctx);
+char	*expand_heredoc(char	*str, t_ctx *ctx);
 int		expand_variable(char *str, int i, char **result, t_ctx *ctx);
 
 //expansion_utils
+int		toggle_quote(char *str, int *i, t_quote_state *q, char **result);
+char	*remove_quotes_after_expansion(const char *str);
+void	add_char_to_string(char **result, char c);
 char	*ft_getenv(char *name, t_ctx *ctx);
 
 //expanse_wildcard
