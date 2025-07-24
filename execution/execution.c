@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 15:09:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 18:19:48 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ int	execute_node_simple(t_treenode *node, char *line, t_ctx *ctx)
 	if (node->type == WORD)
 		return (execute_simple_command(node, line, ctx));
 	else if (node->type == PIPE)
+	{
+		expanse_ast(node, ctx);
 		return (execute_pipeline(node, line, ctx));
+	}
 	return (1);
 }
 
