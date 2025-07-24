@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 17:56:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 18:59:31 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ free_wildcard(psm, NULL, NULL);
 void	sort_argv(char **array)
 {
 	int		i;
+	int		a;
+	int		b;
 	char	*tmp;
 
 	if (!array)
@@ -59,7 +61,9 @@ void	sort_argv(char **array)
 	i = 0;
 	while(array[i] && array[i + 1])
 	{
-			if (ft_strcmp(array[i], array[i + 1]) > 0)
+			a = ft_tolower(array[i][0]);
+			b = ft_tolower(array[i + 1][0]);
+			if (a > b || (a == b && ft_strcmp(array[i], array[i + 1]) > 0))
 			{
 				tmp = array[i];
 				array[i] = array[i + 1];
