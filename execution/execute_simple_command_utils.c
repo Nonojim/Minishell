@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 12:33:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 12:35:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:37:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,7 @@ char	**list_to_dynamiccarray(t_ctx *ctx)
 	t_env	*tmp;
 	char	*key_eq;
 
-	i = 0;
-	tmp = ctx->env;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
+	i = count_env(ctx->env);
 	array = malloc(sizeof(char *) * (i + 1));
 	if (!array)
 		return (NULL);
@@ -35,12 +29,7 @@ char	**list_to_dynamiccarray(t_ctx *ctx)
 	{
 		key_eq = ft_strdup(tmp->key);
 		if (tmp->value)
-		{
-			free(key_eq);
-			key_eq = ft_strjoin(tmp->key, "=");
-			array[i] = ft_strjoin(key_eq, tmp->value);
-			free(key_eq);
-		}
+			add_value(tmp, key_eq, array, &i);
 		else
 			array[i] = key_eq;
 		i++;
@@ -48,6 +37,27 @@ char	**list_to_dynamiccarray(t_ctx *ctx)
 	}
 	array[i] = NULL;
 	return (array);
+}
+
+int	count_env(t_env *env)
+{
+	int	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+void	add_value(t_env *tmp, char *key_eq, char **array, int *i)
+{
+	free(key_eq);
+	key_eq = ft_strjoin(tmp->key, "=");
+	array[*i] = ft_strjoin(key_eq, tmp->value);
+	free(key_eq);
 }
 
 void	free_execve(t_treenode *node, char *line, t_ctx *ctx, char *cmd_path)

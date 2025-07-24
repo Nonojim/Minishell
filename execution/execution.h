@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/23 15:35:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:15:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,12 @@ int		external_command_status(t_ctx *ctx, pid_t pid);
 char	*find_cmd_path(char *cmd, t_env *env_list);
 void	free_split(char **split);
 char	**list_to_dynamiccarray(t_ctx *ctx);
+void	add_value(t_env *tmp, char *key_eq, char **array, int *i);
+int		count_env(t_env *env);
 void	free_execve(t_treenode *node, char *line, t_ctx *ctx, char *cmd_path);
+void	handle_child_process(t_treenode *node, t_ctx *ctx, \
+														char *line, char *cmd);
+char	*shearch_cmd_path(char *cmd, t_ctx *ctx, char *line, t_treenode *node);
 
 // Exe_Pipe
 int		execute_pipeline(t_treenode *node, char *line, t_ctx *ctx);
@@ -83,5 +88,7 @@ void	change_shlvl(t_env	**env);
 void	export_to_env(t_env **env_list, char *key, char *value);
 t_env	*find_usrvar(t_env *env, const char *key);
 void	free_env_list(t_env *env);
+void	add_new_var(t_env **env_list, char *key, char *value);
+void	create_env_list_with_environ(t_env **env_list);
 
 #endif
