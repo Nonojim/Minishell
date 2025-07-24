@@ -39,6 +39,7 @@ FILES = tokenizer/tokenizer.c \
 				expansion/expansion_wilcard_psm.c \
 				expansion/expansion_wildcard_match.c \
 				expansion/expansion_wildcard_utils.c \
+				expansion/expansion_wildcard_newargv.c \
 				execution/execution.c \
 				execution/execute_heredoc.c \
 				execution/execute_pipe.c \
@@ -46,6 +47,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/execute_redirection.c \
 				execution/execute_redirection_utils.c \
 				execution/execute_simple_command.c \
+				execution/execute_simple_command_utils.c \
 				execution/execute_simple_command_builtins.c \
 				execution/execute_simple_command_external.c \
 				signal/signal.c \
@@ -55,6 +57,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/builtins/env.c \
 				execution/builtins/exit.c \
 				execution/builtins/export.c \
+				execution/builtins/export_utils.c \
 				execution/builtins/pwd.c \
 				execution/builtins/unset.c \
 				execution/builtins/whale.c \

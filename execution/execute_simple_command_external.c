@@ -6,63 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 15:21:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:40:33 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern char	**environ;
-
-char	**list_to_dynamiccarray(t_ctx *ctx)
-{
-	int		i;
-	char	**array;
-	t_env	*tmp;
-	char	*key_eq;
-
-	i = 0;
-	tmp = ctx->env;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
-	array = malloc(sizeof(char *) * (i + 1));
-	if (!array)
-		return (NULL);
-	tmp = ctx->env;
-	i = 0;
-	while (tmp)
-	{
-		key_eq = ft_strdup(tmp->key);
-		if (tmp->value)
-		{
-			free(key_eq);
-			key_eq = ft_strjoin(tmp->key, "=");
-			array[i] = ft_strjoin(key_eq, tmp->value);
-			free(key_eq);
-		}
-		else
-			array[i] = key_eq;
-		i++;
-		tmp = tmp->next;
-	}
-	array[i] = NULL;
-	return (array);
-}
-
-void	free_execve(t_treenode *node, char *line, t_ctx *ctx, char *cmd_path)
-{
-	if (node)
-		free_treenode(node);
-	if (line)
-		free(line);
-	if (ctx)
-		free_env_list(ctx->env);
-	if (cmd_path)
-		free(cmd_path);
-}
 
 int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 {
@@ -113,8 +63,8 @@ int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 		}
 		if (access(cmd_path, F_OK) != 0)
 		{
-			ft_fprintf(2, "minishell: %s: No such file or directory\n", cmd_path);
-			
+			ft_fprintf(2, "minishell: %s: No such file or directory\n", \
+							cmd_path);
 			free_execve(ctx->root, line, ctx, cmd_path);
 			exit(127);
 		}
@@ -144,9 +94,11 @@ int	external_command_status(t_ctx *ctx, pid_t pid)
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	setup_signals();
-
 	if (WIFSIGNALED(status))
+	{
+		printf("\n");
 		ctx->exit_code = 128 + WTERMSIG(status);
+	}
 	else if (WIFEXITED(status))
 		ctx->exit_code = WEXITSTATUS(status);
 	else
@@ -180,19 +132,4 @@ char	*find_cmd_path(char *cmd, t_env *env_list)
 		i++;
 	}
 	return (free_split(paths), NULL);
-}
-
-void	free_split(char	**split)
-{
-	int	i;
-
-	if (!split)
-		return;
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
 }

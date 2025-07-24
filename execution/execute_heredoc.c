@@ -6,38 +6,31 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 10:23:50 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:45:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-
 int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 {
 	int	pipefd[2];
 	int	pid;
+	int	exit_code;
 
-	if (!node->left) //corrige le segfault si pas de left (<< EOF)
-	{
-		ctx->exit_code = 0;
-		return (0);
-	}
+	if (!node->left)
+		return (ctx->exit_code = 0);
 	pipe(pipefd);
 	write(pipefd[1], node->right->str, ft_strlen(node->right->str));
 	close(pipefd[1]);
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork");
-		ctx->exit_code = 1;
-		return (1);
-	}
+		return (perror("fork"), ctx->exit_code = 1);
 	if (pid == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		int exit_code = execute_node(node->left, line, ctx);
+		exit_code = execute_node(node->left, line, ctx);
 		free_treenode(node);
 		free_env_list(ctx->env);
 		free(line);
@@ -50,6 +43,7 @@ int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line)
 {
 	int	status;
+
 	(void)line;
 	(void)node;
 	if (waitpid(pid, &status, 0) == -1)
