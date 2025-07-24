@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 14:55:09 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 13:17:28 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@
 
 // cd
 int			ft_cd(t_treenode *node, t_ctx *ctx);
+int			cd_many_arg(char *oldpwd, t_ctx *ctx);
+char		*cd_home_target(char *oldpwd, t_ctx *ctx);
+char		*cd_oldpwd_target(char *oldpwd, t_ctx *ctx);
+int			cd_check_empty_target(char *target, t_treenode *node, \
+													char *oldpwd, t_ctx *ctx);
+void		free_cd(char *oldpwd, char *target);
+int			cd_access(char *target, char *oldpwd, t_ctx *ctx);
+void		update_pwd(t_ctx *ctx);
 // echo
 int			ft_echo(t_treenode *node, t_ctx *ctx);
 int			ft_echo_n(char *argv);
@@ -36,6 +44,7 @@ int			ft_exit(char *line, t_treenode *ast, t_ctx *ctx);
 int			ft_export(t_treenode *node, t_ctx *ctx);
 void		print_export(t_env *env);
 void		add_export_variable(t_ctx *ctx, char *arg);
+void		free_key_value(char *key, char *value);
 void		ft_sort_env_list(t_env *env);
 t_env		*copy_env(t_env *env);
 void		ft_env_add_back(t_env **lst, t_env *new);

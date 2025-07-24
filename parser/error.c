@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:36:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 19:58:58 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 12:16:20 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,13 @@ void	print_error(t_token *tokens)
 {
 	if (parse_error(-1))
 		return ;
+	parse_error(1);
 	if (tokens == NULL)
 	{
-		parse_error(1);
 		ft_fprintf(2, \
 			"minishell: syntax error near unexpected token `newline'\n");
 		return ;
 	}
-	parse_error(1);
 	if (is_op_logique(tokens->type) || is_word_type(tokens->type))
 		ft_fprintf(2, "minishell: syntax error near unexpected token '%s'\n",
 			tokens->str);

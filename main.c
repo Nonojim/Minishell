@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/22 17:47:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 12:47:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,33 @@
 \033[2J = Efface contenu de l'ecran (2: tout l'écran)
 \033[H = Replace curseur position ligne 1, collone 1
 */
-void	clear_screen(void)
-{
-	write(STDOUT_FILENO, "\033[2J\033[H", 7);
-}
-
 void	start_message(void)
 {
+	write(STDOUT_FILENO, "\033[2J\033[H", 7);
 	ft_fprintf(1, "\033[1;34m╔════════════════════════════════════════════╗\n");
+	usleep(200000);
+	ft_fprintf(1, "║                                            ║\n");
 	usleep(200000);
 	ft_fprintf(1, "║        Welcome to Minishell — enjoy!       ║\n");
 	usleep(200000);
 	ft_fprintf(1, "║                                            ║\n");
 	usleep(200000);
-	ft_fprintf(1, "║         \033[3;90mby Nonojim and Zephyre-ls\033[0;34m          ║\n");
-	usleep(200000);
 	ft_fprintf(1, "╚════════════════════════════════════════════╝\033[0m\n");
 	usleep(200000);
+	ft_fprintf(1, "\033[3;90mby Nonojim and Zephyre-ls\033[0;34m   \n");
+	usleep(200000);
 	ft_fprintf(1, "\n");
+}
+
+t_ctx	init_ctx(void)
+{
+	t_ctx	ctx;
+
+	ctx.env = NULL;
+	ctx.exit_code = 0;
+	ctx.root = NULL;
+	ctx.env = init_env_list();
+	return (ctx);
 }
 
 int	main(void)
@@ -44,13 +53,9 @@ int	main(void)
 	t_token		*tmp;
 	t_treenode	*ast;
 	t_ctx		ctx;
-	
-//	clear_screen();
+
 //	start_message();
-	ctx.env = NULL;
-	ctx.exit_code = 0;
-	ctx.root = NULL;
-	ctx.env = init_env_list();
+	ctx = init_ctx();
 	while (1)
 	{
 		setup_signals();
@@ -65,7 +70,7 @@ int	main(void)
 			{
 				g_signum = 0;
 				free(line);
-				continue;
+				continue ;
 			}
 		}
 		g_signum = 0;
@@ -99,8 +104,7 @@ void	token_not_empty(t_token **token, t_treenode **ast)
 	}
 }
 
-void	resolve_ast(t_treenode *ast, 
-			char *line,	t_ctx	*ctx)
+void	resolve_ast(t_treenode *ast, char *line, t_ctx *ctx)
 {
 	if (!ast)
 		return ;
