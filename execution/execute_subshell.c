@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:58:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 15:09:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 11:50:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ int	execute_subshell_node(t_treenode *node, char *line, t_ctx *ctx)
 	else if (pid == 0)
 	{
 		exit_code = execute_node(node->left, line, ctx);
-		free_treenode(node);
+		free_treenode(ctx->root);
 		free_env_list(ctx->env);
+		free(line);
 		exit(exit_code);
 	}
 	return (subshell_status(ctx, pid));

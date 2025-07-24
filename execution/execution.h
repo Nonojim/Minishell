@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/23 11:37:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 15:35:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ typedef struct s_env
 
 typedef struct s_ctx
 {
-	t_env	*env;
-	char	**envp;
-	int		exit_code;
-	t_treenode *root;
+	t_env		*env;
+	char		**envp;
+	int			exit_code;
+	t_treenode	*root;
 }	t_ctx;
 
 //list to char**
@@ -48,6 +48,8 @@ int		execute_builtin_command(t_treenode *node, char *line, t_ctx *ctx);
 int		external_command_status(t_ctx *ctx, pid_t pid);
 char	*find_cmd_path(char *cmd, t_env *env_list);
 void	free_split(char **split);
+char	**list_to_dynamiccarray(t_ctx *ctx);
+void	free_execve(t_treenode *node, char *line, t_ctx *ctx, char *cmd_path);
 
 // Exe_Pipe
 int		execute_pipeline(t_treenode *node, char *line, t_ctx *ctx);
@@ -61,7 +63,7 @@ int		subshell_status(t_ctx *ctx, pid_t pid);
 
 // Exe_HereDoc
 int		execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx);
-int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
+int		heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
 
 // Exe_Redirection
 int		execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx);

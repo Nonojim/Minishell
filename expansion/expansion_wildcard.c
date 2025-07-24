@@ -6,66 +6,14 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 17:49:56 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 11:08:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-void	create_new_argv(char **result, t_treenode *node, t_wildcard *psm)
+t_wildcard	*init_struct_psm(int wildcard_index)
 {
-	int		wildcard_index;
-	int		len_argv;
-	int		len_result;
-	char	**new_argv;
-	int		i;
-	int		j;
-	int		k;
-
-	if (!node || !node->argv)
-		return ;
-	wildcard_index = 0;
-	while (node->argv[wildcard_index]
-		&& ft_strchr(node->argv[wildcard_index], '*') == NULL)
-		wildcard_index++;
-	len_argv = 0;
-	while (node->argv[len_argv])
-		len_argv++;
-	len_result = 0;
-	while (result[len_result])
-		len_result++;
-	new_argv = malloc(sizeof(char *) * (len_argv + len_result + 1));
-	if (!new_argv)
-		return ;
-	i = 0;
-	while (i < wildcard_index)
-	{
-		new_argv[i] = ft_strdup(node->argv[i]);
-		i++;
-	}
-	j = 0;
-	while (result[j])
-	{
-		new_argv[i + j] = result[j];
-		j++;
-	}
-	k = wildcard_index + 1;
-	while (k < len_argv)
-	{
-		new_argv[i + j] = ft_strdup(node->argv[k]);
-		k++;
-		j++;
-	}
-	new_argv[i + j] = NULL;
-	free_wildcard(psm, result, node);
-	node->argv = new_argv;
-}
-
-char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	char		**result;
 	t_wildcard	*psm;
 
 	psm = malloc(sizeof(t_wildcard));
@@ -73,47 +21,95 @@ char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx)
 		return (NULL);
 	psm->prefix = NULL;
 	psm->suffix = NULL;
-	dir = opendir(".");
-	if (!dir)
-		return (str);
-	result = NULL;
-	create_prefix_middle_suffix(str, psm);
-	while ((entry = readdir(dir)) != NULL)
+	psm->wildcard_index = wildcard_index;
+	psm->len_result = 0;
+	psm->len_argv = 0;
+	return (psm);
+}
+
+void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
+										t_treenode *node)
+{
+	(void)ctx;
+	if (result[1] != NULL)
 	{
-		if (entry->d_name[0] == '.')
-			continue ;
-		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix))
-			&& (psm->middle == NULL || match_middle(entry->d_name, psm->middle))
-			&& (psm->suffix == NULL || match_suffix(entry->d_name, psm->suffix)))
-			result = add_array(result, entry->d_name);
+		ctx->exit_code = 1;
+		ft_fprintf(2, "minishell: %s ambiguous redirection\n", \
+								node->right->argv[0]);
+		free_split(result);
+		free_wildcard(psm, NULL, NULL);
+		free(node->right->str);
+		node->right->str = NULL;
+		return ;
 	}
-	closedir(dir);
+	free(node->right->str);
+	node->right->str = ft_strdup(result[0]);
+	free_split(result);
+	free_wildcard(psm, NULL, NULL);
+	return ;
+}
+
+char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
+												t_wildcard *psm)
+{
 	if (!result)
 	{
 		free_wildcard(psm, result, NULL);
 		return (NULL);
 	}
-	if (node->type == INPUT_REDIRECTION
-		|| node->type == OUTPUT_REDIRECTION
-		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	if (is_redirection_without_here_doc(node->type))
 	{
-		if (result[1] != NULL)
-		{
-			ctx->exit_code = 1;
-			ft_fprintf(2, "minishell: ambiguous redirection\n");
-			free_split(result);
-			free_wildcard(psm, NULL, NULL);
-			return (NULL);
-		}
-		free(node->right->str);
-		node->right->str = ft_strdup(result[0]);
-		free_split(result);
-		free_wildcard(psm, NULL, NULL);
+		wildcard_redir(result, ctx, psm, node);
 		return (NULL);
 	}
 	else
+	{
 		create_new_argv(result, node, psm);
+		ctx->exit_code = 0;
+	}
 	return (NULL);
+}
+
+char	**found_match(DIR *dir, t_wildcard *psm, char **result)
+{
+	struct dirent	*entry;
+
+	entry = readdir(dir);
+	while (entry != NULL)
+	{
+		if (entry->d_name[0] == '.')
+		{
+			entry = readdir(dir);
+			continue ;
+		}
+		if ((psm->prefix == NULL || match_prefix(entry->d_name, psm->prefix))
+			&& (psm->middle == NULL || match_middle(entry->d_name, psm->middle))
+			&& (psm->suffix == NULL
+				|| match_suffix(entry->d_name, psm->suffix)))
+			result = add_array(result, entry->d_name);
+		entry = readdir(dir);
+	}
+	return (result);
+}
+
+char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx, \
+												int wildcard_index)
+{
+	DIR				*dir;
+	char			**result;
+	t_wildcard		*psm;
+
+	psm = init_struct_psm(wildcard_index);
+	if (!psm)
+		return (str);
+	dir = opendir(".");
+	if (!dir)
+		return (str);
+	result = NULL;
+	create_prefix_middle_suffix(str, psm);
+	result = found_match(dir, psm, result);
+	closedir(dir);
+	return (result_wildcard(result, node, ctx, psm));
 }
 
 /* = Glob 

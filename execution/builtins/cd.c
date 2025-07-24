@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 14:54:15 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:58:05 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,32 @@ void	free_cd(char *oldpwd, char *target)
 		free(target);
 }
 
+
+int	cd_access(char *target, char *oldpwd, t_ctx *ctx)
+{
+	struct stat	info;
+
+	if (stat(target, &info) != 0)
+	{
+		ft_fprintf(2, "minishell: cd: %s: No such file or directory\n", target);
+		free_cd(oldpwd, target);
+		return (ctx->exit_code = 1);
+	}
+	if (!S_ISDIR(info.st_mode))
+	{
+		ft_fprintf(2, "minishell: cd: %s: Not a directory\n", target);
+		free_cd(oldpwd, target);
+		return (ctx->exit_code = 1);
+	}
+	if (chdir(target) != 0)
+	{
+		ft_fprintf(2, "minishell: cd: %s: Permission denied\n", target);
+		free_cd(oldpwd, target);
+		return (ctx->exit_code = 1);
+	}
+	return (0);
+}
+
 int	ft_cd(t_treenode *node, t_ctx *ctx)
 {
 	char		*oldpwd;
@@ -27,7 +53,6 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 	char		*target;
 	char		*home;
 	char		*old;
-	struct stat	info;
 
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
@@ -65,30 +90,14 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 	}
 	else
 		target = ft_strdup(node->argv[1]);
+	if (cd_access(target, oldpwd, ctx) == 1)
+		return(1);
 	if (!target || target[0] == '\0')
 	{
 		if (!node->argv[1])
 			ft_fprintf(2, "minishell: cd: HOME not set\n");
 		else
 			ft_fprintf(2, "minishell: cd: %s: No such file or directory\n", node->argv[1]);
-		free_cd(oldpwd, target);
-		return (ctx->exit_code = 1);
-	}
-	if (stat(target, &info) != 0)
-	{
-		ft_fprintf(2, "minishell: cd: %s: No such file or directory\n", target);
-		free_cd(oldpwd, target);
-		return (ctx->exit_code = 1);
-	}
-	if (!S_ISDIR(info.st_mode))
-	{
-		ft_fprintf(2, "minishell: cd: %s: Not a directory\n", target);
-		free_cd(oldpwd, target);
-		return (ctx->exit_code = 1);
-	}
-	if (chdir(target) != 0)
-	{
-		ft_fprintf(2, "minishell: cd: %s: Permission denied\n", target);
 		free_cd(oldpwd, target);
 		return (ctx->exit_code = 1);
 	}

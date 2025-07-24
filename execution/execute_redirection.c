@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 10:47:30 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 11:26:27 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	redir_input(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
 
+	if (!node->right || !node->right->str)
+		return (1);
 	fd = open(node->right->str, O_RDONLY);
 	if (fd < 0)
 	{
@@ -81,13 +83,16 @@ int	redir_input(t_treenode *node, t_ctx *ctx)
 	return (0);
 }
 
+
 /*Gestion : >
 Ouvre ou crée le file en écriture et le met à la sortie standard
 Supprime son contenu avec O_TRUNC*/
 int	redir_output(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
-
+	
+	if (!node->right || !node->right->str)
+		return (1);
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
@@ -107,6 +112,8 @@ int	redir_append(t_treenode *node, t_ctx *ctx)
 {
 	int	fd;
 
+	if (!node->right || !node->right->str)
+		return (1);
 	fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
