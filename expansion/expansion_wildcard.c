@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 11:08:17 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:56:47 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,30 @@ void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
 	free(node->right->str);
 	node->right->str = ft_strdup(result[0]);
 	free_split(result);
-	free_wildcard(psm, NULL, NULL);
+free_wildcard(psm, NULL, NULL);
 	return ;
+}
+
+void	sort_argv(char **array)
+{
+	int		i;
+	char	*tmp;
+
+	if (!array)
+		return ;
+	i = 0;
+	while(array[i] && array[i + 1])
+	{
+			if (ft_strcmp(array[i], array[i + 1]) > 0)
+			{
+				tmp = array[i];
+				array[i] = array[i + 1];
+				array[i + 1] = tmp;
+				i = 0;
+			}
+			else
+				i++;
+	}
 }
 
 char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
@@ -64,6 +86,7 @@ char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
 	}
 	else
 	{
+		sort_argv(result);
 		create_new_argv(result, node, psm);
 		ctx->exit_code = 0;
 	}

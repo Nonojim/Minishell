@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 17:15:42 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:39:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,15 @@ int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 	pid_t		pid;
 	char		*cmd;
 
-	if (!node->argv || !node->argv[0])
+	if (!node->argv || !node->argv[0] || node->argv[0][0] == '#')
 	{
 		ctx->exit_code = 0;
 		return (0);
+	}
+	if (node->argv[0][0] == '.' && node->argv[0][1] == '\0')
+	{
+		ft_fprintf(2, "minishell: .: filename argument required \n.: usage: . filename [arguments]\n");
+		return (2);
 	}
 	cmd = node->argv[0];
 	pid = fork();
