@@ -53,6 +53,7 @@ FILES = tokenizer/tokenizer.c \
 				signal/signal.c \
 				execution/env.c \
 				execution/builtins/cd.c \
+				execution/builtins/cd_utils.c \
 				execution/builtins/echo.c \
 				execution/builtins/env.c \
 				execution/builtins/exit.c \

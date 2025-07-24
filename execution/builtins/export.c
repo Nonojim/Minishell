@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:28:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 12:48:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 12:42:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ void	add_export_variable(t_ctx *ctx, char *arg)
 	else
 		value = NULL;
 	export_to_env(&ctx->env, key, value);
+	free_key_value(key, value);
+}
+
+void	free_key_value(char *key, char *value)
+{
 	free(key);
 	if (value)
 		free(value);

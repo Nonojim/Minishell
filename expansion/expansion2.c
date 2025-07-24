@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:12:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 19:49:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 12:44:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 		j++;
 	new_str = ft_substr(str, i + 1, j - (i + 1));
 	expanse = ft_getenv(new_str, ctx);
+	if (!expanse)
+		expanse = ("");
 	free(new_str);
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);
