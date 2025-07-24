@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 12:40:33 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:15:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ extern char	**environ;
 int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 {
 	pid_t		pid;
-	char		*cmd_path;
 	char		*cmd;
-	char		**array;
-	struct stat	entry;
 
 	if (!node->argv || !node->argv[0])
 	{
@@ -36,55 +33,67 @@ int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 		return (1);
 	}
 	if (pid == 0)
+		handle_child_process(node, ctx, line, cmd);
+	return (external_command_status(ctx, pid));
+}
+
+void	handle_child_process(t_treenode *node, t_ctx *ctx, \
+														char *line, char *cmd)
+{
+	char	**array;
+	char	*cmd_path;
+
+	cmd_path = shearch_cmd_path(cmd, ctx, line, node);
+	if (access(cmd_path, F_OK) != 0)
 	{
-		if (!cmd || cmd[0] == '\0')
-		{
-			free_execve(node, line, ctx, NULL);
-			exit(0);
-		}
-		if (cmd[0] == '.' || cmd[0] == '/')
-			cmd_path = ft_strdup(cmd);
-		else
-			cmd_path = find_cmd_path(cmd, ctx->env);
-		if (!cmd_path)
-		{
-			ft_fprintf(2, "minishell: %s: command not found\n", cmd);
-			free_execve(ctx->root, line, ctx, NULL);
-			exit(127);
-		}
-		if (stat(cmd_path, &entry) == 0)
-		{
-			if (S_ISDIR(entry.st_mode))
-			{
-				ft_fprintf(2, "minishell: %s: Is a directory\n", cmd_path);
-				free_execve(ctx->root, line, ctx, cmd_path);
-				exit(126);
-			}
-		}
-		if (access(cmd_path, F_OK) != 0)
-		{
-			ft_fprintf(2, "minishell: %s: No such file or directory\n", \
-							cmd_path);
-			free_execve(ctx->root, line, ctx, cmd_path);
-			exit(127);
-		}
-		if (access(cmd_path, X_OK) != 0)
-		{
-			ft_fprintf(2, "minishell: %s: Permission denied\n", cmd_path);
-			free_execve(ctx->root, line, ctx, cmd_path);
-			exit(126);
-		}
-		array = list_to_dynamiccarray(ctx);
-		execve(cmd_path, node->argv, array);
-		ft_fprintf(2, "minishell: %s: %s\n", cmd_path, strerror(errno));
-		free_split(array);
+		ft_fprintf(2, "minishell: %s: No such file or directory\n", \
+						cmd_path);
 		free_execve(ctx->root, line, ctx, cmd_path);
-		if (errno == ENOENT)
-			exit(127);
+		exit(127);
+	}
+	if (access(cmd_path, X_OK) != 0)
+	{
+		ft_fprintf(2, "minishell: %s: Permission denied\n", cmd_path);
+		free_execve(ctx->root, line, ctx, cmd_path);
 		exit(126);
 	}
+	array = list_to_dynamiccarray(ctx);
+	execve(cmd_path, node->argv, array);
+	ft_fprintf(2, "minishell: %s: %s\n", cmd_path, strerror(errno));
+	free_split(array);
+	free_execve(ctx->root, line, ctx, cmd_path);
+	if (errno == ENOENT)
+		exit(127);
+	exit(126);
+}
+
+char	*shearch_cmd_path(char *cmd, t_ctx *ctx, char *line, t_treenode *node)
+{
+	char		*cmd_path;
+	struct stat	entry;
+
+	if (!cmd || cmd[0] == '\0')
+	{
+		free_execve(node, line, ctx, NULL);
+		exit(0);
+	}
+	if (cmd[0] == '.' || cmd[0] == '/')
+		cmd_path = ft_strdup(cmd);
 	else
-		return (external_command_status(ctx, pid));
+		cmd_path = find_cmd_path(cmd, ctx->env);
+	if (!cmd_path)
+	{
+		ft_fprintf(2, "minishell: %s: command not found\n", cmd);
+		free_execve(ctx->root, line, ctx, NULL);
+		exit(127);
+	}
+	if (stat(cmd_path, &entry) == 0 && S_ISDIR(entry.st_mode))
+	{
+		ft_fprintf(2, "minishell: %s: Is a directory\n", cmd_path);
+		free_execve(ctx->root, line, ctx, cmd_path);
+		exit(126);
+	}
+	return (cmd_path);
 }
 
 int	external_command_status(t_ctx *ctx, pid_t pid)

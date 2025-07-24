@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 15:14:47 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:01:39 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_env	*find_usrvar(t_env *env, const char *key)
 void	export_to_env(t_env **env_list, char *key, char *value)
 {
 	t_env	*node;
-	t_env	*new;
-	t_env	*tmp;
 
 	node = find_usrvar(*env_list, key);
 	if (node)
@@ -44,54 +42,36 @@ void	export_to_env(t_env **env_list, char *key, char *value)
 		}
 	}
 	else
-	{
-		new = malloc(sizeof(t_env));
-		if (!new)
-			return ;
-		ft_memset(new, 0, sizeof(t_env));
-		if (key)
-			new->key = ft_strdup(key);
-		if (value)
-			new->value = ft_strdup(value);
-		if (!*env_list)
-		{
-			*env_list = new;
-			return ;
-		}
-		tmp = *env_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
-void	change_shlvl(t_env	**env)
-{
-	t_env	*shlvl;
-	char	*new_shlvl;
-	int		i;
-
-	shlvl = find_usrvar(*env, "SHLVL");
-	if (!shlvl)
-		i = 0;
-	else
-		i = ft_atoi(shlvl->value);
-	new_shlvl = ft_itoa(i + 1);
-	export_to_env(env, "SHLVL", new_shlvl);
-	free(new_shlvl);
+		add_new_var(env_list, key, value);
 }
 
 // Initialise depuis environ[]
 t_env	*init_env_list(void)
 {
 	t_env	*env_list;
+
+	env_list = NULL;
+	create_env_list_with_environ(&env_list);
+	change_shlvl(&env_list);
+	if (find_usrvar(env_list, "PWD") == NULL)
+		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
+	if (find_usrvar(env_list, "PATH") == NULL)
+	{
+		ft_fprintf(1, "No PATH found a standard unix PATH will be exported\n");
+		export_to_env(&env_list, \
+		"PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	}
+	return (env_list);
+}
+
+void	create_env_list_with_environ(t_env **env_list)
+{
 	char	*key;
 	char	*value;
 	char	*equal;
 	int		i;
 
 	i = 0;
-	env_list = NULL;
 	while (environ[i])
 	{
 		equal = ft_strchr(environ[i], '=');
@@ -105,21 +85,11 @@ t_env	*init_env_list(void)
 			key = ft_strdup(environ[i]);
 			value = NULL;
 		}
-		export_to_env(&env_list, key, value);
+		export_to_env(env_list, key, value);
 		free(key);
 		free(value);
 		i++;
 	}
-	change_shlvl(&env_list);
-	if (find_usrvar(env_list, "PWD") == NULL)
-		export_to_env(&env_list, "PWD", getcwd(NULL, 0));
-	if (find_usrvar(env_list, "PATH") == NULL)
-	{
-		ft_fprintf(1, "No PATH found a standard unix PATH will be exported\n");
-		export_to_env(&env_list, \
-		"PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
-	}
-	return (env_list);
 }
 
 // Libère la liste
