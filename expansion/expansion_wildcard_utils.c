@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 11:29:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/13 19:29:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:58:48 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,32 @@ char	**add_array(char **result, char *file)
 	return (new);
 }
 
+void	sort_argv(char **array)
+{
+	int		i;
+	int		a;
+	int		b;
+	char	*tmp;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i] && array[i + 1])
+	{
+		a = ft_tolower(array[i][0]);
+		b = ft_tolower(array[i + 1][0]);
+		if (a > b || (a == b && ft_strcmp(array[i], array[i + 1]) > 0))
+		{
+			tmp = array[i];
+			array[i] = array[i + 1];
+			array[i + 1] = tmp;
+			i = 0;
+		}
+		else
+			i++;
+	}
+}
+
 int	count_middle_wildcard(char *str)
 {
 	int	i;
@@ -81,4 +107,14 @@ int	count_middle_wildcard(char *str)
 			i++;
 	}
 	return (middle_wildcard);
+}
+
+void	free_expand_variable(char *tmp, char *expanse, char *new_str)
+{
+	if (tmp)
+		free(tmp);
+	if (expanse)
+		free(expanse);
+	if (new_str)
+		free(new_str);
 }

@@ -6,10 +6,9 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:03:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 19:00:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "execution.h"
 
@@ -27,7 +26,8 @@ int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 	}
 	if (node->argv[0][0] == '.' && node->argv[0][1] == '\0')
 	{
-		ft_fprintf(2, "minishell: .: filename argument required \n.: usage: . filename [arguments]\n");
+		ft_fprintf(2, "minishell: .: filename argument required \n.: \
+								usage: . filename [arguments]\n");
 		return (2);
 	}
 	cmd = node->argv[0];
@@ -148,4 +148,3 @@ char	*find_cmd_path(char *cmd, t_env *env_list)
 	}
 	return (free_split(paths), NULL);
 }
-

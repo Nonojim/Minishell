@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:12:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 17:19:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:58:26 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,7 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 		expanse = ft_itoa(ctx->exit_code);
 		tmp = *result;
 		*result = ft_strjoin(tmp, expanse);
-		free(tmp);
-		free(expanse);
+		free_expand_variable(tmp, expanse, NULL);
 		return (i + 2);
 	}
 	j = i + 1;
@@ -132,9 +131,9 @@ int	expand_variable(char *str, int i, char **result, t_ctx *ctx)
 	expanse = ft_getenv(new_str, ctx);
 	if (!expanse)
 		expanse = ("");
-	free(new_str);
+	free_expand_variable(NULL, NULL, new_str);
 	tmp = *result;
 	*result = ft_strjoin(tmp, expanse);
-	free(tmp);
+	free_expand_variable(tmp, NULL, NULL);
 	return (j);
 }
