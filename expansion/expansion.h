@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 19:12:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/25 19:21:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void		free_redir(t_treenode *node, char *expanded);
 
 //expansion2
 char		*expand_tilde(char *str, t_ctx *ctx);
-char		*expand_string(char *str, t_treenode *node, t_ctx *ctx,\
+char		*expand_string(char *str, t_treenode *node, t_ctx *ctx, \
 	int wildcard_index);
 char		*shearch_and_add_var(char *str, char *result, t_ctx *ctx);
 char		*expand_heredoc(char	*str, t_ctx *ctx);
@@ -71,17 +71,17 @@ void		free_expand_variable(char *tmp, char *expanse, char *new_str);
 //wildcard_shearch
 int			ft_strnstr_for_wildcard(char *str,	char **middle, int len_str);
 void		free_wildcard(t_wildcard *psm, char **result, t_treenode *node);
-void		wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm,\
+void		wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
 											t_treenode *node);
-char		*result_wildcard(char **result, t_treenode *node, t_ctx *ctx,\
+char		*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
 											t_wildcard *psm);
-char		*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx,\
+char		*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx, \
 											int wildcard_index);
 char		**found_match(DIR *dir, t_wildcard *psm, char **result);
 //wildcard_new_argv
-void		create_new_argv(char **result, t_treenode *node,\
+void		create_new_argv(char **result, t_treenode *node, \
 											t_wildcard *idx);
-char		**build_new_argv(t_treenode *node, char **result, t_wildcard *idx,\
+char		**build_new_argv(t_treenode *node, char **result, t_wildcard *idx, \
 												char **new_argv);
 int			len_array(char **result);
 
