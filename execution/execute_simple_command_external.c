@@ -6,9 +6,10 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 17:39:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:03:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "execution.h"
 
@@ -147,3 +148,4 @@ char	*find_cmd_path(char *cmd, t_env *env_list)
 	}
 	return (free_split(paths), NULL);
 }
+
