@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/17 14:09:41 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:15:08 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			}*/
 			if (!next_line)
 			{
-				fprintf(stderr,
+				ft_fprintf(stderr,
 					"minishell: warning: here-document delimited at line %d delimited by end-of-file (wanted `%s')\n",
 					line_error, token_doc);
 				write(fd[1], line, ft_strlen(line));
