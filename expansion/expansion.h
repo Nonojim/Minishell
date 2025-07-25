@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 11:24:27 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:58:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ int		create_prefix(char *str, t_wildcard *psm);
 void	allocation_psm_middle(t_wildcard *psm, int middle_wildcard);
 void	create_psm_middle_suffix(char *str, t_wildcard *psm, int i);
 int		count_middle_wildcard(char *str);
+void	sort_argv(char **array);
+void	free_expand_variable(char *tmp, char *expanse, char *new_str);
+
 //wildcard_shearch
 int		ft_strnstr_for_wildcard(char *str,	char **middle, int len_str);
 void	free_wildcard(t_wildcard *psm, char **result, t_treenode *node);
