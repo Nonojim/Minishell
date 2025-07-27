@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:48 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 14:15:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/27 14:41:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,28 @@ int	type_token(char *str)
 		return (WORD);
 }
 
+int	type_token_redir(char *str)
+{
+	if (!str)
+		return (0);
+	if (str[0] == '>' && str[1] == '>')
+		return (APPEND_OUTPUT_REDIRECTION);
+	else if (str[0] == '>')
+		return (OUTPUT_REDIRECTION);
+	else if (str[0] == '<')
+		return (INPUT_REDIRECTION);
+	return (0);
+}
 
+int	type_token_operator(char *str)
+{
+	if (!str)
+		return (0);
+	if (str[0] == '&' && str[1] == '&')
+		return (LOGICAL_AND);
+	else if (str[0] == '|' && str[1] == '|')
+		return (LOGICAL_OR);
+	else if (str[0] == '|')
+		return (PIPE);
+	return (0);
+}

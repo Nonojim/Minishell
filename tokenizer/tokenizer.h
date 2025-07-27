@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 14:35:33 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:06:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,18 @@ void	bracket_unclosed(char **line, char **history_line, char*next_line);
 char	*token_bracket(int *i, int start, char *line, t_token **token, t_ctx *ctx);
 int		count_matching_bracket(char *str);
 void	token_expansion(int *i, int start, char *line, t_token **token);
+
+void	free_unclose_logical(char *tmp, char *next_line, char *line);
+int	print_error_logical(char *line, int *j, t_ctx *ctx, int error);
+int	type_token_operator(char *str);
+int	type_token_redir(char *str);
+int	only_space_after_op(char *line, int i);
+int	only_space_before(char *line, int i);
+int	only_spaces_after_pipe(char *line, int i);
+int	check_error_after_logical(char *line, int *i, t_ctx *ctx);
+int	check_redir_before_logical(char *line, int *i, t_ctx *ctx);
+int	check_error_after_pipe(char *line, int *i, t_ctx *ctx);
+
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
