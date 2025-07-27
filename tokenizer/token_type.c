@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:58:48 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/26 07:58:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/27 14:15:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,5 @@ int	type_token(char *str)
 	else
 		return (WORD);
 }
+
+

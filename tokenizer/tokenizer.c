@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/17 16:33:16 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/27 13:58:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,16 @@ t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 	return (token);
 }
 
+
 char	*tokenize2(int	*i, int start, char *line, t_token **token, t_ctx *ctx)
 {
 	if ((line[*i] == '\'' || line[*i] == '\"') && line[*i])
 		line = token_quote(i, start, line, token);
 	else if ((line[*i] == '&' && line[*i + 1] == '&')
 		|| (line[*i] == '|' && line[*i + 1] == '|'))
-		line = token_logical_unclose(i, start, line, token);
+		line = token_logical_unclose(i, start, line, token, ctx);
 	else if (line[*i] == '|')
-		line = token_pipe_unclose(i, start, line, token);
+		line = token_pipe_unclose(i, start, line, token, ctx);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
 		line = open_heredoc(i, start, line, token, ctx);
 	else if (line[*i] == '(' && line[*i])
