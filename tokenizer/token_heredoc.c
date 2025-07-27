@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:18:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:26:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,11 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 	char	*heredoc_line;
 	char	*buffer;
 	char	tmp[1024];
-	int		size_line;
 	pid_t		pid;
 	int		fd[2];
 	int		status;
 	ssize_t	bytes;
 
-	//(void)*token;
-//	char *delimiteur = (*token)->str;
-	//int	i =0;
 	int	line_error = 0; //quand on refactorera ca ira dans une structure et le compteur marchera (normalement)
 
 	pipe(fd);
@@ -107,7 +103,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		close(fd[0]);
 		//g_signum = 0;
 		line = ft_strdup("");
-		size_line = ft_strlen(token_doc);
 		while (1)
 		{
 			next_line = readline("> ");
@@ -132,21 +127,18 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 				free_token(*token);
 				free_env_list(ctx->env);
 				close(fd[1]);
-			//	fprintf(stderr, "minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')", i , delimiteur);
 				exit(0);
 			}
-			if (ft_strncmp(next_line, token_doc, size_line) == 0)
+			if (ft_strcmp(next_line, token_doc) == 0)
 			{
 				free(next_line);
 				write(fd[1], line, ft_strlen(line));
 				break;
 			}
-			if (ft_strncmp(next_line, token_doc, size_line) != 0)
+			if (ft_strcmp(next_line, token_doc) != 0)
 			{
 				next_line = delete_tab_or_ad_return_line(next_line, j);
 				buffer = ft_strjoin(line, next_line);
-			//	buffer = line;
-				//line = ft_strjoin(line, next_line);
 				free(line);
 				free(next_line);
 				if (!buffer)
@@ -154,7 +146,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 				line = buffer;
 				line_error++;
 			}
-			//free(next_line);
 		}
 		free(token_doc);
 		free(line);
@@ -191,7 +182,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		{
 			ctx->exit_code = 130;
 			close(fd[0]);
-		//	close(fd[1]);
 			free(token_doc);
 		//	free_token(*token);
 		//	free_env_list(ctx->env);
@@ -205,7 +195,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 			ctx->exit_code = WEXITSTATUS(status);
 			if (ctx->exit_code == 130)
 			{
-
 				free(token_doc);
 				free(heredoc_line);
 				return (NULL);
@@ -213,22 +202,6 @@ char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 		}
 		else
 			ctx->exit_code = 1;
-		/*else if (WIFEXITED(status))
-		{
-			int code = WEXITSTATUS(status);
-			if (code == 130)
-			{
-		
-				ctx->exit_code = 130;
-				free(token_doc);
-				free_token(*token);
-				free_env_list(ctx->env);
-				free(heredoc_line);
-				return (NULL);
-			}*/
-		//	else
-		//		ctx->exit_code = code;
-	//	}
 	free(token_doc);
 	return (heredoc_line); 
 	}	
