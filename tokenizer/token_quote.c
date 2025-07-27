@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:10:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/27 10:40:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 */
 char	*read_until_quote_closed(char *line, char quote)
 {
-	char	*next_line = NULL;
+	char	*next_line;
 	char	*tmp;
 
+	next_line = NULL;
 	setup_signals_uncomplete_line();
 	g_signum = 0;
 	while (1)
@@ -32,13 +33,14 @@ char	*read_until_quote_closed(char *line, char quote)
 		if (g_signum == 2)
 		{
 			free(next_line);
-			return(NULL);
+			return (NULL);
 		}
 		if (!next_line)
 		{
 			free(next_line);
-			printf("bash: unexpected EOF while looking for matching `\"'\nexit\n");
-			return(NULL);
+			printf("bash: unexpected EOF while looking for \
+							matching `\"'\nexit\n");
+			return (NULL);
 		}
 		tmp = ft_strjoin(line, "\n");
 		free(line);
@@ -79,7 +81,7 @@ char	*token_quote(int *i, int start, char *line, t_token **token)
 		*i = start;
 		return (line);
 	}
-	while(line[*i] && is_word(line[*i]) && line[*i] != ' ')
+	while (line[*i] && is_word(line[*i]) && line[*i] != ' ')
 		(*i)++;
 	str = ft_substr(line, start, *i - start);
 	add_token_end(token, create_token(WORD, str));

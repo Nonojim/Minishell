@@ -6,16 +6,17 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/10 11:31:42 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/27 10:25:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-t_token *create_token(int type, char *str)
+t_token	*create_token(int type, char *str)
 {
-	t_token *new_token = ft_calloc(1, sizeof(t_token));
+	t_token	*new_token;
 
+	new_token = ft_calloc(1, sizeof(t_token));
 	if (!new_token)
 	{
 		free(str);
@@ -48,7 +49,6 @@ void	add_token_end(t_token **token, t_token *new_token)
 	tmp->next = new_token;
 }
 
-
 void	print_token_list(t_token *token_list)
 {
 	int		i;
@@ -75,7 +75,6 @@ void	print_token_list(t_token *token_list)
 	printf("NULL\n");
 }
 
-
 void	free_token(t_token *token_list)
 {
 	t_token	*tmp;
@@ -89,4 +88,3 @@ void	free_token(t_token *token_list)
 		token_list = tmp;
 	}
 }
-
