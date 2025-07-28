@@ -7,6 +7,7 @@ CFLAGS = -g -Wall -Wextra -Werror
 READFLAG = -lreadline -ltermcap
 NAME = minishell
 LIBFT = libft/libft.a
+OBJDIR = obj
 
 ###############################
 ##SOURCES
@@ -69,7 +70,8 @@ FILES = tokenizer/tokenizer.c \
 				main_utils.c \
 				main.c
 
-OBJS = $(FILES:.c=.o)
+##OBJS = $(FILES:.c=.o)
+OBJS = $(addprefix $(OBJDIR)/, $(FILES:.c=.o))
 
 ###############################
 ##RULES
@@ -89,12 +91,14 @@ $(NAME): $(OBJS)
 	@echo " Run with : ./minishell 🪼🐙										"
 	@echo "\033[0m"
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
-%.o: %.c
+
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@echo "\033[1;32m" "Cleaning .o \033[0m"
-	@rm -f $(OBJS)
+	@rm -rf $(OBJDIR)
 	@make -C libft/ clean
 
 fclean: clean
