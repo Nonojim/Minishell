@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 08:41:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 09:16:38 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int		type_token_double_operator(char *str);
 //Token_word
 int		is_word(int c);
 char	*token_word(int *i, int start, char *line, t_token **token);
+char	*add_token_word(int *i, int start, char *line, t_token **token);
 //Token_operator
 int		is_operator_logical(char c);
 int		is_ok_double(char c);
@@ -84,6 +85,9 @@ int		check_error_after_pipe(char *line, int *i, t_ctx *ctx);
 //Token_quote
 char	*read_until_quote_closed(char *line, char quote);
 char	*token_quote(int *i, int start, char *line, t_token **token);
+char	*quote_interrupt(char *next_line, int signum);
+char	*read_quote_loop(char *line, char quote);
+char	*create_new_line(char *line, char *next_line);
 //Token_HereDoc
 char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx);
 char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx);

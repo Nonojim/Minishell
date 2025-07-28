@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 07:37:06 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 09:17:25 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	is_word(int c)
  */
 char	*token_word(int *i, int start, char *line, t_token **token)
 {
-	char	*str;
 	int		inquote;
 	char	quote;
 
@@ -63,8 +62,14 @@ char	*token_word(int *i, int start, char *line, t_token **token)
 		*i = start;
 		return (line);
 	}
-	else
-		str = ft_substr(line, start, *i - start);
+	return (add_token_word(i, start, line, token));
+}
+
+char	*add_token_word(int *i, int start, char *line, t_token **token)
+{
+	char	*str;
+
+	str = ft_substr(line, start, *i - start);
 	if (!str)
 		return (NULL);
 	if (is_word(*str) == 1)
