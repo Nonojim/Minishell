@@ -8,6 +8,7 @@ READFLAG = -lreadline -ltermcap
 NAME = minishell
 LIBFT = libft/libft.a
 OBJDIR = obj
+VALGRIND = valgrind --leak-check=full --track-fds=yes --trace-children=yes --show-leak-kinds=all --suppressions=readline.supp ./minishell
 
 ###############################
 ##SOURCES
@@ -91,6 +92,9 @@ $(NAME): $(OBJS)
 	@echo " Run with : ./minishell 🪼🐙										"
 	@echo "\033[0m"
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READFLAG) -o $(NAME)
+
+valgrind :$(NAME)
+	$(VALGRIND) ./$(NAME)
 
 $(OBJDIR)/%.o: %.c
 	@mkdir -p $(dir $@)
