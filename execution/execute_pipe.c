@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 12:26:40 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 09:40:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	pipe_left(t_treenode *node, char *line, int pipefd[2], t_ctx *ctx)
 	exit_code = execute_node(node->left, line, ctx);
 	free_treenode(ctx->root);
 	free_env_list(ctx->env);
+	free(line);
 	exit(exit_code);
 }
 
@@ -72,6 +73,7 @@ void	pipe_right(t_treenode *node, char *line, int pipefd[2], t_ctx *ctx)
 	exit_code = execute_node(node->right, line, ctx);
 	free_treenode(ctx->root);
 	free_env_list(ctx->env);
+	free(line);
 	exit(exit_code);
 }
 
