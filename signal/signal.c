@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 07:32:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 09:20:48 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,6 @@ void	setup_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	signal_heredoc_handler(int signum)
-{
-	g_signum = signum;
-	write(2, "\n", 1);
-	exit(130);
-}
-
 void	signal_uncomplete_line_handler(int signum)
 {
 	g_signum = signum;
@@ -70,11 +63,4 @@ void	setup_signals_uncomplete_line(void)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-}
-
-void	setup_signal_heredoc(void)
-{
-	signal(SIGINT, signal_heredoc_handler);
-	signal(SIGQUIT, SIG_IGN);
-	signal(EOF, SIG_IGN);
 }
