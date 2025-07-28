@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 18:26:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:27:38 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,13 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 		return (free(line), NULL);
 	clean_quote = delete_quote(token_doc, token);
 	heredoc_line = newline_heredoc(clean_quote, j, token, ctx);
-	//free(clean_quote);
 	if (!heredoc_line || ctx->exit_code == 130)
 	{
 		free_token(*token);
 		*token = NULL;
-	//	free(line);
 		return (NULL);
 	}
 	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
-
-	//printf("line : [%s]\n", line);
 	return (line);
 }
 

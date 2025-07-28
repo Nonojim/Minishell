@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 15:18:49 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/28 07:32:12 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,18 @@ void	signal_uncomplete_line_handler(int signum)
 		write(1, "\001\033[1;34m\002Minishell$ \001\033[0m\002", 26);
 		rl_done = 1;
 	}
-
 }
 
 void	setup_signals_uncomplete_line(void)
 {
-	struct sigaction sa;
-	
+	struct sigaction	sa;
+
 	signal(EOF, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	sa.sa_handler = signal_uncomplete_line_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-
 }
 
 void	setup_signal_heredoc(void)
