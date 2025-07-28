@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 18:08:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 14:58:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ char	*token_logical_unclose(int *i, int start, \
 	char	*tmp_newline;
 
 	if (check_redir_before_logical(line, i, ctx) == 1)
+	{
+		free_token(*token);
 		return (NULL);
+	}
 	if (check_error_after_logical(line, i, ctx) == 1)
+	{
+		free_token(*token);
 		return (NULL);
+	}
 	if (only_space_after_op(line, *i) && !only_space_before(line, *i))
 	{
 		while (1)
@@ -86,9 +92,10 @@ char	*token_logical_unclose(int *i, int start, \
 			}
 			tmp = ft_strjoin(line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
-			free_unclose_logical(tmp, next_line, line);
+			free_unclose_logical(tmp, next_line, NULL);
 			if (!tmp_newline)
 				break ;
+			free(line);
 			line = tmp_newline;
 			break ;
 		}
@@ -129,9 +136,15 @@ char	*token_pipe_unclose(int *i, int start, char *line, \
 	char	*tmp_newline;
 
 	if (check_redir_before_logical(line, i, ctx) == 1)
+	{
+		free_token(*token);
 		return (NULL);
+	}
 	if (check_error_after_pipe(line, i, ctx) == 1)
+	{
+		free_token(*token);
 		return (NULL);
+	}
 	if (only_spaces_after_pipe(line, *i) && !only_space_before(line, *i))
 	{
 		while (1)
