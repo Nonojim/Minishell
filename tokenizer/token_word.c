@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 09:17:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:22:08 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,32 +37,36 @@ int	is_word(int c)
 * Extract the token word and add to the token_list
 * Word is defined as sequence of the characters who are not a special token
  */
-char	*token_word(int *i, int start, char *line, t_token **token)
+char	*token_word(t_token_info *info)
 {
 	int		inquote;
 	char	quote;
+	int		i;
 
 	inquote = -1;
 	quote = '\0';
-	while (line[*i] != '\0' && (is_word(line[*i]) == 1 || line[*i] == '\n'))
+	i = *(info->i);
+	while (info->line[i] != '\0'
+		&& (is_word(info->line[i]) == 1 || info->line[i] == '\n'))
 	{
-		if ((line[*i] == '"' || line[*i] == '\'' ) && quote == '\0')
-			quote = line[*i];
-		if (quote == line[*i])
+		if ((info->line[i] == '"' || info->line[i] == '\'') && quote == '\0')
+			quote = info->line[i];
+		if (quote == info->line[i])
 			inquote *= -1;
-		if ((line[*i] == '&' && line[*i + 1] == '&'))
+		if ((info->line[i] == '&' && info->line[i + 1] == '&'))
 			break ;
-		(*i)++;
-		if (line[*i] == ' ' && inquote == -1)
+		i++;
+		if (info->line[i] == ' ' && inquote == -1)
 			break ;
 	}
-	if (inquote == 1 && line[*i] == '\0')
+	if (inquote == 1 && info->line[i] == '\0')
 	{
-		line = read_until_quote_closed(line, quote);
-		*i = start;
-		return (line);
+		info->line = read_until_quote_closed(info->line, quote);
+		*(info->i) = info->start;
+		return (info->line);
 	}
-	return (add_token_word(i, start, line, token));
+	*(info->i) = i;
+	return (add_token_word(info->i, info->start, info->line, info->token));
 }
 
 char	*add_token_word(int *i, int start, char *line, t_token **token)

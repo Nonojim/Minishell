@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 14:58:03 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:23:05 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,25 @@ int	check_error_after_logical(char *line, int *i, t_ctx *ctx)
 /*
  * When the prompt finish by && or ||
  */
-char	*token_logical_unclose(int *i, int start, \
-										char *line, t_token **token, t_ctx *ctx)
+
+char	*token_logical_unclose(t_token_info *info)
 {
 	char	*next_line;
 	char	*tmp;
 	char	*tmp_newline;
 
-	if (check_redir_before_logical(line, i, ctx) == 1)
+	if (check_redir_before_logical(info->line, info->i, info->env) == 1)
 	{
-		free_token(*token);
+		free_token(*(info->token));
 		return (NULL);
 	}
-	if (check_error_after_logical(line, i, ctx) == 1)
+	if (check_error_after_logical(info->line, info->i, info->env) == 1)
 	{
-		free_token(*token);
+		free_token(*(info->token));
 		return (NULL);
 	}
-	if (only_space_after_op(line, *i) && !only_space_before(line, *i))
+	if (only_space_after_op(info->line, *(info->i))
+		&& !only_space_before(info->line, *(info->i)))
 	{
 		while (1)
 		{
@@ -90,19 +91,19 @@ char	*token_logical_unclose(int *i, int start, \
 				free(next_line);
 				return (NULL);
 			}
-			tmp = ft_strjoin(line, "\n");
+			tmp = ft_strjoin(info->line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
 			free_unclose_logical(tmp, next_line, NULL);
 			if (!tmp_newline)
 				break ;
-			free(line);
-			line = tmp_newline;
+			free(info->line);
+			info->line = tmp_newline;
 			break ;
 		}
 	}
 	else
-		token_logical_operator(i, start, line, token);
-	return (line);
+		token_logical_operator(info);
+	return (info->line);
 }
 
 int	check_error_after_pipe(char *line, int *i, t_ctx *ctx)
@@ -128,24 +129,24 @@ int	check_error_after_pipe(char *line, int *i, t_ctx *ctx)
 	return (0);
 }
 
-char	*token_pipe_unclose(int *i, int start, char *line, \
-													t_token **token, t_ctx *ctx)
+char	*token_pipe_unclose(t_token_info *info)
 {
 	char	*next_line;
 	char	*tmp;
 	char	*tmp_newline;
 
-	if (check_redir_before_logical(line, i, ctx) == 1)
+	if (check_redir_before_logical(info->line, info->i, info->env) == 1)
 	{
-		free_token(*token);
+		free_token(*(info->token));
 		return (NULL);
 	}
-	if (check_error_after_pipe(line, i, ctx) == 1)
+	if (check_error_after_pipe(info->line, info->i, info->env) == 1)
 	{
-		free_token(*token);
+		free_token(*(info->token));
 		return (NULL);
 	}
-	if (only_spaces_after_pipe(line, *i) && !only_space_before(line, *i))
+	if (only_spaces_after_pipe(info->line, *(info->i))
+		&& !only_space_before(info->line, *(info->i)))
 	{
 		while (1)
 		{
@@ -155,16 +156,16 @@ char	*token_pipe_unclose(int *i, int start, char *line, \
 				free(next_line);
 				return (NULL);
 			}
-			tmp = ft_strjoin(line, "\n");
+			tmp = ft_strjoin(info->line, "\n");
 			tmp_newline = ft_strjoin(tmp, next_line);
-			free_unclose_logical(tmp, next_line, line);
+			free_unclose_logical(tmp, next_line, info->line);
 			if (!tmp_newline)
 				break ;
-			line = tmp_newline;
+			info->line = tmp_newline;
 			break ;
 		}
 	}
 	else
-		token_logical_operator(i, start, line, token);
-	return (line);
+		token_logical_operator(info);
+	return (info->line);
 }

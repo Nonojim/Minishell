@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:41:43 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 12:58:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:26:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,27 @@ int	is_ok_double(char c)
 * Identifie and extract logical operator simple or double
 * And add to the token list 
  */
-void	token_logical_operator(int *i, int start, char *line, t_token **token)
+void	token_logical_operator(t_token_info *info)
 {
 	int		type;
 	char	*str;
+	int		i;
 
-	if (is_operator_logical(line[*i + 1]) == line[*i]
-		&& is_ok_double(line[*i]) == 1)
+	i = *(info->i);
+	if (is_operator_logical(info->line[i + 1]) == info->line[i]
+		&& is_ok_double(info->line[i]) == 1)
 	{
-		str = ft_substr(line, start, 2);
+		str = ft_substr(info->line, info->start, 2);
 		type = type_token(str);
-		add_token_end(token, create_token(type, str));
-		*i += 2;
+		add_token_end(info->token, create_token(type, str));
+		i += 2;
 	}
 	else
 	{
-		str = ft_substr(line, start, 1);
+		str = ft_substr(info->line, info->start, 1);
 		type = type_token(str);
-		add_token_end(token, create_token(type, str));
-		(*i)++;
+		add_token_end(info->token, create_token(type, str));
+		i++;
 	}
+	*(info->i) = i;
 }
