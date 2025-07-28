@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:30:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/09 14:44:07 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:41:43 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ int	count_matching_bracket(char *str)
 		return (1);
 }
 
-char	*token_bracket(int *i, int start, char *line, t_token **token, t_ctx *ctx)
+char	*token_bracket(int *i, int start, char *line, t_token **token, \
+											t_ctx *ctx)
 {
 	char	*str;
 	int		ix_start_bracket;
