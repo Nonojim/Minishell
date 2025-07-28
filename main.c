@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/28 10:15:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 11:09:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ void	token_not_empty(t_token **token, t_treenode **ast, t_token *tmp)
 void	resolve_ast(t_treenode *ast, char *line, t_ctx *ctx)
 {
 	if (!ast)
+	{
+		free(line);
 		return ;
+	}
 	execute_tree(ast, line, ctx);
 	free_prompt(ast, line);
 }
