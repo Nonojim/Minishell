@@ -52,6 +52,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/execute_simple_command_builtins.c \
 				execution/execute_simple_command_external.c \
 				signal/signal.c \
+				signal/signal_heredoc.c \
 				execution/env.c \
 				execution/env_utils.c \
 				execution/builtins/cd.c \
