@@ -66,6 +66,7 @@ FILES = tokenizer/tokenizer.c \
 				execution/builtins/unset.c \
 				execution/builtins/whale.c \
 				execution/builtins/shark.c \
+				main_utils.c \
 				main.c
 
 OBJS = $(FILES:.c=.o)
