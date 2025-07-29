@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:48:03 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/09 16:06:54 by npederen         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:14:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_indent(int depth)
 		printf("  ");
 }
 
-void	astreeprint(t_treenode *node, int depth)
+/*void	astreeprint(t_treenode *node, int depth)
 {
 	int	i;
 
@@ -56,4 +56,4 @@ void	astreeprint(t_treenode *node, int depth)
 		printf("Right:\n");
 		astreeprint(node->right, depth + 1);
 	}
-}
+}*/

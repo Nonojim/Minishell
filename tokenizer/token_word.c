@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 18:22:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 11:07:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ char	*token_word(t_token_info *info)
 		if (info->line[i] == ' ' && inquote == -1)
 			break ;
 	}
+	return (check_quote_and_create_token(info, i, inquote, quote));
+}
+
+char	*check_quote_and_create_token(t_token_info *info, \
+									int i, int inquote, char quote)
+{
 	if (inquote == 1 && info->line[i] == '\0')
 	{
 		info->line = read_until_quote_closed(info->line, quote);

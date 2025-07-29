@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:23:42 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/28 18:50:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 12:16:42 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(void)
 {
 	t_ctx		ctx;
 
-//	start_message();
+	start_message();
 	ctx = init_ctx();
 	main_loop(&ctx);
 	free_env_list(ctx.env);

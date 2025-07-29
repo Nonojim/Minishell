@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/28 18:30:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 10:47:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,35 @@
 t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 {
 	char			*line;
-	int				start;
 	int				i;
 	t_token_info	info;
 
 	line = *line_ptr;
+	init_token_info(&info, &token, ctx, line);
 	i = 0;
-	start = 0;
 	info.i = &i;
-	info.start = start;
-	info.line = line;
-	info.token = &token;
-	info.env = ctx;
 	while (line && line[i] != '\0' && line[i + 1] != '#')
 	{
 		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '\t'
 				|| line[i] == '\n'))
 			i++;
-		start = i;
-		info.start = start;
+		info.start = i;
 		line = tokenize2(&info);
 		if (!line)
 			return (NULL);
 	}
 	*line_ptr = line;
 	return (token);
+}
+
+void	init_token_info(t_token_info *info, t_token **token, \
+											t_ctx *ctx, char *line)
+{
+	info->start = 0;
+	info->line = line;
+	info->token = token;
+	info->env = ctx;
+	info->i = 0;
 }
 
 char	*tokenize2(t_token_info *info)

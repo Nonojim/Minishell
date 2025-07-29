@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 18:54:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 12:12:10 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ typedef struct s_heredoc_info
 	int		status;
 	ssize_t	bytes;
 	int		line_error;
+	int		j;
 }	t_heredoc_info;
 
 // Fonctions tokenisations
 t_token	*tokenize(t_token *token, char **line, t_ctx *ctx);
 char	*tokenize2(t_token_info *info);
+void	init_token_info(t_token_info *info, t_token **token, \
+											t_ctx *ctx, char *line);
 
 // Create_free_print Token
 t_token	*create_token(int type, char *str);
@@ -82,6 +85,8 @@ int		type_token_double_operator(char *str);
 int		is_word(int c);
 char	*token_word(t_token_info *info);
 char	*add_token_word(int *i, int start, char *line, t_token **token);
+char	*check_quote_and_create_token(t_token_info *info, \
+												int i, int inquote, char quote);
 
 // Token_operator
 int		is_operator_logical(char c);
@@ -91,6 +96,7 @@ int		is_orlogical_andlogical(char c);
 char	*token_pipe_unclose(t_token_info *info);
 char	*token_logical_unclose(t_token_info *info);
 int		only_spaces_after_operator_logical(char *line, int i);
+char	*loop_newline(char *line);
 
 // Token_bracket
 char	*token_bracket_unclose(char *line);
@@ -128,5 +134,15 @@ char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
 char	*delete_quote(char *str, t_token **token);
 void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx);
+char	*heredoc_parent_process(t_heredoc_info *hd, \
+		char *token_doc, t_ctx *ctx);
+int		check_heredoc_exit_status(t_heredoc_info *hd, \
+		char *token_doc, t_ctx *ctx);
+void	heredoc_child_process(t_heredoc_info *hd, \
+		char *token_doc, t_token **token, t_ctx *ctx);
+void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
+		t_token **token, t_ctx *ctx);
+void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
+		t_token **token, t_ctx *ctx);
 
 #endif
