@@ -6,19 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 01:34:39 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 18:27:38 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 12:16:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx);
-char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx);
-int		create_token_op_heredoc(char *line, int *i, t_token **token);
-char	*delete_tab_or_ad_return_line(char *next_line, int j);
-void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
-
-char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
+char	*open_heredoc(t_token_info *info)
 {
 	char	*token_doc;
 	char	*heredoc_line;
@@ -27,216 +21,41 @@ char	*open_heredoc(int *i, int start, char *line, t_token **token, t_ctx *ctx)
 
 	heredoc_line = NULL;
 	token_doc = NULL;
-	j = create_token_op_heredoc(line, i, token);
-	while (line[*i] == ' ' && line[*i] != '\0')
-		(*i)++;
-	start = *i;
-	if (line[*i] == '\0' || is_word(line[*i]) == 0)
-		return (line);
-	while (line[*i] != '\0' && is_word(line[*i]) == 1 && line[*i] != ' ')
-		(*i)++;
-	token_doc = ft_substr(line, start, *i - start);
+	j = create_token_op_heredoc(info->line, info->i, info->token);
+	while (info->line[*(info->i)] == ' ' && info->line[*(info->i)] != '\0')
+		(*(info->i))++;
+	info->start = *(info->i);
+	if (info->line[*(info->i)] == '\0' || is_word(info->line[*(info->i)]) == 0)
+		return (info->line);
+	while (info->line[*(info->i)] != '\0' && info->line[*(info->i)] != ' '
+		&& is_word(info->line[*(info->i)]) == 1)
+		(*(info->i))++;
+	token_doc = ft_substr(info->line, info->start, *(info->i) - info->start);
 	if (!token_doc)
-		return (free(line), NULL);
-	clean_quote = delete_quote(token_doc, token);
-	heredoc_line = newline_heredoc(clean_quote, j, token, ctx);
-	if (!heredoc_line || ctx->exit_code == 130)
-	{
-		free_token(*token);
-		*token = NULL;
-		return (NULL);
-	}
-	add_token_end(token, create_token(INSIDE_HERE_DOC, heredoc_line));
-	return (line);
+		return (free(info->line), NULL);
+	clean_quote = delete_quote(token_doc, info->token);
+	heredoc_line = newline_heredoc(clean_quote, j, info->token, info->env);
+	if (!heredoc_line || info->env->exit_code == 130)
+		return (free_token(*(info->token)), *(info->token) = NULL, NULL);
+	add_token_end(info->token, create_token(INSIDE_HERE_DOC, heredoc_line));
+	return (info->line);
 }
 
-int	create_token_op_heredoc(char *line, int *i, t_token **token)
-{
-	int	j;
-
-	(*i) += 2;
-	if (line[*i] == '-')
-	{
-		(*i)++;
-		j = 0;
-	}
-	else
-		j = 1;
-	if (line[*i] == '\0')
-		add_token_end(token, create_token(HERE_DOCUMENT, ft_strdup(line)));
-	return (j);
-}
-
-/*
-* Faire un tab dabs le terminal : CTRL+V puis TAB
-*/
 char	*newline_heredoc(char *token_doc, int j, t_token **token, t_ctx *ctx)
 {
-	char	*line = NULL;
-	char	*next_line;
-	char	*heredoc_line;
-	char	*buffer;
-	char	tmp[1024];
-	pid_t		pid;
-	int		fd[2];
-	int		status;
-	ssize_t	bytes;
+	t_heredoc_info	hd;
 
-	int	line_error = 0; //quand on refactorera ca ira dans une structure et le compteur marchera (normalement)
-
-	pipe(fd);
-	pid = fork();
-	if (pid == -1)
+	ft_memset(&hd, 0, sizeof(hd));
+	hd.j = j;
+	pipe(hd.fd);
+	hd.pid = fork();
+	if (hd.pid == -1)
 	{
-		close(fd[0]);
-		close(fd[1]);
-		return (perror("error fork"), NULL);
+		close(hd.fd[0]);
+		close(hd.fd[1]);
+		return (perror("fork"), NULL);
 	}
-	if (pid == 0)
-	{
-		line_error = 1;
-		setup_signal_heredoc();
-		close(fd[0]);
-		//g_signum = 0;
-		line = ft_strdup("");
-		while (1)
-		{
-			next_line = readline("> ");
-		/*	if (g_signum == 1)
-			{
-				close(fd[1]);
-				free(line);
-				free(next_line);
-				free_token(*token);
-				free_env_list(ctx->env);
-				//continue ;
-				exit(130);
-			}*/
-			if (!next_line)
-			{
-				ft_fprintf(2,
-					"minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",
-					line_error, token_doc);
-				write(fd[1], line, ft_strlen(line));
-				free(line);
-				free(token_doc);
-				free_token(*token);
-				free_env_list(ctx->env);
-				close(fd[1]);
-				exit(0);
-			}
-			if (ft_strcmp(next_line, token_doc) == 0)
-			{
-				free(next_line);
-				write(fd[1], line, ft_strlen(line));
-				break;
-			}
-			if (ft_strcmp(next_line, token_doc) != 0)
-			{
-				next_line = delete_tab_or_ad_return_line(next_line, j);
-				buffer = ft_strjoin(line, next_line);
-				free(line);
-				free(next_line);
-				if (!buffer)
-					exit(1);
-				line = buffer;
-				line_error++;
-			}
-		}
-		free(token_doc);
-		free(line);
-		free_token(*token);
-		free_env_list(ctx->env);
-		close(fd[1]);
-		exit(0);
-	}
-	else
-	{
-		setup_signals();
-		close(fd[1]);
-		heredoc_line = ft_strdup("");
-		if (!heredoc_line)
-		{
-			close(fd[0]);
-			return (NULL);
-		}
-		while ((bytes = read(fd[0], tmp, sizeof(tmp) - 1)) > 0)
-		{
-			tmp[bytes] = '\0';
-			buffer = ft_strjoin(heredoc_line, tmp);
-			free(heredoc_line);
-			if (!buffer)
-			{
-				close(fd[0]);
-				return (NULL);
-			}
-			heredoc_line = buffer;
-		}
-		close(fd[0]);
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
-		{
-			ctx->exit_code = 130;
-			close(fd[0]);
-			free(token_doc);
-		//	free_token(*token);
-		//	free_env_list(ctx->env);
-			free(heredoc_line);
-			//free(line);
-		//	g_signum = 0;
-			return (NULL);
-		}
-		else if (WIFEXITED(status))
-		{
-			ctx->exit_code = WEXITSTATUS(status);
-			if (ctx->exit_code == 130)
-			{
-				free(token_doc);
-				free(heredoc_line);
-				return (NULL);
-			}
-		}
-		else
-			ctx->exit_code = 1;
-	free(token_doc);
-	return (heredoc_line); 
-	}	
-}
-
-char	*delete_tab_or_ad_return_line(char *next_line, int j)
-{
-	char	*tmp;
-	int		k;
-
-	k = 0;
-	if (j == 0)
-	{
-		k = 0;
-		while (next_line[k] == '\t')
-			k++;
-		tmp = ft_strdup(next_line + k);
-		free(next_line);
-		next_line = tmp;
-	}
-	tmp = ft_strjoin(next_line, "\n");
-	free(next_line);
-	return (tmp);
-}
-
-char	*delete_quote(char *str, t_token **token)
-{
-	char	*no_quote;
-	int		i;
-
-	if (!str)
-		return (NULL);
-	add_token_end(token, create_token(HERE_DOCUMENT, ft_strdup(str)));
-	i = ft_strlen(str);
-	if ((str[0] == '\'' && str[i - 1] == '\'')
-		|| (str[0] == '"' && str[i - 1] == '"'))
-		no_quote = ft_substr(str, 1, i - 2);
-	else
-		no_quote = ft_strdup(str);
-	free(str);
-	return (no_quote);
+	if (hd.pid == 0)
+		heredoc_child_process(&hd, token_doc, token, ctx);
+	return (heredoc_parent_process(&hd, token_doc, ctx));
 }

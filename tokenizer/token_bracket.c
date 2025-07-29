@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:30:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/27 14:41:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:24:26 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,30 +73,31 @@ int	count_matching_bracket(char *str)
 		return (1);
 }
 
-char	*token_bracket(int *i, int start, char *line, t_token **token, \
-											t_ctx *ctx)
+char	*token_bracket(t_token_info *info)
 {
 	char	*str;
 	int		ix_start_bracket;
 	int		ix_end_bracket;
-	int		ix ;
+	int		ix;
 
 	ix = 0;
-	while (count_matching_bracket(line) == 1)
-		line = token_bracket_unclose(line);
-	str = ft_substr(line, start, 1);
-	add_token_end(token, create_token(BRACKETS_L, str));
-	(*i)++;
-	ix_start_bracket = *i;
-	while (line[*i] && line [*i + 1] == ')')
+	while (count_matching_bracket(info->line) == 1)
+		info->line = token_bracket_unclose(info->line);
+	str = ft_substr(info->line, info->start, 1);
+	add_token_end(info->token, create_token(BRACKETS_L, str));
+	(*(info->i))++;
+	ix_start_bracket = *(info->i);
+	while (info->line[*(info->i)] && info->line[*(info->i) + 1] == ')')
 	{
-		(*i)++;
-		while ((line[ix++] == '(' || line[*i] != ')') && line[*i])
-			(*i)++;
+		(*(info->i))++;
+		while ((info->line[ix++] == '(' || info->line[*(info->i)] != ')')
+			&& info->line[*(info->i)])
+			(*(info->i))++;
 	}
-	ix_end_bracket = *i;
-	str = ft_substr(line, ix_start_bracket, ix_end_bracket - ix_start_bracket);
-	tokenize(*token, &str, ctx);
+	ix_end_bracket = *(info->i);
+	str = ft_substr(info->line, ix_start_bracket, \
+									ix_end_bracket - ix_start_bracket);
+	tokenize(*(info->token), &str, info->env);
 	free(str);
-	return (line);
+	return (info->line);
 }

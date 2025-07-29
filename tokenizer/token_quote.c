@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 09:06:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:20:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,26 +84,29 @@ char	*quote_interrupt(char *next_line, int signum)
 * If the quote is not closed = read_until_closed
 * When the same quote is found, prompt is closed and token is create
  */
-char	*token_quote(int *i, int start, char *line, t_token **token)
+char	*token_quote(t_token_info *info)
 {
 	char	quote;
 	char	*str;
+	int		i;
 
-	quote = line[*i];
-	start = *i;
-	(*i)++;
-	while (line[*i] && line[*i] != quote)
-		(*i)++;
-	if (!line[*i])
+	i = *(info->i);
+	quote = info->line[i];
+	info->start = i;
+	i++;
+	while (info->line[i] && info->line[i] != quote)
+		i++;
+	if (!info->line[i])
 	{
-		line = read_until_quote_closed(line, quote);
-		*i = start;
-		return (line);
+		info->line = read_until_quote_closed(info->line, quote);
+		*(info->i) = info->start;
+		return (info->line);
 	}
-	while (line[*i] && is_word(line[*i]) && line[*i] != ' ')
-		(*i)++;
-	str = ft_substr(line, start, *i - start);
-	add_token_end(token, create_token(WORD, str));
+	while (info->line[i] && is_word(info->line[i]) && info->line[i] != ' ')
+		i++;
+	str = ft_substr(info->line, info->start, i - info->start);
+	add_token_end(info->token, create_token(WORD, str));
+	*(info->i) = i;
 	setup_signals();
-	return (line);
+	return (info->line);
 }
