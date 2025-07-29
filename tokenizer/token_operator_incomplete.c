@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/29 11:25:12 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/29 12:40:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ char	*token_pipe_unclose(t_token_info *info)
 	{
 		info->line = loop_newline(info->line);
 		if (!info->line)
+		{
+			free_token(*(info->token));
 			return (NULL);
+		}
 	}
 	else
 		token_logical_operator(info);
@@ -49,7 +52,10 @@ char	*token_logical_unclose(t_token_info *info)
 	{
 		info->line = loop_newline(info->line);
 		if (!info->line)
+		{
+			free_token(*(info->token));
 			return (NULL);
+		}
 	}
 	else
 		token_logical_operator(info);
