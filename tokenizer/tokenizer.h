@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 21:31:32 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 22:07:18 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		is_word(int c);
 char	*token_word(t_token_info *info);
 char	*add_token_word(int *i, int start, char *line, t_token **token);
 char	*check_quote_and_create_token(t_token_info *info, \
-												int i, int inquote, char quote);
+												int i, int inquote, char *quote);
 
 // Token_operator
 int		is_operator_logical(char c);
@@ -124,7 +124,7 @@ char	*read_until_quote_closed(char *line, char quote);
 char	*quote_interrupt(char *next_line, int signum);
 char	*read_quote_loop(char *line, char quote);
 char	*create_new_line(char *line, char *next_line);
-int		if_in_quote(t_token_info *info, char quote, int inquote);
+int		if_in_quote(t_token_info *info, char *quote, int inquote);
 int		is_all_quotes_closed(const char *line);
 // Token_HereDoc
 char	*open_heredoc(t_token_info *info);

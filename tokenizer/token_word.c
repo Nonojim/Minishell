@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 21:34:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 22:13:44 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*token_word(t_token_info *info)
 	while (info->line[i])
 	{
 		if ((info->line[i] == '"' || info->line[i] == '\''))
-			inquote = if_in_quote(info, quote, inquote);
+			inquote = if_in_quote(info, &quote, inquote);
 		else if (!inquote)
 		{
 			if (info->line[i] == ' '
@@ -46,7 +46,7 @@ char	*token_word(t_token_info *info)
 		}
 		i++;
 	}
-	return (check_quote_and_create_token(info, i, inquote, quote));
+	return (check_quote_and_create_token(info, i, inquote, &quote));
 }
 
 /*
@@ -74,7 +74,7 @@ int	is_word(int c)
 Met à jour l'état de la quote 
 Ignore les quote differentes jusqu'à que la premiere quote soit fermé
 */
-int	if_in_quote(t_token_info *info, char quote, int inquote)
+int	if_in_quote(t_token_info *info, char *quote, int inquote)
 {
 	int	i;
 
@@ -82,18 +82,18 @@ int	if_in_quote(t_token_info *info, char quote, int inquote)
 	if (!inquote)
 	{
 		inquote = 1;
-		quote = info->line[i];
+		*quote = info->line[i];
 	}
-	else if (info->line[i] == quote)
+	else if (info->line[i] == *quote)
 	{
 		inquote = 0;
-		quote = '\0';
+		*quote = '\0';
 	}
 	return (inquote);
 }
 
 char	*check_quote_and_create_token(t_token_info *info, \
-									int i, int inquote, char quote)
+									int i, int inquote, char *quote)
 {
 	if (inquote == 1 && info->line[i] == '\0')
 	{
@@ -103,7 +103,7 @@ char	*check_quote_and_create_token(t_token_info *info, \
 			return (add_token_word(info->i, info->start, \
 							info->line, info->token));
 		}
-		info->line = read_until_quote_closed(info->line, quote);
+		info->line = read_until_quote_closed(info->line, *quote);
 		*(info->i) = info->start;
 		return (info->line);
 	}
