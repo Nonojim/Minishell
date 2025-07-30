@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 18:20:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 21:32:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ char	*read_until_quote_closed(char *line, char quote)
 * When the single || double is found the line is finish
 * ft_strjoin(line, "\n");  = emulate the \n that bash produce
 * line = ft_strjoin(line, next_line); = join the all new lines to the first one
-* if (ft_strchr(line, quote)) = check if quote is closed
 */
 char	*read_quote_loop(char *line, char quote)
 {
 	char	*next_line;
 
+	(void)quote;
 	next_line = NULL;
 	while (1)
 	{
@@ -40,7 +40,7 @@ char	*read_quote_loop(char *line, char quote)
 		if (!next_line)
 			return (quote_interrupt(next_line, 0));
 		line = create_new_line(line, next_line);
-		if (ft_strchr(next_line, quote))
+		if (is_all_quotes_closed(line))
 		{
 			free(next_line);
 			break ;
@@ -50,6 +50,30 @@ char	*read_quote_loop(char *line, char quote)
 	}
 	setup_signals();
 	return (line);
+}
+
+/*
+Verifie que toutes les quotes sont fermés
+*/
+int	is_all_quotes_closed(const char *line)
+{
+	int		i;
+	char	inquote;
+
+	inquote = '\0';
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+		{
+			if (inquote == '\0')
+				inquote = line[i];
+			else if (line[i] == inquote)
+				inquote = '\0';
+		}
+		i++;
+	}
+	return (inquote == '\0');
 }
 
 char	*create_new_line(char *line, char *next_line)
@@ -75,38 +99,6 @@ char	*quote_interrupt(char *next_line, int signum)
 	if (next_line)
 		free(next_line);
 	ft_fprintf(2, "minishell: unexpected EOF while looking for \
-							matching `\"'\nexit\n");
+matching `''\nexit\n");
 	return (NULL);
-}
-
-/*
-* Identifie and extract token beetween quote
-* If the quote is not closed = read_until_closed
-* When the same quote is found, prompt is closed and token is create
- */
-char	*token_quote(t_token_info *info)
-{
-	char	quote;
-	char	*str;
-	int		i;
-
-	i = *(info->i);
-	quote = info->line[i];
-	info->start = i;
-	i++;
-	while (info->line[i] && info->line[i] != quote)
-		i++;
-	if (!info->line[i])
-	{
-		info->line = read_until_quote_closed(info->line, quote);
-		*(info->i) = info->start;
-		return (info->line);
-	}
-	while (info->line[i] && is_word(info->line[i]) && info->line[i] != ' ')
-		i++;
-	str = ft_substr(info->line, info->start, i - info->start);
-	add_token_end(info->token, create_token(WORD, str));
-	*(info->i) = i;
-	setup_signals();
-	return (info->line);
 }

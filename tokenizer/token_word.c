@@ -6,11 +6,48 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/29 11:07:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 21:34:35 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
+
+/*
+* Extract the token word and add to the token_list
+* Word is defined as sequence of the characters who are not a special token
+* Fonction parcourt caractère par caractère
+* Gestion des quotes:
+* inquote = 0 si on est hors quote inquote = 1 si on est inside
+* quote = stock le type de quote (' ou ")
+* lorsqu'on rencontre la même quote on ferme inquote = 0
+* tant quond est dans une quote tous les caractere sont acceptés 
+* En dehors de quote le mot stop sur space, op logique, redir
+* Si quote non fermé elle sera demandé avec une newline
+ */
+char	*token_word(t_token_info *info)
+{
+	int		i;
+	int		inquote;
+	char	quote;
+
+	i = *(info->i);
+	inquote = 0;
+	quote = '\0';
+	while (info->line[i])
+	{
+		if ((info->line[i] == '"' || info->line[i] == '\''))
+			inquote = if_in_quote(info, quote, inquote);
+		else if (!inquote)
+		{
+			if (info->line[i] == ' '
+				|| (info->line[i] == '&' && info->line[i + 1] == '&')
+				|| !is_word(info->line[i]))
+				break ;
+		}
+		i++;
+	}
+	return (check_quote_and_create_token(info, i, inquote, quote));
+}
 
 /*
 * Check if the character is valid a part of a token word
@@ -34,32 +71,25 @@ int	is_word(int c)
 }
 
 /*
-* Extract the token word and add to the token_list
-* Word is defined as sequence of the characters who are not a special token
- */
-char	*token_word(t_token_info *info)
+Met à jour l'état de la quote 
+Ignore les quote differentes jusqu'à que la premiere quote soit fermé
+*/
+int	if_in_quote(t_token_info *info, char quote, int inquote)
 {
-	int		inquote;
-	char	quote;
-	int		i;
+	int	i;
 
-	inquote = -1;
-	quote = '\0';
 	i = *(info->i);
-	while (info->line[i] != '\0'
-		&& (is_word(info->line[i]) == 1 || info->line[i] == '\n'))
+	if (!inquote)
 	{
-		if ((info->line[i] == '"' || info->line[i] == '\'') && quote == '\0')
-			quote = info->line[i];
-		if (quote == info->line[i])
-			inquote *= -1;
-		if ((info->line[i] == '&' && info->line[i + 1] == '&'))
-			break ;
-		i++;
-		if (info->line[i] == ' ' && inquote == -1)
-			break ;
+		inquote = 1;
+		quote = info->line[i];
 	}
-	return (check_quote_and_create_token(info, i, inquote, quote));
+	else if (info->line[i] == quote)
+	{
+		inquote = 0;
+		quote = '\0';
+	}
+	return (inquote);
 }
 
 char	*check_quote_and_create_token(t_token_info *info, \
@@ -67,6 +97,12 @@ char	*check_quote_and_create_token(t_token_info *info, \
 {
 	if (inquote == 1 && info->line[i] == '\0')
 	{
+		if (is_all_quotes_closed(info->line))
+		{
+			*(info->i) = i;
+			return (add_token_word(info->i, info->start, \
+							info->line, info->token));
+		}
 		info->line = read_until_quote_closed(info->line, quote);
 		*(info->i) = info->start;
 		return (info->line);
@@ -82,12 +118,6 @@ char	*add_token_word(int *i, int start, char *line, t_token **token)
 	str = ft_substr(line, start, *i - start);
 	if (!str)
 		return (NULL);
-	if (is_word(*str) == 1)
-		add_token_end(token, create_token(WORD, str));
-	else
-	{
-		(*i)++;
-		free (str);
-	}
+	add_token_end(token, create_token(WORD, str));
 	return (line);
 }

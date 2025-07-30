@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/29 10:47:10 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 20:58:36 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ char	*tokenize2(t_token_info *info)
 
 	i = *(info->i);
 	line = info->line;
-	if ((line[i] == '\'' || line[i] == '\"') && line[i])
-		line = token_quote(info);
-	else if ((line[i] == '&' && line[i + 1] == '&')
+	if ((line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == '|' && line[i + 1] == '|'))
 		line = token_logical_unclose(info);
 	else if (line[i] == '|')
