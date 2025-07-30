@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:01:08 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 10:07:22 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,5 @@ void	expanse_argv(t_treenode *node, t_ctx *ctx)
 		node->argv[i] = clean;
 		i++;
 	}
+	delete_var_empty(node);
 }

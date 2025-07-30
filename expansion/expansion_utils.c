@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 12:19:43 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 10:08:03 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,29 @@ void	add_char_to_string(char **result, char c)
 	if (result != NULL)
 		free(*result);
 	*result = tmp;
+}
+
+/*
+For not variable recognise;
+remplace argv NULL, for execute other command
+*/
+void	delete_var_empty(t_treenode *node)
+{
+	int	j;
+	int	k;
+
+	j = 0;
+	k = 0;
+	while (node->argv[j])
+	{
+		if (node->argv[j][0] != '\0')
+		{
+			node->argv[k] = node->argv[j];
+			k++;
+		}
+		else
+			free(node->argv[j]);
+		j++;
+	}
+	node->argv[k] = NULL;
 }

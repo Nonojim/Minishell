@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 19:21:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 10:07:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void		expanse_argv(t_treenode *node, t_ctx *ctx);
 void		expanse_redir(t_treenode *node, t_ctx *ctx);
 void		expanse_heredoc(t_treenode *node, t_ctx *ctx);
 void		free_redir(t_treenode *node, char *expanded);
+void		delete_var_empty(t_treenode *node);
 
 //expansion2
 char		*expand_tilde(char *str, t_ctx *ctx);
