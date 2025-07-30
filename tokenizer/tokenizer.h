@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 22:07:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 22:28:55 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char	*read_until_quote_closed(char *line, char quote);
 char	*quote_interrupt(char *next_line, int signum);
 char	*read_quote_loop(char *line, char quote);
 char	*create_new_line(char *line, char *next_line);
-int		if_in_quote(t_token_info *info, char *quote, int inquote);
+void	if_in_quote(t_token_info *info, char *quote, int *inquote);
 int		is_all_quotes_closed(const char *line);
 // Token_HereDoc
 char	*open_heredoc(t_token_info *info);
