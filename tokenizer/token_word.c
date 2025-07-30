@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 22:40:35 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 22:53:56 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,16 @@ char	*token_word(t_token_info *info)
 	quote = '\0';
 	while (info->line[i])
 	{
-		//avant interieur mis dans if_in_quote mais ne veut pas marcher, normin a revoir.
 		if ((info->line[i] == '"' || info->line[i] == '\''))
 		{
-			if (!inquote)
-			{
-				inquote = 1;
-				quote = info->line[i];
-			}
-			else if (info->line[i] == quote)
-			{
-				inquote = 0;
-				quote = '\0';
-			}
+			if_in_quote(info->line[i], &quote, &inquote);
 			i++;
-			continue;
+			continue ;
 		}
 		if (!inquote)
 		{
-			if (info->line[i] == ' '
-				|| (info->line[i] == '&' && info->line[i + 1] == '&')
-				|| !is_word(info->line[i]))
+			if (info->line[i] == ' ' || !is_word(info->line[i])
+				|| (info->line[i] == '&' && info->line[i + 1] == '&'))
 				break ;
 		}
 		i++;
@@ -89,17 +78,14 @@ int	is_word(int c)
 Met à jour l'état de la quote 
 Ignore les quote differentes jusqu'à que la premiere quote soit fermé
 */
-void	if_in_quote(t_token_info *info, char *quote, int *inquote)
+void	if_in_quote(char current, char *quote, int *inquote)
 {
-	int	i;
-
-	i = *(info->i);
 	if (!*inquote)
 	{
 		*inquote = 1;
-		*quote = info->line[i];
+		*quote = current;
 	}
-	else if (info->line[i] == *quote)
+	else if (current == *quote)
 	{
 		*inquote = 0;
 		*quote = '\0';
