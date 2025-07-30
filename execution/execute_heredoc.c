@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 14:35:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 23:15:41 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	found_last_heredoc_and_cmd(t_treenode *node, \
 {
 	if (!node)
 		return (ctx->exit_code = 0);
+	new_argv_cmd(node);
 	*last_hd = node;
 	*cmd = node;
 	while (*last_hd && (*last_hd)->type == HERE_DOCUMENT

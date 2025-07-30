@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:31:46 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/23 11:41:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 23:10:38 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	dup_and_close(int saved_stdin, int saved_stdout)
  */
 t_treenode	*find_command_node(t_treenode *node)
 {
-	while (node && is_redirection_without_here_doc(node->type))
+	while (node && is_redirection(node->type))
 		node = node->left;
 	return (node);
 }
@@ -72,7 +72,7 @@ char	**create_new_array_cmd(t_treenode *redir_node, t_treenode *cmd)
 	while (cmd->argv[i])
 		i++;
 	total_argv = i;
-	while (redir_node && is_redirection_without_here_doc(redir_node->type))
+	while (redir_node && is_redirection(redir_node->type))
 	{
 		i = 1;
 		if (redir_node->right && redir_node->right->argv)
@@ -95,7 +95,7 @@ void	create_new_argv_cmd(char **new_argv, int *i, t_treenode *node)
 {
 	int	j;
 
-	if (!node || !is_redirection_without_here_doc(node->type))
+	if (!node || !is_redirection(node->type))
 		return ;
 	create_new_argv_cmd(new_argv, i, node->left);
 	j = 1;
