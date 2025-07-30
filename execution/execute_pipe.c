@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:57:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 09:40:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 11:23:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	execute_pipeline(t_treenode *node, char *line, t_ctx *ctx)
 	int		pipefd[2];
 	pid_t	pid1;
 	pid_t	pid2;
+	int		status;
 
 	if (pipe(pipefd) == -1)
 		return (perror("pipe"), 1);
@@ -46,7 +47,9 @@ int	execute_pipeline(t_treenode *node, char *line, t_ctx *ctx)
 		pipe_right(node, line, pipefd, ctx);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	return (pipe_status(pid1, pid2, ctx));
+	signal(SIGINT, SIG_IGN);
+	status = pipe_status(pid1, pid2, ctx);
+	return (status);
 }
 
 void	pipe_left(t_treenode *node, char *line, int pipefd[2], t_ctx *ctx)

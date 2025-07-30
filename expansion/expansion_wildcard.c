@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:38:57 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 11:34:39 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
 	if (result[1] != NULL)
 	{
 		ctx->exit_code = 1;
-		ft_fprintf(2, "minishell: %s ambiguous redirection\n", \
+		ft_fprintf(2, "minishell: %s: ambiguous redirect\n", \
 								node->right->argv[0]);
 		free_split(result);
 		free_wildcard(psm, NULL, NULL);

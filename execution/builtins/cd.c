@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 13:23:45 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 11:57:09 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ int	ft_cd(t_treenode *node, t_ctx *ctx)
 		return (ctx->exit_code = 1);
 	if (node->argv[1] && node->argv[2])
 		return (cd_many_arg(oldpwd, ctx));
-	if (!node->argv[1])
-		target = cd_home_target(oldpwd, ctx);
-	else if (ft_strcmp(node->argv[1], "-") == 0)
-		target = cd_oldpwd_target(oldpwd, ctx);
+	if (!node->argv[1] || ft_strcmp(node->argv[1], "-") == 0)
+	{
+		target = cd_home_oldpwd(node, oldpwd, ctx);
+		if (!target)
+			return (1);
+	}
 	else
 		target = ft_strdup(node->argv[1]);
 	if (cd_check_empty_target(target, node, oldpwd, ctx) == 1)
@@ -74,7 +76,7 @@ char	*cd_oldpwd_target(char *oldpwd, t_ctx *ctx)
 	if (!old || old[0] == '\0')
 	{
 		ft_fprintf(2, "minishell: cd: OLDPWD not set\n");
-		free_cd(oldpwd, NULL);
+		free(oldpwd);
 		ctx->exit_code = 1;
 		return (NULL);
 	}
@@ -93,7 +95,7 @@ int	cd_check_empty_target(char *target, t_treenode *node, \
 		else
 			ft_fprintf(2, "minishell: cd: %s: No such file or directory\n", \
 									node->argv[1]);
-		free_cd(oldpwd, target);
+		free_cd(oldpwd, NULL);
 		ctx->exit_code = 1;
 		return (1);
 	}

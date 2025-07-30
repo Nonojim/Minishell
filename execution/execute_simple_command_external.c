@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 09:19:17 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 11:29:02 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	handle_child_process(t_treenode *node, t_ctx *ctx, \
 	char	**array;
 	char	*cmd_path;
 
+	signal(SIGQUIT, SIG_DFL);
 	cmd_path = shearch_cmd_path(cmd, ctx, line, node);
 	if (access(cmd_path, F_OK) != 0)
 	{
-		ft_fprintf(2, "minishell: %s: No such file or directory\n", \
-						cmd_path);
+		ft_fprintf(2, "minishell: %s: No such file or directory\n", cmd_path);
 		free_execve(ctx->root, line, ctx, cmd_path);
 		exit(127);
 	}
@@ -105,13 +105,18 @@ char	*shearch_cmd_path(char *cmd, t_ctx *ctx, char *line, t_treenode *node)
 int	external_command_status(t_ctx *ctx, pid_t pid)
 {
 	int	status;
+	int	sig;
 
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	setup_signals();
 	if (WIFSIGNALED(status))
 	{
-		printf("\n");
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			ft_fprintf(2, "Quit (core dumped)\n");
+		else
+			ft_fprintf(2, "\n");
 		ctx->exit_code = 128 + WTERMSIG(status);
 	}
 	else if (WIFEXITED(status))

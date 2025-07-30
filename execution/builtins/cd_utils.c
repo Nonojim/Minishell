@@ -6,11 +6,20 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 13:06:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 13:24:25 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/30 11:58:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+char	*cd_home_oldpwd(t_treenode *node, char *oldpwd, t_ctx *ctx)
+{
+	if (!node->argv[1])
+		return (cd_home_target(oldpwd, ctx));
+	if (ft_strcmp(node->argv[1], "-") == 0)
+		return (cd_oldpwd_target(oldpwd, ctx));
+	return (NULL);
+}
 
 void	free_cd(char *oldpwd, char *target)
 {
