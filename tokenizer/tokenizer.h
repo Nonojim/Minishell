@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 22:54:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/31 15:53:56 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ int		check_redir_before_logical(char *line, int *i, t_ctx *ctx);
 int		check_error_after_pipe(char *line, int *i, t_ctx *ctx);
 
 // Token_quote
-char	*read_until_quote_closed(char *line, char quote);
-char	*quote_interrupt(char *next_line, int signum);
-char	*read_quote_loop(char *line, char quote);
+char	*read_until_quote_closed(t_token_info *info, char quote);
+char	*quote_interrupt(t_token_info *info, char *next_line, int signum);
+char	*read_quote_loop(t_token_info *info, char quote);
 char	*create_new_line(char *line, char *next_line);
 void	if_in_quote(char current, char *quote, int *inquote);
 int		is_all_quotes_closed(const char *line);

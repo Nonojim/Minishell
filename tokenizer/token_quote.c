@@ -6,18 +6,18 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 21:32:17 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/31 18:13:09 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-char	*read_until_quote_closed(char *line, char quote)
+char	*read_until_quote_closed(t_token_info *info, char quote)
 {
 	setup_signals_uncomplete_line();
 	g_signum = 0;
-	line = read_quote_loop(line, quote);
-	return (line);
+	info->line = read_quote_loop(info, quote);
+	return (info->line);
 }
 
 /*
@@ -26,7 +26,7 @@ char	*read_until_quote_closed(char *line, char quote)
 * ft_strjoin(line, "\n");  = emulate the \n that bash produce
 * line = ft_strjoin(line, next_line); = join the all new lines to the first one
 */
-char	*read_quote_loop(char *line, char quote)
+char	*read_quote_loop(t_token_info *info, char quote)
 {
 	char	*next_line;
 
@@ -36,11 +36,11 @@ char	*read_quote_loop(char *line, char quote)
 	{
 		next_line = readline("> ");
 		if (g_signum == 2)
-			return (quote_interrupt(next_line, 2));
+			return (quote_interrupt(info, next_line, 2));
 		if (!next_line)
-			return (quote_interrupt(next_line, 0));
-		line = create_new_line(line, next_line);
-		if (is_all_quotes_closed(line))
+			return (quote_interrupt(info, next_line, 0));
+		info->line = create_new_line(info->line, next_line);
+		if (is_all_quotes_closed(info->line))
 		{
 			free(next_line);
 			break ;
@@ -49,7 +49,7 @@ char	*read_quote_loop(char *line, char quote)
 			free(next_line);
 	}
 	setup_signals();
-	return (line);
+	return (info->line);
 }
 
 /*
@@ -89,11 +89,13 @@ char	*create_new_line(char *line, char *next_line)
 	return (line);
 }
 
-char	*quote_interrupt(char *next_line, int signum)
+char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
 {
+	(void)info;
 	if (signum == 2)
 	{
 		free (next_line);
+		//free_token(*(info->token));
 		return (NULL);
 	}
 	if (next_line)

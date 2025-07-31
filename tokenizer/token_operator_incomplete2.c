@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_incomplete2.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 11:22:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/29 11:23:19 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/07/31 17:30:08 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
