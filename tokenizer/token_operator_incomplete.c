@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 12:09:19 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:43:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,32 +62,50 @@ char	*token_logical_unclose(t_token_info *info)
 	return (info->line);
 }
 
-char	*loop_newline(t_token_info *info)
+static int	is_operator(int c)
 {
-	char	*next_line;
-	char	*tmp;
-	char	*tmp_newline;
+	return (c == '|' || c == '&' || c == '<' || c == '>' ||
+			c == '(' || c == ')');
+}
+
+static int	ft_isspace(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
+}
+
+static int line_is_complete_after_operator(char *line)
+{
+	int i = ft_strlen(line) - 1;
+	while (i >= 0 && ft_isspace(line[i]))
+		i--;
+	if (i < 0 || is_operator(line[i]))
+		return (0);
+	return (1);
+}
+
+char *loop_newline(t_token_info *info)
+{
+	char *next_line;
+	char *tmp;
 
 	while (1)
 	{
 		next_line = readline_continuation("> ", info->env);
 		if (!next_line)
-		{
-			free(info->line);
-			return (NULL);
-		}
-		tmp = ft_strjoin(info->line, "\n");
+			return (free(info->line), NULL);
+
+		tmp = ft_strjoin(info->line, " ");
 		if (!tmp)
-			return (free(next_line), free(info->line), NULL);
-		tmp_newline = ft_strjoin(tmp, next_line);
+			return (free(info->line), free(next_line), NULL);
+		info->line = ft_strjoin(tmp, next_line);
 		free(tmp);
 		free(next_line);
-		if (!tmp_newline)
-			return (free(info->line), NULL);
-		free(info->line);
-		info->line = tmp_newline;
-		if (ft_isalnum(info->line[ft_strlen(info->line) - 1]))
-			break ;
+		if (!info->line)
+			return (NULL);
+
+		if (line_is_complete_after_operator(info->line))
+			break;
 	}
 	return (info->line);
 }

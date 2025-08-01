@@ -16,12 +16,27 @@ int	main(void)
 {
 	t_ctx		ctx;
 
-	start_message();
+	//start_message();
 	ctx = init_ctx();
 	main_loop(&ctx);
 	free_env_list(ctx.env);
 	rl_clear_history();
 	return (0);
+}
+
+static int	is_printable_str(const char *s)
+{
+	int	i = 0;
+
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (!isprint((unsigned char)s[i]) && !isspace((unsigned char)s[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	main_loop(t_ctx *ctx)
@@ -43,7 +58,8 @@ void	main_loop(t_ctx *ctx)
 		token = tokenize(token, &line, ctx);
 		//print_token_list(token);
 		tmp = token;
-		add_history(line);
+		if (line && *line && is_printable_str(line))
+			add_history(line);
 		parse_error(0);
 		ast = parse_line_node(&token);
 		if (parse_error(-1))
