@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/22 19:55:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/01 17:24:40 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,24 @@ void	free_treenode(t_treenode *node)
 	if (node->argv)
 	{
 		i = 0;
-		while (node->argv[i])
-			free(node->argv[i++]);
+		if (node->argv[i])
+		{
+			while (node->argv[i])
+			{
+				free(node->argv[i]);
+				node->argv[i++] = NULL;
+			}
+		}
 		free(node->argv);
+		node->argv = NULL;
 	}
 	if (node->str)
+	{
 		free(node->str);
+		node->str = NULL;
+	}
 	free(node);
+	node = NULL;
 }
 
 t_treenode	*free_then_return_null(t_treenode *node)

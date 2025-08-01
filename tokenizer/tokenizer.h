@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 12:22:27 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:15:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,10 @@ void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
 void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
 		t_token **token, t_ctx *ctx);
 //fork_praying
-void	continuation_child(const char *prompt, t_continuation_info *cinfo, t_ctx *ctx);
+void	continuation_child(const char *prompt, t_continuation_info *cinfo, t_token_info *info);
 char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx);
-char	*readline_continuation(const char *prompt, t_ctx *ctx);
+char	*readline_continuation(const char *prompt, t_token_info *info);
+t_token	*exit_token(void);
+int		is_printable_str(const char *s);
 
 #endif

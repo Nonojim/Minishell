@@ -24,21 +24,6 @@ int	main(void)
 	return (0);
 }
 
-static int	is_printable_str(const char *s)
-{
-	int	i = 0;
-
-	if (!s)
-		return (0);
-	while (s[i])
-	{
-		if (!isprint((unsigned char)s[i]) && !isspace((unsigned char)s[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	main_loop(t_ctx *ctx)
 {
 	char		*line;
@@ -49,17 +34,15 @@ void	main_loop(t_ctx *ctx)
 	while (1)
 	{
 		setup_signals();
-		token = NULL;
 		line = readline("\001\033[1;34m\002Minishell$ \001\033[0m\002");
 		if (line == NULL)
 			break ;
 		if (signal_interrupt(line, ctx) == 1)
 			continue ;
-		token = tokenize(token, &line, ctx);
-		//print_token_list(token);
-		tmp = token;
 		if (line && *line && is_printable_str(line))
 			add_history(line);
+		token = tokenize(token, &line, ctx);
+		tmp = token;
 		parse_error(0);
 		ast = parse_line_node(&token);
 		if (parse_error(-1))
@@ -101,7 +84,8 @@ void	resolve_ast(t_treenode *ast, char *line, t_ctx *ctx)
 {
 	if (!ast)
 	{
-		free(line);
+		if (line)
+			free(line);
 		return ;
 	}
 	execute_tree(ast, line, ctx);

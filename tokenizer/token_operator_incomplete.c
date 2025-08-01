@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 12:43:21 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 17:28:59 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,29 @@ char *loop_newline(t_token_info *info)
 
 	while (1)
 	{
-		next_line = readline_continuation("> ", info->env);
+		next_line = readline_continuation("> ", info);
 		if (!next_line)
-			return (free(info->line), NULL);
-
+		{
+			info->start = 66;
+			if (info->line)
+			{
+				free(info->line);
+				info->line = NULL;
+			}
+			return (NULL);
+		}
 		tmp = ft_strjoin(info->line, " ");
+		free(info->line);
+		info->line = NULL;
 		if (!tmp)
-			return (free(info->line), free(next_line), NULL);
+			return (free(next_line), NULL);
 		info->line = ft_strjoin(tmp, next_line);
 		free(tmp);
+		tmp = NULL;
 		free(next_line);
+		next_line = NULL;
 		if (!info->line)
 			return (NULL);
-
 		if (line_is_complete_after_operator(info->line))
 			break;
 	}
