@@ -33,6 +33,7 @@ void	main_loop(t_ctx *ctx)
 
 	while (1)
 	{
+		token = NULL;
 		setup_signals();
 		line = readline("\001\033[1;34m\002Minishell$ \001\033[0m\002");
 		if (line == NULL)
