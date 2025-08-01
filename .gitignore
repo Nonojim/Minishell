@@ -2,3 +2,4 @@ obj
 *.o
 minishell
 libft.a
+minishell_tester
