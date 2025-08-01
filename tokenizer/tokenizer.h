@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/31 15:53:56 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:22:27 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ typedef struct s_heredoc_info
 	int		j;
 }	t_heredoc_info;
 
+typedef struct s_continuation_info
+{
+	int		fd[2];
+	pid_t	pid;
+	char	*line;
+	char	*tmp;
+	char	*buffer;
+	int		status;
+	int		bytes;
+}	t_continuation_info;
+
 // Fonctions tokenisations
 t_token	*tokenize(t_token *token, char **line, t_ctx *ctx);
 char	*tokenize2(t_token_info *info);
@@ -96,7 +107,7 @@ int		is_orlogical_andlogical(char c);
 char	*token_pipe_unclose(t_token_info *info);
 char	*token_logical_unclose(t_token_info *info);
 int		only_spaces_after_operator_logical(char *line, int i);
-char	*loop_newline(char *line);
+char	*loop_newline(t_token_info *info);
 
 // Token_bracket
 char	*token_bracket_unclose(char *line);
@@ -144,5 +155,9 @@ void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
 		t_token **token, t_ctx *ctx);
 void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
 		t_token **token, t_ctx *ctx);
+//fork_praying
+void	continuation_child(const char *prompt, t_continuation_info *cinfo, t_ctx *ctx);
+char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx);
+char	*readline_continuation(const char *prompt, t_ctx *ctx);
 
 #endif

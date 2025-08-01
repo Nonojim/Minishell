@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/31 18:18:52 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:09:19 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*token_pipe_unclose(t_token_info *info)
 	if (only_spaces_after_pipe(info->line, *(info->i))
 		&& !only_space_before(info->line, *(info->i)))
 	{
-		info->line = loop_newline(info->line);
+		info->line = loop_newline(info);
 		if (!info->line)
 		{
 			free_token(*(info->token));
@@ -50,7 +50,7 @@ char	*token_logical_unclose(t_token_info *info)
 	if (only_space_after_op(info->line, *(info->i))
 		&& !only_space_before(info->line, *(info->i)))
 	{
-		info->line = loop_newline(info->line);
+		info->line = loop_newline(info);
 		if (!info->line)
 		{
 			free_token(*(info->token));
@@ -62,7 +62,7 @@ char	*token_logical_unclose(t_token_info *info)
 	return (info->line);
 }
 
-char	*loop_newline(char *line)
+char	*loop_newline(t_token_info *info)
 {
 	char	*next_line;
 	char	*tmp;
@@ -70,23 +70,25 @@ char	*loop_newline(char *line)
 
 	while (1)
 	{
-		next_line = readline("> ");
+		next_line = readline_continuation("> ", info->env);
 		if (!next_line)
 		{
-			free(next_line);
+			free(info->line);
 			return (NULL);
 		}
-		tmp = ft_strjoin(line, "\n");
+		tmp = ft_strjoin(info->line, "\n");
+		if (!tmp)
+			return (free(next_line), free(info->line), NULL);
 		tmp_newline = ft_strjoin(tmp, next_line);
-		free_unclose_logical(tmp, NULL, NULL);
-		if (!tmp_newline)
-			return (NULL);
-		free(line);
-		line = tmp_newline;
-		if (ft_isalnum(*next_line))
-			break ;
+		free(tmp);
 		free(next_line);
+		if (!tmp_newline)
+			return (free(info->line), NULL);
+		free(info->line);
+		info->line = tmp_newline;
+		if (ft_isalnum(info->line[ft_strlen(info->line) - 1]))
+			break ;
 	}
-	free(next_line);
-	return (line);
+	return (info->line);
 }
+

@@ -41,7 +41,7 @@ void	main_loop(t_ctx *ctx)
 		if (signal_interrupt(line, ctx) == 1)
 			continue ;
 		token = tokenize(token, &line, ctx);
-		print_token_list(token);
+		//print_token_list(token);
 		tmp = token;
 		add_history(line);
 		parse_error(0);

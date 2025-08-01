@@ -20,6 +20,7 @@ FILES = tokenizer/tokenizer.c \
 				tokenizer/token_utils.c \
 				tokenizer/token_word.c \
 				tokenizer/token_type.c \
+				tokenizer/token_continuation.c \
 				tokenizer/token_heredoc.c \
 				tokenizer/token_heredoc2.c \
 				tokenizer/token_heredoc_utils.c \
