@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/01 18:12:37 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:04:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,9 @@ t_token	*tokenize(t_token *token, char **line_ptr, t_ctx *ctx)
 		line = tokenize2(&info);
 		if (!line)
 		{
+			*line_ptr = NULL;
 			if(info.start == 66)
-			{
-				*line_ptr = NULL;
 				return(exit_token());
-			}
 			return (NULL);
 		}
 	}

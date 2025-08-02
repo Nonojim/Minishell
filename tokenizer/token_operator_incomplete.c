@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 17:28:59 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 11:26:07 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char	*token_pipe_unclose(t_token_info *info)
 		|| (check_error_after_pipe(info->line, info->i, info->env) == 1))
 	{
 		free_token(*(info->token));
+		free(info->line);
 		return (NULL);
 	}
 	if (only_spaces_after_pipe(info->line, *(info->i))
@@ -42,9 +43,9 @@ char	*token_pipe_unclose(t_token_info *info)
 char	*token_logical_unclose(t_token_info *info)
 {
 	if (check_redir_before_logical(info->line, info->i, info->env) == 1
-		|| check_error_after_logical(info->line, info->i, info->env) == 1)
-	{
+		|| check_error_after_logical(info->line, info->i, info->env) == 1)	{
 		free_token(*(info->token));
+		free(info->line);
 		return (NULL);
 	}
 	if (only_space_after_op(info->line, *(info->i))

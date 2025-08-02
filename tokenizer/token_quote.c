@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/31 18:13:09 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:41:50 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
 	if (signum == 2)
 	{
 		free (next_line);
+		next_line = NULL;
 		//free_token(*(info->token));
 		return (NULL);
 	}
