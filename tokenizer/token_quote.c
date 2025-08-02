@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 18:41:50 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 12:34:47 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*read_until_quote_closed(t_token_info *info, char quote)
 {
-	setup_signals_uncomplete_line();
-	g_signum = 0;
 	info->line = read_quote_loop(info, quote);
+	if (!info->line)
+			free_token(*(info->token));
 	return (info->line);
 }
 
@@ -29,26 +29,42 @@ char	*read_until_quote_closed(t_token_info *info, char quote)
 char	*read_quote_loop(t_token_info *info, char quote)
 {
 	char	*next_line;
+	char	*tmp;
 
-	(void)quote;
+	quote = '1';
 	next_line = NULL;
 	while (1)
 	{
-		next_line = readline("> ");
-		if (g_signum == 2)
-			return (quote_interrupt(info, next_line, 2));
+		next_line = readline_continuation("> ", info);
 		if (!next_line)
-			return (quote_interrupt(info, next_line, 0));
-		info->line = create_new_line(info->line, next_line);
-		if (is_all_quotes_closed(info->line))
 		{
-			free(next_line);
-			break ;
+			info->start = 66;
+			if (info->line)
+			{
+				free(info->line);
+				info->line = NULL;
+			}
+			return (NULL);
 		}
+		if (quote == '1')
+			tmp = ft_strjoin(info->line, "\n");
 		else
-			free(next_line);
+			tmp = ft_strjoin(info->line, "");
+		quote = '0';
+		free(info->line);
+		info->line = NULL;
+		if (!tmp)
+			return (free(next_line), NULL);
+		info->line = ft_strjoin(tmp, next_line);
+		free(tmp);
+		tmp = NULL;
+		free(next_line);
+		next_line = NULL;
+		if (!info->line)
+			return (NULL);
+		if (is_all_quotes_closed(info->line))
+			break ;
 	}
-	setup_signals();
 	return (info->line);
 }
 
@@ -76,32 +92,32 @@ int	is_all_quotes_closed(const char *line)
 	return (inquote == '\0');
 }
 
-char	*create_new_line(char *line, char *next_line)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(line, "\n");
-	free(line);
-	line = tmp;
-	tmp = ft_strjoin(line, next_line);
-	free(line);
-	line = tmp;
-	return (line);
-}
-
-char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
-{
-	(void)info;
-	if (signum == 2)
-	{
-		free (next_line);
-		next_line = NULL;
-		//free_token(*(info->token));
-		return (NULL);
-	}
-	if (next_line)
-		free(next_line);
-	ft_fprintf(2, "minishell: unexpected EOF while looking for \
-matching `''\nexit\n");
-	return (NULL);
-}
+//char	*create_new_line(char *line, char *next_line)
+//{
+//	char	*tmp;
+//
+//	tmp = ft_strjoin(line, "\n");
+//	free(line);
+//	line = tmp;
+//	tmp = ft_strjoin(line, next_line);
+//	free(line);
+//	line = tmp;
+//	return (line);
+//}
+//
+//char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
+//{
+//	(void)info;
+//	if (signum == 2)
+//	{
+//		free (next_line);
+//		next_line = NULL;
+//		//free_token(*(info->token));
+//		return (NULL);
+//	}
+//	if (next_line)
+//		free(next_line);
+//	ft_fprintf(2, "minishell: unexpected EOF while looking for \
+//matching `''\nexit\n");
+//	return (NULL);
+//}
