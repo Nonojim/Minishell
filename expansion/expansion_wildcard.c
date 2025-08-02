@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_wildcard.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 11:34:39 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:11:53 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
 								node->right->argv[0]);
 		free_split(result);
 		free_wildcard(psm, NULL, NULL);
-		free(node->right->str);
-		node->right->str = NULL;
+		free_then_setnull((void **)&node->right->str);
 		return ;
 	}
 	free(node->right->str);

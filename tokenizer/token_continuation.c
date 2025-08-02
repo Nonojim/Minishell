@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:43:24 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/01 17:56:11 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:14:38 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	continuation_child(const char *prompt, t_continuation_info *cinfo, t_token_
 		write(cinfo->fd[1], line, ft_strlen(line));
 		write(cinfo->fd[1], "\n", 1);
 		free_heredoc(info->line, NULL, info->token, info->env);
-		free(line);
-		line = NULL;
+		free_then_setnull((void **)&line);
 		close(cinfo->fd[1]);
 		exit(0);
 	}
@@ -67,8 +66,7 @@ char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx)
 	{
 		tmp[bytes] = '\0';
 		cinfo->buffer = ft_strjoin(cinfo->line, tmp);
-		free(cinfo->line);
-		cinfo->line = NULL;
+		free_then_setnull((void **)&cinfo->line);
 		if (!cinfo->buffer)
 			return (close(cinfo->fd[0]), NULL);
 		cinfo->line = cinfo->buffer;
@@ -79,8 +77,7 @@ char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx)
 	if (WIFSIGNALED(cinfo->status) || WEXITSTATUS(cinfo->status) == 130)
 	{
 		ctx->exit_code = 130;
-		free(cinfo->line);
-		cinfo->line = NULL;
+		free_then_setnull((void **)&cinfo->line);
 		return (NULL);
 	}
 	return (cinfo->line);

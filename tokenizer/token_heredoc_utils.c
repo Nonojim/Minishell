@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 18:29:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 17:51:53 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:15:57 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,9 @@ int	create_token_op_heredoc(char *line, int *i, t_token **token)
 void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx)
 {
 	if (line)
-	{
-		free(line);
-		line = NULL;
-	}
+		free_then_setnull((void **)&line);
 	if (token_doc)
-	{
-		free(token_doc);
-		token_doc = NULL;
-	}
+		free_then_setnull((void **)&token_doc);
 	if (token)
 	{
 		free_token(*token);
@@ -86,4 +80,5 @@ void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx)
 	}
 	if (ctx)
 		free_env_list(ctx->env);
+		
 }

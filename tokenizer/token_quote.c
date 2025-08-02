@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 12:34:47 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:18:12 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ char	*read_quote_loop(t_token_info *info, char quote)
 		{
 			info->start = 66;
 			if (info->line)
-			{
-				free(info->line);
-				info->line = NULL;
-			}
+				free_then_setnull((void **)&info->line);
 			return (NULL);
 		}
 		if (quote == '1')
@@ -51,15 +48,12 @@ char	*read_quote_loop(t_token_info *info, char quote)
 		else
 			tmp = ft_strjoin(info->line, "");
 		quote = '0';
-		free(info->line);
-		info->line = NULL;
+		free_then_setnull((void **)&info->line);
 		if (!tmp)
-			return (free(next_line), NULL);
+			return (free_then_setnull((void **)&next_line), NULL);
 		info->line = ft_strjoin(tmp, next_line);
-		free(tmp);
-		tmp = NULL;
-		free(next_line);
-		next_line = NULL;
+		free_then_setnull((void **)&tmp);
+		free_then_setnull((void **)&next_line);
 		if (!info->line)
 			return (NULL);
 		if (is_all_quotes_closed(info->line))
@@ -117,7 +111,7 @@ int	is_all_quotes_closed(const char *line)
 //	}
 //	if (next_line)
 //		free(next_line);
-//	ft_fprintf(2, "minishell: unexpected EOF while looking for \
+//	ft_fprintf(2, "minishell: unexpected EOF while looking for 
 //matching `''\nexit\n");
 //	return (NULL);
 //}

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:45:33 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/01 17:24:40 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:04:18 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,15 @@ void	free_treenode(t_treenode *node)
 		{
 			while (node->argv[i])
 			{
-				free(node->argv[i]);
-				node->argv[i++] = NULL;
+				free_then_setnull((void **)&node->argv[i]);
+				i++;
 			}
 		}
-		free(node->argv);
-		node->argv = NULL;
+		free_then_setnull((void **)&node->argv);
 	}
 	if (node->str)
-	{
-		free(node->str);
-		node->str = NULL;
-	}
-	free(node);
-	node = NULL;
+		free_then_setnull((void **)&node->str);
+	free_then_setnull((void **)&node);
 }
 
 t_treenode	*free_then_return_null(t_treenode *node)

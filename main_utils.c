@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:58:00 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 12:08:42 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 12:54:45 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	free_prompt(t_treenode *ast, char *line)
 	if (ast)
 		free_treenode(ast);
 	if (line)
-		free(line);
+		free_then_setnull((void **)&line);
+
 }
 
 t_ctx	init_ctx(void)
@@ -56,4 +57,12 @@ t_ctx	init_ctx(void)
 	ft_memset(&ctx, 0, sizeof(t_ctx));
 	ctx.env = init_env_list();
 	return (ctx);
+}
+void	free_then_setnull(void **ptr)
+{
+	if (ptr && *ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
 }

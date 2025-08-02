@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:48:04 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 17:26:04 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:02:34 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,10 @@ void	free_env_list(t_env *env)
 	{
 		tmp = env;
 		env = env->next;
-		free(tmp->key);
-		tmp->key = NULL;
+		free_then_setnull((void **)&tmp->key);
 		if (tmp->value)
-		{
-			free(tmp->value);
-			tmp->value = NULL;
-		}
-		free(tmp);
-		tmp = NULL;
+			free_then_setnull((void **)&tmp->value);
+		free_then_setnull((void **)&tmp);
 		count++;
 	}
 }

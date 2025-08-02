@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/01 17:54:34 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:05:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ t_token *exit_token(void)
 	if (!exit_token)
 		return (NULL);
 	ft_memset(exit_token, 0, sizeof(t_token));
-
 	exit_token->str = ft_strdup("exit");
 	return (exit_token);
 }

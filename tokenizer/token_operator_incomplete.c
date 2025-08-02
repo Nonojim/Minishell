@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 11:26:07 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 12:59:56 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,16 @@ char *loop_newline(t_token_info *info)
 		{
 			info->start = 66;
 			if (info->line)
-			{
-				free(info->line);
-				info->line = NULL;
-			}
+				free_then_setnull((void **)&info->line);
 			return (NULL);
 		}
 		tmp = ft_strjoin(info->line, " ");
-		free(info->line);
-		info->line = NULL;
+		free_then_setnull((void **)&info->line);
 		if (!tmp)
-			return (free(next_line), NULL);
+			return (free_then_setnull((void **)&next_line), NULL);
 		info->line = ft_strjoin(tmp, next_line);
-		free(tmp);
-		tmp = NULL;
-		free(next_line);
-		next_line = NULL;
+		free_then_setnull((void **)&tmp);
+		free_then_setnull((void **)&next_line);
 		if (!info->line)
 			return (NULL);
 		if (line_is_complete_after_operator(info->line))

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:56:16 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 10:02:20 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 12:40:01 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,6 @@ void	token_not_empty(t_token **token, t_treenode **ast, t_token *tmp);
 t_ctx	init_ctx(void);
 void	start_message(void);
 void	free_prompt(t_treenode *ast, char *line);
+void	free_then_setnull(void **ptr);
+
 #endif
