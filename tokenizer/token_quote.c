@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:18:12 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:02:56 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*read_until_quote_closed(t_token_info *info, char quote)
 {
 	info->line = read_quote_loop(info, quote);
 	if (!info->line)
-			free_token(*(info->token));
+		free_token(*(info->token));
 	return (info->line);
 }
 

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:05:07 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 11:58:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:40:55 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char		*cd_home_oldpwd(t_treenode *node, char *oldpwd, t_ctx *ctx);
 int			cd_many_arg(char *oldpwd, t_ctx *ctx);
 char		*cd_home_target(char *oldpwd, t_ctx *ctx);
 char		*cd_oldpwd_target(char *oldpwd, t_ctx *ctx);
-int			cd_check_empty_target(char *target, t_treenode *node, \
+int			cd_check_empty_target(char *target, t_treenode *node,\
 													char *oldpwd, t_ctx *ctx);
 void		free_cd(char *oldpwd, char *target);
 int			cd_access(char *target, char *oldpwd, t_ctx *ctx);

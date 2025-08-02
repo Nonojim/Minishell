@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 18:29:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:15:57 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:54:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,4 @@ void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx)
 	}
 	if (ctx)
 		free_env_list(ctx->env);
-		
 }

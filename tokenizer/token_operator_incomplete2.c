@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 11:22:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/31 17:30:08 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:02:22 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	check_redir_before_logical(char *line, int *i, t_ctx *ctx)
 	{
 		if (line[*i] == '|' && line[*i + 1] != '|')
 			ft_fprintf(2, \
-			"minishell: syntax error near unexpected token `%c'\n", \
-			line[*i]);
+"minishell: syntax error near unexpected token `%c'\n", \
+line[*i]);
 		else
 			ft_fprintf(2, \
-			"minishell: syntax error near unexpected token `%c%c'\n", \
-			line[*i], line[*i + 1]);
+"minishell: syntax error near unexpected token `%c%c'\n", \
+line[*i], line[*i + 1]);
 		ctx->exit_code = 2;
 		return (1);
 	}

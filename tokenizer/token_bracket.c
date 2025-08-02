@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:30:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/28 18:24:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:52:01 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*token_bracket(t_token_info *info)
 	}
 	ix_end_bracket = *(info->i);
 	str = ft_substr(info->line, ix_start_bracket, \
-									ix_end_bracket - ix_start_bracket);
+ix_end_bracket - ix_start_bracket);
 	tokenize(*(info->token), &str, info->env);
 	free(str);
 	return (info->line);

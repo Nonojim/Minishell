@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:56:21 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:05:04 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:03:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ void	free_token(t_token *token_list)
 	}
 }
 
-t_token *exit_token(void)
+t_token	*exit_token(void)
 {
-	t_token *exit_token;
+	t_token	*exit_token;
 
 	exit_token = malloc(sizeof(t_token));
 	if (!exit_token)

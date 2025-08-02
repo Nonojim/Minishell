@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:43:24 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/02 13:14:38 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:55:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ int	is_printable_str(const char *s)
 	return (1);
 }
 
-void	continuation_child(const char *prompt, t_continuation_info *cinfo, t_token_info *info)
+void	continuation_child(const char *prompt, t_continuation_info *cinfo,\
+															t_token_info *info)
 {
 	char	*line;
+
 	setup_signal_heredoc();
 	close(cinfo->fd[0]);
 	line = readline(prompt);

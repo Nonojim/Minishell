@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 12:59:56 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:58:58 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ char	*token_pipe_unclose(t_token_info *info)
 char	*token_logical_unclose(t_token_info *info)
 {
 	if (check_redir_before_logical(info->line, info->i, info->env) == 1
-		|| check_error_after_logical(info->line, info->i, info->env) == 1)	{
+		|| check_error_after_logical(info->line, info->i, info->env) == 1)
+	{
 		free_token(*(info->token));
 		free(info->line);
 		return (NULL);
@@ -65,8 +66,8 @@ char	*token_logical_unclose(t_token_info *info)
 
 static int	is_operator(int c)
 {
-	return (c == '|' || c == '&' || c == '<' || c == '>' ||
-			c == '(' || c == ')');
+	return (c == '|' || c == '&' || c == '<' || c == '>'
+		|| c == '(' || c == ')');
 }
 
 static int	ft_isspace(int c)
@@ -75,9 +76,11 @@ static int	ft_isspace(int c)
 		|| c == '\v' || c == '\f' || c == '\r');
 }
 
-static int line_is_complete_after_operator(char *line)
+static int	line_is_complete_after_operator(char *line)
 {
-	int i = ft_strlen(line) - 1;
+	int	i;
+
+	i = ft_strlen(line) - 1;
 	while (i >= 0 && ft_isspace(line[i]))
 		i--;
 	if (i < 0 || is_operator(line[i]))
@@ -85,10 +88,10 @@ static int line_is_complete_after_operator(char *line)
 	return (1);
 }
 
-char *loop_newline(t_token_info *info)
+char	*loop_newline(t_token_info *info)
 {
-	char *next_line;
-	char *tmp;
+	char	*next_line;
+	char	*tmp;
 
 	while (1)
 	{
@@ -110,8 +113,7 @@ char *loop_newline(t_token_info *info)
 		if (!info->line)
 			return (NULL);
 		if (line_is_complete_after_operator(info->line))
-			break;
+			break ;
 	}
 	return (info->line);
 }
-

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/31 15:49:16 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/02 14:03:42 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	if_in_quote(char current, char *quote, int *inquote)
 	}
 }
 
-char	*check_quote_and_create_token(t_token_info *info, \
+char	*check_quote_and_create_token(t_token_info *info,\
 									int i, int inquote, char *quote)
 {
 	if (inquote == 1 && info->line[i] == '\0')
@@ -101,7 +101,7 @@ char	*check_quote_and_create_token(t_token_info *info, \
 		{
 			*(info->i) = i;
 			return (add_token_word(info->i, info->start, \
-							info->line, info->token));
+info->line, info->token));
 		}
 		info->line = read_until_quote_closed(info, *quote);
 		*(info->i) = info->start;

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 12:30:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:43:33 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	return (pipe_node);
 }
 
-t_treenode	*create_pipe_node(t_token *pipe_token, \
+t_treenode	*create_pipe_node(t_token *pipe_token,\
 	t_treenode *pipe_node, t_treenode *left, t_treenode *right)
 {
 	pipe_node = create_treenode(pipe_token->type, pipe_token->str);
