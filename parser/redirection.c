@@ -6,15 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 12:29:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 18:01:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_redirection_node(t_token **tokens);
-t_treenode	*parse_redirection1(t_token **tokens);
-t_treenode	*settoken_thenreturn(t_token **tokenstoset, t_token *setting);
 
 /*
 <redirection>				::= ( "<" | "<<" | ">" | ">>" ) <word>
@@ -28,7 +24,7 @@ t_treenode	*parse_redirection_node(t_token **tokens)
 	tmp = *tokens;
 	if (parse_error(-1) == 1)
 		return (NULL);
-	redir_node = parse_redirection1(tokens);
+	redir_node = parse_redirection(tokens);
 	if (parse_error(-1) == 1)
 		return (NULL);
 	if (redir_node != NULL)
@@ -37,7 +33,7 @@ t_treenode	*parse_redirection_node(t_token **tokens)
 	return (NULL);
 }
 
-t_treenode	*parse_redirection1(t_token **tokens)
+t_treenode	*parse_redirection(t_token **tokens)
 {
 	t_treenode	*redir_node;
 	t_treenode	*right;

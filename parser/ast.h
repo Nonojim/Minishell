@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:39:19 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/06 12:24:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 18:02:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,22 @@ t_treenode	*parse_line3(t_token **tokens);
 // Logical_and
 t_treenode	*parse_logical_and_node(t_token **tokens);
 t_treenode	*parse_logical_and1(t_token **tokens);
+t_treenode	*parse_logical_and2(t_token **tokens);
+t_treenode	*create_node_logicaland(t_token *and_token,\
+										t_treenode *left, t_treenode *right);
 
 // Logical_or
 t_treenode	*parse_logical_or_node(t_token **tokens);
 t_treenode	*parse_logical_or1(t_token **tokens);
+t_treenode	*parse_logical_or2(t_token **tokens);
+t_treenode	*create_node_logicalor(t_token *or_token,\
+										t_treenode *left, t_treenode *right);
 
 // Pipeline
 t_treenode	*parse_pipeline_node(t_token **tokens);
 t_treenode	*parse_pipeline1(t_token **tokens);
 t_treenode	*parse_pipeline2(t_token **tokens);
-t_treenode	*create_pipe_node(t_token *pipe_token, \
+t_treenode	*create_pipe_node(t_token *pipe_token,\
 		t_treenode *pipe_node, t_treenode *left, t_treenode *right);
 
 // Command
@@ -124,14 +130,15 @@ t_treenode	*parse_command_node5(t_token **tokens);
 t_treenode	*parse_simple_command_node(t_token **tokens);
 t_treenode	*parse_simple_command1(t_token **tokens);
 t_treenode	*parse_simple_command2(t_token **tokens);
+t_treenode	*parse_simple_command3(t_token **tokens);
 
 // Redirection
 t_treenode	*parse_redirection_node(t_token **tokens);
-t_treenode	*parse_redirection1(t_token **tokens);
-t_treenode	*parse_redirection2(t_token **tokens);
+t_treenode	*parse_redirection(t_token **tokens);
+t_treenode	*settoken_thenreturn(t_token **tokenstoset, t_token *setting);
 
 // WORD
 t_treenode	*parse_word_node(t_token **tokens);
-t_treenode	*parse_word1(t_token **tokens);
+t_treenode	*create_word_node(int *argc, t_token *tmp, t_token **tokens);
 
 #endif

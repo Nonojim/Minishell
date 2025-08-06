@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 11:05:36 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:45:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_wildcard	*init_struct_psm(int wildcard_index)
 	return (psm);
 }
 
-void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
+void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm,\
 										t_treenode *node)
 {
 	(void)ctx;
@@ -48,7 +48,7 @@ node->right->argv[0]);
 	return ;
 }
 
-char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
+char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx,\
 												t_wildcard *psm)
 {
 	if (!result)
@@ -92,7 +92,7 @@ char	**found_match(DIR *dir, t_wildcard *psm, char **result)
 	return (result);
 }
 
-char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx, \
+char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx,\
 												int wildcard_index)
 {
 	DIR				*dir;
@@ -128,19 +128,6 @@ char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx, \
  * si * est entre simple/double quote 
  * = on affiche litteralement avec echo ou on renvoie une erreur direct 
  * si pas de correspondance trouvé avec echo on renvoie la demande *.md 
-
- */
-/*Fonctions utile :
-getcwd 	char *getcwd(char *buf, size_t size); 	
-Récupère le chemin absolu du répertoire courant
-chdir 	int chdir(const char *path); 	Change le répertoire de travail courant.
-stat 	int stat(const char *pathname, struct stat *statbuf);
-Récupère des informations sur un fichier ou un dossier.
-opendir 	DIR *opendir(const char *name); 	Ouvre un répertoire pour lecture
-closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
-*/
-
-/*
 * DIR *dir = représente le dossier ouvert, obtenu avec opendir
 * Lecture de ce dossier avec readdir, 
 * readdir envoir un pointeur dans structdirent

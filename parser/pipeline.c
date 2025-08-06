@@ -6,15 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:31 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 12:24:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:48:31 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_pipeline_node(t_token **tokens);
-t_treenode	*parse_pipeline1(t_token **tokens);
-t_treenode	*parse_pipeline2(t_token **tokens);
 
 t_treenode	*parse_pipeline_node(t_token **tokens)
 {
@@ -41,8 +37,6 @@ t_treenode	*parse_pipeline_node(t_token **tokens)
 }
 
 //<command> "|" <command>
-//Conservation du noeuf left (word) même si pas de pipeline,
-//evite de reparser.
 t_treenode	*parse_pipeline1(t_token **tokens)
 {
 	t_treenode	*left;
@@ -72,7 +66,7 @@ t_treenode	*parse_pipeline1(t_token **tokens)
 	return (pipe_node);
 }
 
-t_treenode	*create_pipe_node(t_token *pipe_token, \
+t_treenode	*create_pipe_node(t_token *pipe_token,\
 	t_treenode *pipe_node, t_treenode *left, t_treenode *right)
 {
 	pipe_node = create_treenode(pipe_token->type, pipe_token->str);

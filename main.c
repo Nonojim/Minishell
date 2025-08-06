@@ -28,7 +28,6 @@ void	main_loop(t_ctx *ctx)
 {
 	char		*line;
 	t_token		*token;
-	t_token		*tmp;
 	t_treenode	*ast;
 
 	while (1)
@@ -43,13 +42,13 @@ void	main_loop(t_ctx *ctx)
 		if (line && *line && is_printable_str(line))
 			add_history(line);
 		token = tokenize(token, &line, ctx);
-		tmp = token;
+		ctx->head_token_list = token;
 		parse_error(0);
 		ast = parse_line_node(&token);
 		if (parse_error(-1))
 			ctx->exit_code = 2;
 		ctx->root = ast;
-		token_not_empty(&token, &ast, tmp);
+		token_not_empty(&token, &ast, ctx->head_token_list);
 		resolve_ast(ast, line, ctx);
 	}
 }
@@ -79,6 +78,7 @@ void	token_not_empty(t_token **token, t_treenode **ast, t_token *tmp)
 		*ast = NULL;
 	}
 	free_token(tmp);
+	tmp = NULL;
 }
 
 void	resolve_ast(t_treenode *ast, char *line, t_ctx *ctx)

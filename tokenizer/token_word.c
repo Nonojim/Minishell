@@ -6,24 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:49:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 11:07:24 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:52:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-/*
-* Extract the token word and add to the token_list
-* Word is defined as sequence of the characters who are not a special token
-* Fonction parcourt caractère par caractère
-* Gestion des quotes:
-* inquote = 0 si on est hors quote inquote = 1 si on est inside
-* quote = stock le type de quote (' ou ")
-* lorsqu'on rencontre la même quote on ferme inquote = 0
-* tant quond est dans une quote tous les caractere sont acceptés 
-* En dehors de quote le mot stop sur space, op logique, redir
-* Si quote non fermé elle sera demandé avec une newline
- */
 char	*token_word(t_token_info *info)
 {
 	int		i;
@@ -92,7 +80,7 @@ void	if_in_quote(char current, char *quote, int *inquote)
 	}
 }
 
-char	*check_quote_and_create_token(t_token_info *info, \
+char	*check_quote_and_create_token(t_token_info *info,\
 									int i, int inquote, char *quote)
 {
 	if (inquote == 1 && info->line[i] == '\0')

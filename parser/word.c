@@ -6,14 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:30:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/22 19:55:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:49:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_word_node(t_token **tokens);
-t_treenode	*create_word_node(int *argc, t_token *tmp, t_token **tokens);
 
 t_treenode	*parse_word_node(t_token **tokens)
 {

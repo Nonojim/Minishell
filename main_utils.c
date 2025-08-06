@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:58:00 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:22:13 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:54:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 \033 = ASCII = ESC 
 \033[2J = Efface contenu de l'ecran (2: tout l'écran)
-\033[H = Replace curseur position ligne 1, collone 1
+\033[H = Replace curseur position ligne 1, colonne 1
 */
 void	start_message(void)
 {

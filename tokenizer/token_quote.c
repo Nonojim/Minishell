@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 12:36:11 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:51:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ char	*read_until_quote_closed(t_token_info *info, char quote)
 	return (info->line);
 }
 
-/*
-* Continue to read when the user don't close a quote
-* When the single || double is found the line is finish
-* ft_strjoin(line, "\n");  = emulate the \n that bash produce
-* line = ft_strjoin(line, next_line); = join the all new lines to the first one
-*/
 char	*read_quote_loop(t_token_info *info, char quote)
 {
 	char	*next_line;
@@ -73,9 +67,6 @@ char	*missing_next_line(t_token_info *info)
 	return (NULL);
 }
 
-/*
-Verifie que toutes les quotes sont fermés
-*/
 int	is_all_quotes_closed(const char *line)
 {
 	int		i;

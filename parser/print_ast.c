@@ -6,13 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:48:03 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/29 12:14:42 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:49:10 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-//Fichier à retirer du MakeFile à la fin du projet
 void	print_indent(int depth)
 {
 	while (depth-- > 0)
