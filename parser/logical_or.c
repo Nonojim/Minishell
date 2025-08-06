@@ -6,17 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:28:11 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/18 15:02:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:58:48 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_logical_or_node(t_token **tokens);
-t_treenode	*parse_logical_or1(t_token **tokens);
-t_treenode	*parse_logical_or2(t_token **tokens);
-t_treenode	*create_node_logicalor(t_token *or_token,
-				t_treenode *left, t_treenode *right);
 
 t_treenode	*parse_logical_or_node(t_token **tokens)
 {

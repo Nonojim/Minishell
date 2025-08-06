@@ -6,17 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 14:46:18 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:48:06 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_logical_and_node(t_token **tokens);
-t_treenode	*parse_logical_and1(t_token **tokens);
-t_treenode	*parse_logical_and2(t_token **tokens);
-t_treenode	*create_node_logicaland(t_token *and_token,
-				t_treenode *left, t_treenode *right);
 
 t_treenode	*parse_logical_and_node(t_token **tokens)
 {

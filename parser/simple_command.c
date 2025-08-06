@@ -6,16 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:29:26 by lduflot           #+#    #+#             */
-/*   Updated: 2025/06/17 14:21:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:48:53 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-t_treenode	*parse_simple_command_node(t_token **tokens);
-t_treenode	*parse_simple_command1(t_token **tokens);
-t_treenode	*parse_simple_command2(t_token **tokens);
-t_treenode	*parse_simple_command3(t_token **tokens);
 
 /*
  <simple_command>      ::= <word> ( <word> | <redirection> )*

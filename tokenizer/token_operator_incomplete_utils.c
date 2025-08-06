@@ -6,16 +6,12 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 14:42:51 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 15:43:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:50:08 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-/*
- * Utils for token_logical_incomplete
- * When the prompt finish by && or || with multiple space
- */
 int	only_space_after_op(char *line, int i)
 {
 	i += 2;

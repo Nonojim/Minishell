@@ -6,15 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 16:00:41 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:50:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
-
-/*
- * When the prompt finish by && or ||
- */
 
 char	*token_pipe_unclose(t_token_info *info)
 {

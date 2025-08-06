@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 15:55:57 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:45:21 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,19 +128,6 @@ char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx,\
  * si * est entre simple/double quote 
  * = on affiche litteralement avec echo ou on renvoie une erreur direct 
  * si pas de correspondance trouvé avec echo on renvoie la demande *.md 
-
- */
-/*Fonctions utile :
-getcwd 	char *getcwd(char *buf, size_t size); 	
-Récupère le chemin absolu du répertoire courant
-chdir 	int chdir(const char *path); 	Change le répertoire de travail courant.
-stat 	int stat(const char *pathname, struct stat *statbuf);
-Récupère des informations sur un fichier ou un dossier.
-opendir 	DIR *opendir(const char *name); 	Ouvre un répertoire pour lecture
-closedir 	int closedir(DIR *dirp); 	Ferme un répertoire ouvert.
-*/
-
-/*
 * DIR *dir = représente le dossier ouvert, obtenu avec opendir
 * Lecture de ce dossier avec readdir, 
 * readdir envoir un pointeur dans structdirent

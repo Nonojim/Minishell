@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 12:36:25 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:43:46 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,3 @@ void	setup_signals(void)
 	sigaction(SIGINT, &signalusr, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }
-
-//void	signal_uncomplete_line_handler(int signum)
-//{
-//	g_signum = signum;
-//	if (signum == SIGINT)
-//	{
-//		write(2, "\n", 1);
-//		rl_replace_line("", 0);
-//		write(1, "\001\033[1;34m\002Minishell$ \001\033[0m\002", 26);
-//		rl_done = 1;
-//	}
-//}
-//
-//void	setup_signals_uncomplete_line(void)
-//{
-//	struct sigaction	sa;
-//
-//	signal(EOF, SIG_IGN);
-//	signal(SIGQUIT, SIG_IGN);
-//	sa.sa_handler = signal_uncomplete_line_handler;
-//	sigemptyset(&sa.sa_mask);
-//	sa.sa_flags = 0;
-//	sigaction(SIGINT, &sa, NULL);
-//}

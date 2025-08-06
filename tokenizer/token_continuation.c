@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:43:24 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/06 16:23:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:27:49 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	is_printable_str(const char *s)
 		return (0);
 	while (s[i])
 	{
-		if (!ft_isprint((unsigned char)s[i]) && !ft_isspace((unsigned char)s[i]))
+		if (!ft_isprint((unsigned char)s[i])
+			&& !ft_isspace((unsigned char)s[i]))
 			return (0);
 		i++;
 	}

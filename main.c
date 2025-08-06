@@ -28,13 +28,11 @@ void	main_loop(t_ctx *ctx)
 {
 	char		*line;
 	t_token		*token;
-	//t_token		*tmp;
 	t_treenode	*ast;
 
 	while (1)
 	{
 		token = NULL;
-		ctx->head_token_list = NULL;
 		setup_signals();
 		line = readline("\001\033[1;34m\002Minishell$ \001\033[0m\002");
 		if (line == NULL)
@@ -44,7 +42,6 @@ void	main_loop(t_ctx *ctx)
 		if (line && *line && is_printable_str(line))
 			add_history(line);
 		token = tokenize(token, &line, ctx);
-		//tmp = token;
 		ctx->head_token_list = token;
 		parse_error(0);
 		ast = parse_line_node(&token);
@@ -55,7 +52,7 @@ void	main_loop(t_ctx *ctx)
 		resolve_ast(ast, line, ctx);
 	}
 }
-//dsfpkgjdfsokpgkdso^fkhdslpgkh, dsfpo h,;dsfplg,dsflph, dsgpklh, dfs
+
 int	signal_interrupt(char *line, t_ctx *ctx)
 {
 	if (g_signum == 2)
@@ -81,6 +78,7 @@ void	token_not_empty(t_token **token, t_treenode **ast, t_token *tmp)
 		*ast = NULL;
 	}
 	free_token(tmp);
+	tmp = NULL;
 }
 
 void	resolve_ast(t_treenode *ast, char *line, t_ctx *ctx)
