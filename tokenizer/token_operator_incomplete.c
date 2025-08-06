@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:58:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:20:19 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,16 @@ char	*token_logical_unclose(t_token_info *info)
 	return (info->line);
 }
 
-static int	is_operator(int c)
-{
-	return (c == '|' || c == '&' || c == '<' || c == '>'
-		|| c == '(' || c == ')');
-}
-
-static int	ft_isspace(int c)
-{
-	return (c == ' ' || c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f' || c == '\r');
-}
-
 static int	line_is_complete_after_operator(char *line)
 {
 	int	i;
 
 	i = ft_strlen(line) - 1;
-	while (i >= 0 && ft_isspace(line[i]))
+	while (i >= 0 && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n' \
+			|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
 		i--;
-	if (i < 0 || is_operator(line[i]))
+	if (i < 0 || line[i] == '|' || line[i] == '&' || line[i] == '<' \
+		|| line[i] == '>' || line[i] == '(' || line[i] == ')')
 		return (0);
 	return (1);
 }
@@ -98,10 +88,9 @@ char	*loop_newline(t_token_info *info)
 		next_line = readline_continuation("> ", info);
 		if (!next_line)
 		{
-			info->start = 66;
 			if (info->line)
 				free_then_setnull((void **)&info->line);
-			return (NULL);
+			return (info->start = 66, NULL);
 		}
 		tmp = ft_strjoin(info->line, " ");
 		free_then_setnull((void **)&info->line);

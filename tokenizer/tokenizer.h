@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:37:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:37:39 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct s_continuation_info
 // Fonctions tokenisations
 t_token	*tokenize(t_token *token, char **line, t_ctx *ctx);
 char	*tokenize2(t_token_info *info);
-void	init_token_info(t_token_info *info, t_token **token,\
+void	init_token_info(t_token_info *info, t_token **token, \
 											t_ctx *ctx, char *line);
 
 // Create_free_print Token
@@ -96,7 +96,7 @@ int		type_token_double_operator(char *str);
 int		is_word(int c);
 char	*token_word(t_token_info *info);
 char	*add_token_word(int *i, int start, char *line, t_token **token);
-char	*check_quote_and_create_token(t_token_info *info,\
+char	*check_quote_and_create_token(t_token_info *info, \
 										int i, int inquote, char *quote);
 
 // Token_operator
@@ -108,6 +108,8 @@ char	*token_pipe_unclose(t_token_info *info);
 char	*token_logical_unclose(t_token_info *info);
 int		only_spaces_after_operator_logical(char *line, int i);
 char	*loop_newline(t_token_info *info);
+char	*missing_next_line(t_token_info *info);
+char	*join_state_quote(t_token_info *info, char *quote);
 
 // Token_bracket
 char	*token_bracket_unclose(char *line);
@@ -145,20 +147,21 @@ char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
 char	*delete_quote(char *str, t_token **token);
 void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx);
-char	*heredoc_parent_process(t_heredoc_info *hd,\
+char	*heredoc_parent_process(t_heredoc_info *hd, \
 		char *token_doc, t_ctx *ctx);
-int		check_heredoc_exit_status(t_heredoc_info *hd,\
+int		check_heredoc_exit_status(t_heredoc_info *hd, \
 		char *token_doc, t_ctx *ctx);
-void	heredoc_child_process(t_heredoc_info *hd,\
+void	heredoc_child_process(t_heredoc_info *hd, \
 		char *token_doc, t_token **token, t_ctx *ctx);
-void	heredoc_loop(t_heredoc_info *hd, char *token_doc,\
+void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
 		t_token **token, t_ctx *ctx);
-void	heredoc_eof(t_heredoc_info *hd, char *token_doc,\
+void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
 		t_token **token, t_ctx *ctx);
 //fork_praying
-void	continuation_child(const char *prompt, t_continuation_info *cinfo,\
+void	continuation_child(const char *prompt, t_continuation_info *cinfo, \
 		t_token_info *info);
 char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx);
+char	*continuation_status(t_continuation_info *cinfo, t_ctx *ctx);
 char	*readline_continuation(const char *prompt, t_token_info *info);
 t_token	*exit_token(void);
 int		is_printable_str(const char *s);

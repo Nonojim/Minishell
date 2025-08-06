@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:53:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:49:43 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:02:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*cd_oldpwd_target(char *oldpwd, t_ctx *ctx)
 }
 
 //Verifie cd dir
-int	cd_check_empty_target(char *target, t_treenode *node,\
+int	cd_check_empty_target(char *target, t_treenode *node, \
 													char *oldpwd, t_ctx *ctx)
 {
 	if (!target || target[0] == '\0')

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 11:43:24 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/02 13:55:04 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:21:36 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_printable_str(const char *s)
 	return (1);
 }
 
-void	continuation_child(const char *prompt, t_continuation_info *cinfo,\
+void	continuation_child(const char *prompt, t_continuation_info *cinfo, \
 															t_token_info *info)
 {
 	char	*line;
@@ -75,6 +75,11 @@ char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx)
 		bytes = read(cinfo->fd[0], tmp, sizeof(tmp) - 1);
 	}
 	close(cinfo->fd[0]);
+	return (continuation_status(cinfo, ctx));
+}
+
+char	*continuation_status(t_continuation_info *cinfo, t_ctx *ctx)
+{
 	waitpid(cinfo->pid, &cinfo->status, 0);
 	if (WIFSIGNALED(cinfo->status) || WEXITSTATUS(cinfo->status) == 130)
 	{
