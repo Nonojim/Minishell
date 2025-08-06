@@ -16,7 +16,7 @@ int	main(void)
 {
 	t_ctx		ctx;
 
-	//start_message();
+	start_message();
 	ctx = init_ctx();
 	main_loop(&ctx);
 	free_env_list(ctx.env);
