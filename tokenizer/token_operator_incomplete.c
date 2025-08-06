@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:58:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:48:07 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,6 @@ char	*token_logical_unclose(t_token_info *info)
 	else
 		token_logical_operator(info);
 	return (info->line);
-}
-
-static int	is_operator(int c)
-{
-	return (c == '|' || c == '&' || c == '<' || c == '>'
-		|| c == '(' || c == ')');
-}
-
-static int	ft_isspace(int c)
-{
-	return (c == ' ' || c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f' || c == '\r');
 }
 
 static int	line_is_complete_after_operator(char *line)

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 14:42:51 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 14:01:28 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:43:36 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	only_space_after_op(char *line, int i)
 	i += 2;
 	while (line[i])
 	{
-		if (line[i] != ' ')
+		if (!ft_isspace(line[i]))
 			return (0);
 		i++;
 	}
@@ -33,7 +33,7 @@ int	only_space_before(char *line, int i)
 	while (i > 0)
 	{
 		i--;
-		if (line[i] != ' ')
+		if (!ft_isspace(line[i]))
 			return (0);
 	}
 	return (1);
@@ -44,7 +44,7 @@ int	only_spaces_after_pipe(char *line, int i)
 	i++;
 	while (line[i])
 	{
-		if (line[i] != ' ')
+		if (!ft_isspace(line[i]))
 			return (0);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:37:23 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:40:15 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,7 @@ char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx);
 char	*readline_continuation(const char *prompt, t_token_info *info);
 t_token	*exit_token(void);
 int		is_printable_str(const char *s);
+int		is_operator(int c);
+int		ft_isspace(int c);
 
 #endif

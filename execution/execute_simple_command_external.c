@@ -6,13 +6,11 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:40:18 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:32:15 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-extern char	**environ;
 
 int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 {

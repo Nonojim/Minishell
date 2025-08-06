@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:49:49 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/02 13:34:58 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:49:02 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,16 @@ char	*tokenize2(t_token_info *info)
 		line = token_word(info);
 	info->line = line;
 	return (line);
+}
+
+int	is_operator(int c)
+{
+	return (c == '|' || c == '&' || c == '<' || c == '>'
+		|| c == '(' || c == ')');
+}
+
+int	ft_isspace(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
 }
