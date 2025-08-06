@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 14:02:56 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:36:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,8 @@ char	*read_quote_loop(t_token_info *info, char quote)
 	{
 		next_line = readline_continuation("> ", info);
 		if (!next_line)
-		{
-			info->start = 66;
-			if (info->line)
-				free_then_setnull((void **)&info->line);
-			return (NULL);
-		}
-		if (quote == '1')
-			tmp = ft_strjoin(info->line, "\n");
-		else
-			tmp = ft_strjoin(info->line, "");
-		quote = '0';
+			return (missing_next_line(info));
+		tmp = join_state_quote(info, &quote);
 		free_then_setnull((void **)&info->line);
 		if (!tmp)
 			return (free_then_setnull((void **)&next_line), NULL);
@@ -60,6 +51,26 @@ char	*read_quote_loop(t_token_info *info, char quote)
 			break ;
 	}
 	return (info->line);
+}
+
+char	*join_state_quote(t_token_info *info, char *quote)
+{
+	char	*tmp;
+
+	if (*quote == '1')
+		tmp = ft_strjoin(info->line, "\n");
+	else
+		tmp = ft_strjoin(info->line, "");
+	*quote = '0';
+	return (tmp);
+}
+
+char	*missing_next_line(t_token_info *info)
+{
+	info->start = 66;
+	if (info->line)
+		free_then_setnull((void **)&info->line);
+	return (NULL);
 }
 
 /*
@@ -85,33 +96,3 @@ int	is_all_quotes_closed(const char *line)
 	}
 	return (inquote == '\0');
 }
-
-//char	*create_new_line(char *line, char *next_line)
-//{
-//	char	*tmp;
-//
-//	tmp = ft_strjoin(line, "\n");
-//	free(line);
-//	line = tmp;
-//	tmp = ft_strjoin(line, next_line);
-//	free(line);
-//	line = tmp;
-//	return (line);
-//}
-//
-//char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
-//{
-//	(void)info;
-//	if (signum == 2)
-//	{
-//		free (next_line);
-//		next_line = NULL;
-//		//free_token(*(info->token));
-//		return (NULL);
-//	}
-//	if (next_line)
-//		free(next_line);
-//	ft_fprintf(2, "minishell: unexpected EOF while looking for 
-//matching `''\nexit\n");
-//	return (NULL);
-//}

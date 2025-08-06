@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 13:52:17 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:51:10 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:05:36 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_wildcard	*init_struct_psm(int wildcard_index)
 	return (psm);
 }
 
-void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm,\
+void	wildcard_redir(char **result, t_ctx *ctx, t_wildcard *psm, \
 										t_treenode *node)
 {
 	(void)ctx;
@@ -48,7 +48,7 @@ node->right->argv[0]);
 	return ;
 }
 
-char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx,\
+char	*result_wildcard(char **result, t_treenode *node, t_ctx *ctx, \
 												t_wildcard *psm)
 {
 	if (!result)
@@ -92,7 +92,7 @@ char	**found_match(DIR *dir, t_wildcard *psm, char **result)
 	return (result);
 }
 
-char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx,\
+char	*expand_wildcard(char *str, t_treenode *node, t_ctx *ctx, \
 												int wildcard_index)
 {
 	DIR				*dir;

@@ -6,13 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 11:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/02 13:53:50 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:07:39 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-void	heredoc_child_process(t_heredoc_info *hd, char *token_doc,\
+void	heredoc_child_process(t_heredoc_info *hd, char *token_doc, \
 									t_token **token, t_ctx *ctx)
 {
 	hd->line_error = 1;
@@ -25,7 +25,7 @@ void	heredoc_child_process(t_heredoc_info *hd, char *token_doc,\
 	exit(0);
 }
 
-void	heredoc_loop(t_heredoc_info *hd, char *token_doc,\
+void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
 									t_token **token, t_ctx *ctx)
 {
 	while (1)
@@ -50,7 +50,7 @@ void	heredoc_loop(t_heredoc_info *hd, char *token_doc,\
 	}
 }
 
-void	heredoc_eof(t_heredoc_info *hd, char *token_doc,\
+void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
 							t_token **token, t_ctx *ctx)
 {
 	ft_fprintf(2,

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/02 13:40:36 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:04:13 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ void		free_split(char **split);
 char		**list_to_dynamiccarray(t_ctx *ctx);
 void		add_value(t_env *tmp, char *key_eq, char **array, int *i);
 int			count_env(t_env *env);
-void		free_execve(t_treenode *node, char *line, t_ctx *ctx,\
+void		free_execve(t_treenode *node, char *line, t_ctx *ctx, \
 	char *cmd_path);
-void		handle_child_process(t_treenode *node, t_ctx *ctx,\
+void		handle_child_process(t_treenode *node, t_ctx *ctx, \
 	char *line, char *cmd);
-char		*shearch_cmd_path(char *cmd, t_ctx *ctx,\
+char		*shearch_cmd_path(char *cmd, t_ctx *ctx, \
 	char *line, t_treenode *node);
 
 // Exe_Pipe
@@ -72,7 +72,7 @@ int			subshell_status(t_ctx *ctx, pid_t pid);
 int			execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx);
 int			heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
 void		free_hd(t_treenode *node, t_ctx *ctx, char *line);
-int			found_last_heredoc_and_cmd(t_treenode *node, t_treenode **last_hd,\
+int			found_last_heredoc_and_cmd(t_treenode *node, t_treenode **last_hd, \
 				t_treenode **cmd, t_ctx *ctx);
 // Exe_Redirection
 int			execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx);
