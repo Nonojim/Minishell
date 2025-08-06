@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 15:51:03 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:00:41 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,9 @@ static int	line_is_complete_after_operator(char *line)
 	int	i;
 
 	i = ft_strlen(line) - 1;
-	while (i >= 0 && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n' \
-			|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
+	while (i >= 0 && ft_isspace(line[i]))
 		i--;
-	if (i < 0 || line[i] == '|' || line[i] == '&' || line[i] == '<' \
-		|| line[i] == '>' || line[i] == '(' || line[i] == ')')
+	if (i < 0 || is_operator(line[i]))
 		return (0);
 	return (1);
 }
