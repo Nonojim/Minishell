@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_operator_incomplete_utils.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 14:42:51 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 18:10:56 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 14:01:28 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,19 @@ int	print_error_logical(char *line, int *j, t_ctx *ctx, int error)
 {
 	if (error == 1)
 		ft_fprintf(2, "minishell: syntax error near unexpected token `%c%c'\n", \
-							line[*j], line[*j + 1]);
+line[*j], line[*j + 1]);
 	else if (error == 2)
 		ft_fprintf(2, \
-		"minishell: syntax error near unexpected token `newline'\n");
+"minishell: syntax error near unexpected token `newline'\n");
 	else if (error == 3)
 		ft_fprintf(2, \
-		"minishell: syntax error near unexpected token `%c%c'\n", \
-		line[*j], line [*j + 1]);
+"minishell: syntax error near unexpected token `%c%c'\n", \
+line[*j], line [*j + 1]);
 	else if (error == 4)
 		ft_fprintf(2, "minishell: syntax error near unexpected token `|'\n");
 	else if (error == 5)
 		ft_fprintf(2, "minishell: syntax error near unexpected token `%c'\n", \
-		line[*j]);
+line[*j]);
 	ctx->exit_code = 2;
 	return (1);
 }

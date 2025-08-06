@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 23:15:41 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:40:06 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx)
 	return (heredoc_status(ctx, pid, node, line));
 }
 
-int	found_last_heredoc_and_cmd(t_treenode *node, \
+int	found_last_heredoc_and_cmd(t_treenode *node,\
 		t_treenode **last_hd, t_treenode **cmd, t_ctx *ctx)
 {
 	if (!node)
@@ -66,7 +66,7 @@ void	free_hd(t_treenode *node, t_ctx *ctx, char *line)
 	if (ctx)
 		free_env_list(ctx->env);
 	if (line)
-		free(line);
+		free_then_setnull((void **)&line);
 }
 
 int	heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line)

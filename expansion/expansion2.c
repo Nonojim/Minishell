@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:12:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/25 18:58:26 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:50:44 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ On traite les strings pour remplacer les vars d'environnement,
 le tilde. On vérifie que les quotes sont ok avec ça.
 On return les expansions appliqués
 */
-char	*expand_string(char *str, t_treenode *node, t_ctx *ctx, \
+char	*expand_string(char *str, t_treenode *node, t_ctx *ctx,\
 										int wildcard_index)
 {
 	char	*result;

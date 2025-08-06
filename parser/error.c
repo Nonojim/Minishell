@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:36:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/27 14:37:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:51:41 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_error(t_token *tokens)
 	if (tokens == NULL)
 	{
 		ft_fprintf(2, \
-			"minishell: syntax error near unexpected token `newline'\n");
+"minishell: syntax error near unexpected token `newline'\n");
 		return ;
 	}
 	if (is_op_logique(tokens->type) || is_word_type(tokens->type))
@@ -54,7 +54,7 @@ void	print_error(t_token *tokens)
 	}
 	if (is_redirection(tokens->type))
 		ft_fprintf(2, \
-			"minishell: syntax error near unexpected token `newline'\n");
+"minishell: syntax error near unexpected token `newline'\n");
 	if (is_bracket(tokens->type))
 		ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
 			tokens->str);

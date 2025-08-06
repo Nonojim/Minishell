@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 12:58:47 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 11:29:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:40:18 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	execute_external_command(t_treenode *node, t_ctx *ctx, char *line)
 	return (external_command_status(ctx, pid));
 }
 
-void	handle_child_process(t_treenode *node, t_ctx *ctx, \
+void	handle_child_process(t_treenode *node, t_ctx *ctx,\
 														char *line, char *cmd)
 {
 	char	**array;

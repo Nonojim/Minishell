@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:49:03 by npederen          #+#    #+#             */
-/*   Updated: 2025/07/22 14:58:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:50:05 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_env(t_treenode *node, t_ctx *ctx)
 	if (node->argv[1] != NULL)
 	{
 		ft_fprintf(2, "minishell: env: ‘%s’: No such file or directory\n", \
-			node->argv[1]);
+node->argv[1]);
 		ctx->exit_code = 127;
 		return (127);
 	}

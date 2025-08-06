@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_wildcard_newargv.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:01:53 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 11:03:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:42:42 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-void	create_new_argv(char **result, t_treenode *node, \
+void	create_new_argv(char **result, t_treenode *node,\
 											t_wildcard *idx)
 {
 	char	**new_argv;
@@ -29,7 +29,7 @@ void	create_new_argv(char **result, t_treenode *node, \
 	node->argv = new_argv;
 }
 
-char	**build_new_argv(t_treenode *node, char **result, t_wildcard *idx, \
+char	**build_new_argv(t_treenode *node, char **result, t_wildcard *idx,\
 												char **new_argv)
 {
 	int	i;

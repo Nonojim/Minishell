@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_heredoc_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 18:29:08 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/28 18:53:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:54:04 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,14 @@ int	create_token_op_heredoc(char *line, int *i, t_token **token)
 void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx)
 {
 	if (line)
-		free(line);
+		free_then_setnull((void **)&line);
 	if (token_doc)
-		free(token_doc);
+		free_then_setnull((void **)&token_doc);
 	if (token)
+	{
 		free_token(*token);
+		*token = NULL;
+	}
 	if (ctx)
 		free_env_list(ctx->env);
 }

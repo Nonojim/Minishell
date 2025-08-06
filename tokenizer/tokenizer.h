@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 11:21:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 22:54:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:37:23 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,21 @@ typedef struct s_heredoc_info
 	int		j;
 }	t_heredoc_info;
 
+typedef struct s_continuation_info
+{
+	int		fd[2];
+	pid_t	pid;
+	char	*line;
+	char	*tmp;
+	char	*buffer;
+	int		status;
+	int		bytes;
+}	t_continuation_info;
+
 // Fonctions tokenisations
 t_token	*tokenize(t_token *token, char **line, t_ctx *ctx);
 char	*tokenize2(t_token_info *info);
-void	init_token_info(t_token_info *info, t_token **token, \
+void	init_token_info(t_token_info *info, t_token **token,\
 											t_ctx *ctx, char *line);
 
 // Create_free_print Token
@@ -85,7 +96,7 @@ int		type_token_double_operator(char *str);
 int		is_word(int c);
 char	*token_word(t_token_info *info);
 char	*add_token_word(int *i, int start, char *line, t_token **token);
-char	*check_quote_and_create_token(t_token_info *info, \
+char	*check_quote_and_create_token(t_token_info *info,\
 										int i, int inquote, char *quote);
 
 // Token_operator
@@ -96,7 +107,7 @@ int		is_orlogical_andlogical(char c);
 char	*token_pipe_unclose(t_token_info *info);
 char	*token_logical_unclose(t_token_info *info);
 int		only_spaces_after_operator_logical(char *line, int i);
-char	*loop_newline(char *line);
+char	*loop_newline(t_token_info *info);
 
 // Token_bracket
 char	*token_bracket_unclose(char *line);
@@ -120,10 +131,10 @@ int		check_redir_before_logical(char *line, int *i, t_ctx *ctx);
 int		check_error_after_pipe(char *line, int *i, t_ctx *ctx);
 
 // Token_quote
-char	*read_until_quote_closed(char *line, char quote);
-char	*quote_interrupt(char *next_line, int signum);
-char	*read_quote_loop(char *line, char quote);
-char	*create_new_line(char *line, char *next_line);
+char	*read_until_quote_closed(t_token_info *info, char quote);
+//char	*quote_interrupt(t_token_info *info, char *next_line, int signum);
+char	*read_quote_loop(t_token_info *info, char quote);
+//char	*create_new_line(char *line, char *next_line);
 void	if_in_quote(char current, char *quote, int *inquote);
 int		is_all_quotes_closed(const char *line);
 // Token_HereDoc
@@ -134,15 +145,22 @@ char	*delete_tab_or_ad_return_line(char *next_line, int j);
 void	add_heredoc_token(t_token **token, char *token_doc, char *heredoc_line);
 char	*delete_quote(char *str, t_token **token);
 void	free_heredoc(char *line, char *token_doc, t_token **token, t_ctx *ctx);
-char	*heredoc_parent_process(t_heredoc_info *hd, \
+char	*heredoc_parent_process(t_heredoc_info *hd,\
 		char *token_doc, t_ctx *ctx);
-int		check_heredoc_exit_status(t_heredoc_info *hd, \
+int		check_heredoc_exit_status(t_heredoc_info *hd,\
 		char *token_doc, t_ctx *ctx);
-void	heredoc_child_process(t_heredoc_info *hd, \
+void	heredoc_child_process(t_heredoc_info *hd,\
 		char *token_doc, t_token **token, t_ctx *ctx);
-void	heredoc_loop(t_heredoc_info *hd, char *token_doc, \
+void	heredoc_loop(t_heredoc_info *hd, char *token_doc,\
 		t_token **token, t_ctx *ctx);
-void	heredoc_eof(t_heredoc_info *hd, char *token_doc, \
+void	heredoc_eof(t_heredoc_info *hd, char *token_doc,\
 		t_token **token, t_ctx *ctx);
+//fork_praying
+void	continuation_child(const char *prompt, t_continuation_info *cinfo,\
+		t_token_info *info);
+char	*continuation_parent(t_continuation_info *cinfo, t_ctx *ctx);
+char	*readline_continuation(const char *prompt, t_token_info *info);
+t_token	*exit_token(void);
+int		is_printable_str(const char *s);
 
 #endif

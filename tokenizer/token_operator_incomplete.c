@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:36:54 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/29 12:40:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:58:58 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ char	*token_pipe_unclose(t_token_info *info)
 		|| (check_error_after_pipe(info->line, info->i, info->env) == 1))
 	{
 		free_token(*(info->token));
+		free(info->line);
 		return (NULL);
 	}
 	if (only_spaces_after_pipe(info->line, *(info->i))
 		&& !only_space_before(info->line, *(info->i)))
 	{
-		info->line = loop_newline(info->line);
+		info->line = loop_newline(info);
 		if (!info->line)
 		{
 			free_token(*(info->token));
@@ -45,12 +46,13 @@ char	*token_logical_unclose(t_token_info *info)
 		|| check_error_after_logical(info->line, info->i, info->env) == 1)
 	{
 		free_token(*(info->token));
+		free(info->line);
 		return (NULL);
 	}
 	if (only_space_after_op(info->line, *(info->i))
 		&& !only_space_before(info->line, *(info->i)))
 	{
-		info->line = loop_newline(info->line);
+		info->line = loop_newline(info);
 		if (!info->line)
 		{
 			free_token(*(info->token));
@@ -62,28 +64,56 @@ char	*token_logical_unclose(t_token_info *info)
 	return (info->line);
 }
 
-char	*loop_newline(char *line)
+static int	is_operator(int c)
+{
+	return (c == '|' || c == '&' || c == '<' || c == '>'
+		|| c == '(' || c == ')');
+}
+
+static int	ft_isspace(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
+}
+
+static int	line_is_complete_after_operator(char *line)
+{
+	int	i;
+
+	i = ft_strlen(line) - 1;
+	while (i >= 0 && ft_isspace(line[i]))
+		i--;
+	if (i < 0 || is_operator(line[i]))
+		return (0);
+	return (1);
+}
+
+char	*loop_newline(t_token_info *info)
 {
 	char	*next_line;
 	char	*tmp;
-	char	*tmp_newline;
 
 	while (1)
 	{
-		next_line = readline("> ");
+		next_line = readline_continuation("> ", info);
 		if (!next_line)
 		{
-			free(next_line);
+			info->start = 66;
+			if (info->line)
+				free_then_setnull((void **)&info->line);
 			return (NULL);
 		}
-		tmp = ft_strjoin(line, "\n");
-		tmp_newline = ft_strjoin(tmp, next_line);
-		free_unclose_logical(tmp, next_line, NULL);
-		if (!tmp_newline)
+		tmp = ft_strjoin(info->line, " ");
+		free_then_setnull((void **)&info->line);
+		if (!tmp)
+			return (free_then_setnull((void **)&next_line), NULL);
+		info->line = ft_strjoin(tmp, next_line);
+		free_then_setnull((void **)&tmp);
+		free_then_setnull((void **)&next_line);
+		if (!info->line)
 			return (NULL);
-		free(line);
-		line = tmp_newline;
-		break ;
+		if (line_is_complete_after_operator(info->line))
+			break ;
 	}
-	return (line);
+	return (info->line);
 }

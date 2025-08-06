@@ -6,18 +6,18 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:55:13 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 21:32:17 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 14:02:56 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-char	*read_until_quote_closed(char *line, char quote)
+char	*read_until_quote_closed(t_token_info *info, char quote)
 {
-	setup_signals_uncomplete_line();
-	g_signum = 0;
-	line = read_quote_loop(line, quote);
-	return (line);
+	info->line = read_quote_loop(info, quote);
+	if (!info->line)
+		free_token(*(info->token));
+	return (info->line);
 }
 
 /*
@@ -26,30 +26,40 @@ char	*read_until_quote_closed(char *line, char quote)
 * ft_strjoin(line, "\n");  = emulate the \n that bash produce
 * line = ft_strjoin(line, next_line); = join the all new lines to the first one
 */
-char	*read_quote_loop(char *line, char quote)
+char	*read_quote_loop(t_token_info *info, char quote)
 {
 	char	*next_line;
+	char	*tmp;
 
-	(void)quote;
+	quote = '1';
 	next_line = NULL;
 	while (1)
 	{
-		next_line = readline("> ");
-		if (g_signum == 2)
-			return (quote_interrupt(next_line, 2));
+		next_line = readline_continuation("> ", info);
 		if (!next_line)
-			return (quote_interrupt(next_line, 0));
-		line = create_new_line(line, next_line);
-		if (is_all_quotes_closed(line))
 		{
-			free(next_line);
-			break ;
+			info->start = 66;
+			if (info->line)
+				free_then_setnull((void **)&info->line);
+			return (NULL);
 		}
+		if (quote == '1')
+			tmp = ft_strjoin(info->line, "\n");
 		else
-			free(next_line);
+			tmp = ft_strjoin(info->line, "");
+		quote = '0';
+		free_then_setnull((void **)&info->line);
+		if (!tmp)
+			return (free_then_setnull((void **)&next_line), NULL);
+		info->line = ft_strjoin(tmp, next_line);
+		free_then_setnull((void **)&tmp);
+		free_then_setnull((void **)&next_line);
+		if (!info->line)
+			return (NULL);
+		if (is_all_quotes_closed(info->line))
+			break ;
 	}
-	setup_signals();
-	return (line);
+	return (info->line);
 }
 
 /*
@@ -76,29 +86,32 @@ int	is_all_quotes_closed(const char *line)
 	return (inquote == '\0');
 }
 
-char	*create_new_line(char *line, char *next_line)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(line, "\n");
-	free(line);
-	line = tmp;
-	tmp = ft_strjoin(line, next_line);
-	free(line);
-	line = tmp;
-	return (line);
-}
-
-char	*quote_interrupt(char *next_line, int signum)
-{
-	if (signum == 2)
-	{
-		free (next_line);
-		return (NULL);
-	}
-	if (next_line)
-		free(next_line);
-	ft_fprintf(2, "minishell: unexpected EOF while looking for \
-matching `''\nexit\n");
-	return (NULL);
-}
+//char	*create_new_line(char *line, char *next_line)
+//{
+//	char	*tmp;
+//
+//	tmp = ft_strjoin(line, "\n");
+//	free(line);
+//	line = tmp;
+//	tmp = ft_strjoin(line, next_line);
+//	free(line);
+//	line = tmp;
+//	return (line);
+//}
+//
+//char	*quote_interrupt(t_token_info *info, char *next_line, int signum)
+//{
+//	(void)info;
+//	if (signum == 2)
+//	{
+//		free (next_line);
+//		next_line = NULL;
+//		//free_token(*(info->token));
+//		return (NULL);
+//	}
+//	if (next_line)
+//		free(next_line);
+//	ft_fprintf(2, "minishell: unexpected EOF while looking for 
+//matching `''\nexit\n");
+//	return (NULL);
+//}

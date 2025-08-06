@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:25:50 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 20:31:04 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:50:13 by npederen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 	}
 	else
 		ctx->exit_code = 0;
-	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ctx->root);
+	if (line)
+		free(line);
 	rl_clear_history();
 	exit(ctx->exit_code);
 }
@@ -51,7 +52,7 @@ int	ft_exit(char *line, t_treenode *ast, t_ctx *ctx)
 void	error_numeric_exit(char *line, t_treenode *ast, t_ctx *ctx)
 {
 	ft_fprintf(2, "Minishell: exit: %s: numeric argument required\n", \
-						ast->argv[1]);
+ast->argv[1]);
 	free(line);
 	free_env_list(ctx->env);
 	free_treenode(ast);
