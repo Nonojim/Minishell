@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/07 19:42:29 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/07 20:07:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,30 +83,37 @@ int    execute_node(t_treenode *node, char *line, t_ctx *ctx)
 			&& node->right 
 			&& node->right->argv 
 			&& node->right->argv[1]) 
-			||	(node->type == HERE_DOCUMENT
-			&& node->left 
+			||(node->type == HERE_DOCUMENT
+			&& node->left
 			&& node->left->type == HERE_DOCUMENT))
 				{
 					if (node->left && node->type == HERE_DOCUMENT)
 						node = node->left;
-					t_treenode *cmd_test = malloc(sizeof(t_treenode) + 1);
+					t_treenode *cmd_test = NULL;
+					cmd_test = malloc(sizeof(t_treenode));
 					if (!cmd_test)
 						return (ctx->exit_code = 1);
 					cmd_test->type = WORD;
 					//cmd_test->argv = save_cmd;
 					cmd_test->argv = copy_argv_hd_in_newcmd(node->right->argv);
+				if (!cmd_test->argv)
+				{
+					free(cmd_test);
+					return (ctx->exit_code = 0);
+				}
 					cmd_test->str = ft_strdup(cmd_test->argv[0]);
 					//	printf("cmd = %s , %s ", cmd_test->argv[0], cmd_test->argv[1]);
 					cmd_test->left = node;
-					int exit_code = execute_node(cmd_test, line, ctx);
+					int exit_code = 0;
+					exit_code = execute_node(cmd_test, line, ctx);
 					free(cmd_test->str);
 					free(cmd_test);
 					return (exit_code);
 			}
-         return (execute_node_redir(node, line, ctx));
+			return (execute_node_redir(node, line, ctx));
    	  }
- else
-     return (1);
+		 else
+    	 return (1);
 }
 
 int	execute_node_simple(t_treenode *node, char *line, t_ctx *ctx)
