@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 18:19:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/07 12:04:06 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,10 @@ int	execute_node_logical(t_treenode *node, char *line, t_ctx *ctx)
 
 int	execute_node_redir(t_treenode *node, char *line, t_ctx *ctx)
 {
-	if (node->type == HERE_DOCUMENT)
-	{
-		expanse_ast(node, ctx);
-		return (execute_heredoc_node(node, line, ctx));
-	}
-	else if (node->type == INPUT_REDIRECTION
+	if (node->type == INPUT_REDIRECTION
 		|| node->type == OUTPUT_REDIRECTION
-		|| node->type == APPEND_OUTPUT_REDIRECTION)
+		|| node->type == APPEND_OUTPUT_REDIRECTION
+		|| node->type == HERE_DOCUMENT)
 	{
 		expanse_ast(node, ctx);
 		return (execute_redirection_chain(node, line, ctx));

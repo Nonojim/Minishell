@@ -6,12 +6,13 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 12:04:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/07 12:35:52 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
+int	redir_heredoc(t_treenode *node, t_ctx *ctx);
 /*Applique toutes les redirs de l'AST,
 Exe la cmd, et save les entrées/sortie.*/
 int	execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx)
@@ -56,10 +57,38 @@ int	apply_redirections(t_treenode *node, char *line, t_ctx *ctx)
 		return (status);
 	if (node->type == INPUT_REDIRECTION)
 		return (redir_input(node, ctx));
+	else if(node->type == HERE_DOCUMENT)
+			return (redir_heredoc(node, ctx));
 	else if (node->type == OUTPUT_REDIRECTION)
 		return (redir_output(node, ctx));
 	else if (node->type == APPEND_OUTPUT_REDIRECTION)
 		return (redir_append(node, ctx));
+	return (0);
+}
+
+int	redir_heredoc(t_treenode *node, t_ctx *ctx)
+{
+	int		pipefd[2];
+	int	len;
+
+	if (!node || !node->right || !node->right->str)
+		return (ctx->exit_code = 1);
+	if (pipe(pipefd) == -1)
+		return (perror("pipe"), ctx->exit_code = 1);
+	len = ft_strlen(node->right->str);
+	if (write(pipefd[1], node->right->str, len) != len)
+	{
+		close(pipefd[0]);
+		close(pipefd[1]);
+		return (perror("write"), ctx->exit_code = 1);
+	}
+	close(pipefd[1]);
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	{
+		close(pipefd[0]);
+		return (perror("dup2"), ctx->exit_code = 1);
+	}
+	close(pipefd[0]);
 	return (0);
 }
 
