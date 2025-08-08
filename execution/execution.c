@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/08 14:23:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 17:23:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,23 @@ void	execute_tree(t_treenode *tree, char *line, t_ctx	*ctx)
 	ctx->exit_code = execute_node(tree, line, ctx);
 }
 
-int    execute_node(t_treenode *node, char *line, t_ctx *ctx)
+int	execute_node(t_treenode *node, char *line, t_ctx *ctx)
 {
 	if (!node)
 		return (1);
 	if (node->type == WORD || node->type == PIPE)
 		return (execute_node_simple(node, line, ctx));
 	else if (node->type == LOGICAL_AND || node->type == LOGICAL_OR
-			|| node->type == SEMICOLON)
+		|| node->type == SEMICOLON)
 		return (execute_node_logical(node, line, ctx));
 	else if (node->type == HERE_DOCUMENT
-			|| node->type == INPUT_REDIRECTION
-			|| node->type == OUTPUT_REDIRECTION
-			|| node->type == APPEND_OUTPUT_REDIRECTION)
-  	{
-			expanse_ast(node, ctx);
-			return (execute_redirection_chain(node, line, ctx));
-		}
+		|| node->type == INPUT_REDIRECTION
+		|| node->type == OUTPUT_REDIRECTION
+		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		expanse_ast(node, ctx);
+		return (execute_redirection_chain(node, line, ctx));
+	}
 	else if (node->type == SUBSHELL)
 		return (execute_subshell_node(node, line, ctx));
 	else
