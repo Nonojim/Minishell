@@ -48,7 +48,6 @@ FILES = tokenizer/tokenizer.c \
 				expansion/expansion_wildcard_utils.c \
 				expansion/expansion_wildcard_newargv.c \
 				execution/execution.c \
-				execution/execute_heredoc.c \
 				execution/execute_pipe.c \
 				execution/execute_subshell.c \
 				execution/execute_redirection.c \

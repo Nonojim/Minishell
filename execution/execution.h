@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 22:14:13 by npederen          #+#    #+#             */
-/*   Updated: 2025/08/08 17:24:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 17:27:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,6 @@ void		pipe_right(t_treenode *node, char *line, int pipefd[2], t_ctx *ctx);
 // Exe_Subshell
 int			execute_subshell_node(t_treenode *node, char *line, t_ctx *ctx);
 int			subshell_status(t_ctx *ctx, pid_t pid);
-
-// Exe_HereDoc
-int			execute_heredoc_node(t_treenode *node, char *line, t_ctx *ctx);
-int			heredoc_status(t_ctx *ctx, pid_t pid, t_treenode *node, char *line);
-void		free_hd(t_treenode *node, t_ctx *ctx, char *line);
-int			found_last_heredoc_and_cmd(t_treenode *node, t_treenode **last_hd,\
-				t_treenode **cmd, t_ctx *ctx);
 
 // Exe_Redirection
 char		**copy_argv_in_newcmd(char **argv);
