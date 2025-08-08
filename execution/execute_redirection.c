@@ -6,13 +6,17 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 11:00:27 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/08 17:22:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 17:43:57 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 /*Applique toutes les redirs de l'AST,
+ Exe la cmd associé (crée un node cmd si aucune existe mais que des arg[1] 
+existe (problème dans la création de l'AST les arguments écrit aprés une redir
+s'écrive dans l'argv de la redir. Necessité de les récupérer manuellement.
+Execute les redirs dans l'ordre de lecture (gauche à droite)
 Exe la cmd, et save les entrées/sortie.*/
 int	execute_redirection_chain(t_treenode *node, char *line, t_ctx *ctx)
 {
@@ -42,6 +46,9 @@ dup_and_close(saved_stdin, saved_stdout), status);
 	return (dup_and_close(saved_stdin, saved_stdout), 0);
 }
 
+/*
+Récupère les arg présent dans l'AST;
+*/
 char	**recup_all_argv_without_cmd(t_treenode *node)
 {
 	char	**result;
@@ -70,6 +77,10 @@ char	**recup_all_argv_without_cmd(t_treenode *node)
 	return (merged = create_new_node_arg(&len_res, &len_cur, result, curent));
 }
 
+/*
+Ignore l'élement 0 qui réprésente:
+inside_here_doc, ou nom du file
+*/
 char	**copy_argv_in_newcmd(char **argv)
 {
 	char	**new_argv;
@@ -119,6 +130,11 @@ char	**create_new_node_arg(int *len_res, int *len_cur,\
 	return (merged);
 }
 
+/*
+Cree un node commande factice (non relié à l'AST),
+il est seulement utilisé dans le cadre des redirections
+avec les argv et l'exe
+*/
 int	create_and_exe_cmd(char **tmp_argv, char *line, t_ctx *ctx)
 {
 	int			status;

@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/07 20:05:36 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 18:47:21 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,12 @@ void	expanse_argv(t_treenode *node, t_ctx *ctx)
 	i = 0;
 	while (node->argv[i])
 	{
+			if (node->argv[0] && node->argv[0][0] == '\''
+			&& node->argv[0][1] == '\'' && node->argv[0][2] == '\0')
+				return ;
+			if (node->argv[0] && node->argv[0][0] == '"'
+			&& node->argv[0][1] == '"' && node->argv[0][2] == '\0')
+				return ;
 		expanded = expand_string(node->argv[i], node, ctx, i);
 		if (!expanded)
 			clean = remove_quotes_after_expansion(node->argv[i]);
