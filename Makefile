@@ -41,6 +41,7 @@ FILES = tokenizer/tokenizer.c \
 				parser/print_ast.c \
 				expansion/expansion.c \
 				expansion/expansion2.c \
+				expansion/expansion3.c \
 				expansion/expansion_utils.c \
 				expansion/expansion_wildcard.c \
 				expansion/expansion_wilcard_psm.c \

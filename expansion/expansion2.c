@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 14:12:57 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/08 18:52:28 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/09 17:48:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,21 @@ char	*shearch_and_add_var(char *str, char *result, t_ctx *ctx)
 {
 	t_quote_state	q;
 	int				i;
+	int				j;
 
 	i = 0;
 	q.in_single_quote = 0;
 	q.in_double_quote = 0;
 	while (str[i])
 	{
+		if (var_with_number_after_dollar(&j, str, &i) == 1)
+			continue ;
+		if (var_with_quote_after_dollar(&j, &result, str, &i) == 1)
+			continue ;
 		if (toggle_quote(str, &i, &q, &result))
 			continue ;
-		if (!q.in_single_quote && str[i] == '$'
-			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'
-				|| str[i + 1] == '?'))
+		if (!q.in_single_quote && str[i] == '$' && (str[i + 1] == '?'
+				|| (ft_isalpha(str[i + 1]) || str[i + 1] == '_')))
 		{
 			i = expand_variable(str, i, &result, ctx);
 			continue ;
