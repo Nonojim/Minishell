@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:55 by lduflot           #+#    #+#             */
-/*   Updated: 2025/08/06 15:55:27 by npederen         ###   ########.fr       */
+/*   Updated: 2025/08/09 17:49:56 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void		expanse_ast(t_treenode *node, t_ctx *ctx);
 void		expanse_argv(t_treenode *node, t_ctx *ctx);
 void		expanse_redir(t_treenode *node, t_ctx *ctx);
 void		expanse_heredoc(t_treenode *node, t_ctx *ctx);
-void		free_redir(t_treenode *node, char *expanded);
 void		delete_var_empty(t_treenode *node);
+int			verif_quote_only(t_treenode *node);
 
 //expansion2
 char		*expand_tilde(char *str, t_ctx *ctx);
@@ -46,6 +46,11 @@ char		*expand_string(char *str, t_treenode *node, t_ctx *ctx,\
 char		*shearch_and_add_var(char *str, char *result, t_ctx *ctx);
 char		*expand_heredoc(char	*str, t_ctx *ctx);
 int			expand_variable(char *str, int i, char **result, t_ctx *ctx);
+
+//expansion3
+int			var_with_quote_after_dollar(int *j, char **result, char *str,\
+		int *i);
+int			var_with_number_after_dollar(int *j, char *str, int *i);
 
 //expansion_utils
 int			toggle_quote(char *str, int *i, t_quote_state *q, char **result);

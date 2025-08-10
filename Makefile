@@ -41,6 +41,7 @@ FILES = tokenizer/tokenizer.c \
 				parser/print_ast.c \
 				expansion/expansion.c \
 				expansion/expansion2.c \
+				expansion/expansion3.c \
 				expansion/expansion_utils.c \
 				expansion/expansion_wildcard.c \
 				expansion/expansion_wilcard_psm.c \
@@ -48,10 +49,10 @@ FILES = tokenizer/tokenizer.c \
 				expansion/expansion_wildcard_utils.c \
 				expansion/expansion_wildcard_newargv.c \
 				execution/execution.c \
-				execution/execute_heredoc.c \
 				execution/execute_pipe.c \
 				execution/execute_subshell.c \
 				execution/execute_redirection.c \
+				execution/execute_redirection_type.c \
 				execution/execute_redirection_utils.c \
 				execution/execute_simple_command.c \
 				execution/execute_simple_command_utils.c \

@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:31:46 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 23:10:38 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 14:15:05 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ t_treenode	*find_command_node(t_treenode *node)
 {
 	while (node && is_redirection(node->type))
 		node = node->left;
-	return (node);
+	if (node && node->type == WORD)
+		return (node);
+	return (NULL);
 }
 
 /*Récupère les argv en trop d'une redirection 

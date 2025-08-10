@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:05:41 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/30 10:07:22 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 19:01:40 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,15 @@ void	expanse_redir(t_treenode *node, t_ctx *ctx)
 		if (ft_strchr(expanded, '*'))
 			return ;
 		clean = remove_quotes_after_expansion(expanded);
-		free_redir(node, expanded);
+		free(node->right->str);
+		free(expanded);
 		node->right->str = clean;
 	}
 	else
 	{
-		free_redir(node, NULL);
+		free(node->right->str);
 		node->right->str = expanded;
 	}
-}
-
-void	free_redir(t_treenode *node, char *expanded)
-{
-	if (node)
-		free(node->right->str);
-	if (expanded)
-		free(expanded);
 }
 
 void	expanse_argv(t_treenode *node, t_ctx *ctx)
@@ -86,6 +79,8 @@ void	expanse_argv(t_treenode *node, t_ctx *ctx)
 	int		i;
 
 	i = 0;
+	if (verif_quote_only(node) == 1)
+		return ;
 	while (node->argv[i])
 	{
 		expanded = expand_string(node->argv[i], node, ctx, i);
@@ -104,4 +99,15 @@ void	expanse_argv(t_treenode *node, t_ctx *ctx)
 		i++;
 	}
 	delete_var_empty(node);
+}
+
+int	verif_quote_only(t_treenode *node)
+{
+	if (node->argv[0] && node->argv[0][0] == '\''
+		&& node->argv[0][1] == '\'' && node->argv[0][2] == '\0')
+		return (1);
+	if (node->argv[0] && node->argv[0][0] == '"'
+		&& node->argv[0][1] == '"' && node->argv[0][2] == '\0')
+		return (1);
+	return (0);
 }

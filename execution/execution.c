@@ -6,7 +6,7 @@
 /*   By: npederen <npederen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:55:01 by lduflot           #+#    #+#             */
-/*   Updated: 2025/07/24 18:19:48 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/08/08 17:23:59 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ int	execute_node(t_treenode *node, char *line, t_ctx *ctx)
 	else if (node->type == HERE_DOCUMENT
 		|| node->type == INPUT_REDIRECTION
 		|| node->type == OUTPUT_REDIRECTION
-		|| node->type == APPEND_OUTPUT_REDIRECTION
-		|| node->type == SUBSHELL)
-		return (execute_node_redir(node, line, ctx));
+		|| node->type == APPEND_OUTPUT_REDIRECTION)
+	{
+		expanse_ast(node, ctx);
+		return (execute_redirection_chain(node, line, ctx));
+	}
+	else if (node->type == SUBSHELL)
+		return (execute_subshell_node(node, line, ctx));
 	else
 		return (1);
 }
@@ -86,23 +90,4 @@ int	execute_node_logical(t_treenode *node, char *line, t_ctx *ctx)
 	}
 	ctx->exit_code = 1;
 	return (ctx->exit_code);
-}
-
-int	execute_node_redir(t_treenode *node, char *line, t_ctx *ctx)
-{
-	if (node->type == HERE_DOCUMENT)
-	{
-		expanse_ast(node, ctx);
-		return (execute_heredoc_node(node, line, ctx));
-	}
-	else if (node->type == INPUT_REDIRECTION
-		|| node->type == OUTPUT_REDIRECTION
-		|| node->type == APPEND_OUTPUT_REDIRECTION)
-	{
-		expanse_ast(node, ctx);
-		return (execute_redirection_chain(node, line, ctx));
-	}
-	else if (node->type == SUBSHELL)
-		return (execute_subshell_node(node, line, ctx));
-	return (1);
 }
